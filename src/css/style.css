@@ -1,0 +1,13 @@
+
+/* 集中修改iview组件库的默认样式 */
+.ivu-btn.ivu-btn-ghost{
+    color:white;
+    font-weight: bold;
+    border-color:rgba(16, 162, 249, 1);
+}
+.ivu-btn.ivu-btn-ghost:hover{
+    color:white;
+}
+.ivu-btn-ghost.ivu-btn-small{
+    padding:2px 14px;
+}

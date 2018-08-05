@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Examples</title>
+<style>
+    body,html{
+        background-color: white;
+        width:100%;
+        height: 100%;
+        margin:0;
+        padding: 0;
+    }
+    .rr,.tt{
+        width: 20px;
+        height: 30px;
+        background-color: aquamarine;
+        /* position: absolute; */
+    }
+    .input{
+        /* position: absolute; */
+        z-index: 5;
+    }
+    #user-guider{
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        position: absolute;
+        box-sizing: border-box;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+    }
+    button{
+        position: absolute;
+        left: 50%;
+        top:50%;
+    }
+    #user-guider-1{
+        width:90px;
+        position: absolute;
+        height: 80px;
+        background-color: rgb(17, 182, 127);
+        left: 50%;
+    }
+    .dig{
+        width: 100;
+        position: relative;
+    }
+    .button-box{
+        width: 200px;
+        height: 50px;
+        position: absolute;
+        bottom: 100px;
+        background-color: aqua;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+
+</head>
+<body><!-- body 设置背景色是为了能看出镂空效果 -->
+    <div id="user-guider">
+        <div class="button-box"></div>
+    </div>
+    <div class="user-guider">
+        <button>xiayibu</button>
+    </div>
+    <div class="tt"></div>
+    <input type="text" value="23" class="">
+    <div class="rr"></div>
+    <div class="dig">
+            <div id="user-guider-1"></div>    
+    </div>
+    <div>电量：</div>
+    <div>电费：</div>
+    <script>
+        
+        // $('input').addClass('input');
+        // // $('.tt').after(' <input type="text" value="23" id="rep" class="">');
+        // $('button').click(function() {
+        //     $('#rep').remove();
+        //     $('input').removeClass('input');
+        // });
+        function userGuid() {
+    // var oneBox=$('#user-guider-1 .layui-unselect.layui-form-checkbox');
+
+            // var oneBox = $('#user-guider-1');
+            // var W = $('body').width();
+            // var H = $('body').height();
+            // var pos = getAbsolutePosition(oneBox);
+            // $('#user-guider').css(getBackStyle(pos, 5));
+            // function getBackStyle(pos, distant) {
+            //     var bl = pos.x - distant,
+            //         bt = pos.y - distant,
+            //         bb = H - (pos.height + pos.y) - distant,
+            //         br = W - (pos.width + pos.x) - distant;
+            //     var style = {
+            //         'border-left-width': bl + 'px',
+            //         'border-right-width': br + 'px',
+            //         'border-top-width': bt + 'px',
+            //         'border-bottom-width': bb + 'px'
+            //     };
+            //     return style;
+            // }
+            // $.post('/czxt/pages/wjhx/getIdWjhxParm.do', {paramArrs: '[201803,A33,NHDP0001],[201803,A33,NHDP0002]'}, function(json, textStatus) {
+            //     let aa = '[{"accountCode":"A33","bilMonth":"201803","indexVlue":"58888","indexCode":"NHDP0001"},{"accountCode":"A33","bilMonth":"201803","indexVlue":"9786","indexCode":"NHDP0002"}]';
+            //     // console.log(JSON.parse(json));
+            //     let bb = [{'accountCode': 'A33', 'bilMonth': '201803', 'indexVlue': '58888', 'indexCode': 'NHDP0001'}, {'accountCode': 'A33', 'bilMonth': '201803', 'indexVlue': '9786', 'indexCode': 'NHDP0002'}];
+            // });
+            $.post('/czxt/pages/wjhx/getIdWjhxParm.do', {paramArrs: '[201803,,NHJZ0001],[201803,,NHJZ0002]'}, function(json, textStatus) {
+                console.log(JSON.parse(json));
+            });
+            // "[{'accountCode': 'A33', 'bilMonth': '201803', 'indexVlue': '58888', 'indexCode': 'NHDP0001'},{'accountCode': 'A33', 'bilMonth': '201803', 'indexVlue': '9786', 'indexCode': 'NHDP0002'}]";
+            function getAbsolutePosition(box) {
+                return {
+                    x: box.offset().left,
+                    y: box.offset().top,
+                    width: box.width(),
+                    height: box.height()
+                };
+            }
+        }
+        userGuid();
+    </script>
+</body>
+</html>

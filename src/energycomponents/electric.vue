@@ -1,0 +1,781 @@
+<template>
+        <div :class="$style.content">
+            <div  :class="$style['left-top']">
+                <div :class="$style['left-top-l']">
+                    <card-text type='dl' :topage="goElectricQuantity" :number="allCount" :ratio="allCountRa"></card-text>
+                </div>
+                <div :class="$style['left-top-m']">
+                    <card-text type='df' :topage="goElectricPrice" :number="allCost" :ratio="allCostRa"></card-text>
+                </div>
+                <div :class="$style['left-top-r']">
+                    <card-text type='yc' :topage="goExceptionPage" :number="allException"></card-text>
+                </div>
+            </div>
+            <div :class="$style['left-bottom']">
+                <div :class="$style['left-bottom-t']">
+                    <div id="electric-all-lt" ref="echarts-4"></div>
+                </div>
+                <div :class="$style['left-bottom-m']">
+                    <Button-group>
+                        <i-button type="ghost" 
+                        @click="leftViewNumber()" 
+                        :style="[leftCurrent==1?buttonStyle:{}]">电量</i-button>
+                        <i-button type="ghost" 
+                        @click="leftViewMoney()" 
+                        :style="[leftCurrent==2?buttonStyle:{}]">电费</i-button>
+                    </Button-group>
+                </div>
+                <div :class="$style['left-bottom-b']">
+                    <div id="electric-all-lb"></div>
+                </div>
+            </div>
+            <div id="electric-right-all" :class="$style['right-all']">
+                <div id="electric-right-top" :class="$style['right-top']"></div>
+                <div v-show="mapMoudle==='city'" id="electric-right-topcity" :class="[$style['right-top-back']]">
+                        <i-button type="primary" @click="goBack()" :style="{borderColor: '#fff'}">
+                            <Icon type="chevron-left"></Icon>
+                            返回
+                        </i-button>
+                </div>                
+                <div  :class="$style['right-mid']">
+                    <Button-group>
+                        <i-button type="ghost" 
+                        @click="rightViewPointNum()" 
+                        :style="[rightCurrent==1?buttonStyle:{}]">局点数</i-button>
+                        <i-button type="ghost" 
+                        @click="rightViewNumber()" 
+                        :style="[rightCurrent==2?buttonStyle:{}]">电量</i-button>
+                        <i-button type="ghost" 
+                        @click="rightViewMoney()"
+                        :style="[rightCurrent==3?buttonStyle:{}]">电费</i-button>
+                        <i-button type="ghost" 
+                        @click="rightViewPrice()"
+                        :style="[rightCurrent==4?buttonStyle:{}]">电价</i-button>
+                    </Button-group>                    
+                </div>
+                <div :class="$style['right-bottom']" v-show="rightCurrent!==4">   
+                    <div id="electric-right-bottom" :class="$style.pie" style="z-index: 100;"></div>
+                    <div id="electric-right-bottompie2" :class="$style.pie" style="position: absolute;"></div>
+                    <!-- <div id="electric-right-bottompie3" :class="$style.pie" style="position: absolute;"></div> -->
+                    <!-- <div :class="$style.tablebar">
+                        <div :class="[$style.bar,$style.top]">
+                        <table-bar v-if="rightBottom.eleOfficePoint[0]" :data="rightBottom.eleOfficePoint[0]">
+                        </table-bar>
+                        </div>
+                        <div :class="[$style.bar,$style.bottom]">
+                        <table-bar v-if="rightBottom.eleOfficePoint[1]" :data="rightBottom.eleOfficePoint[1]">
+                        </table-bar>                            
+                        </div>
+                    </div> -->
+                </div>
+                <div :class="[$style['right-bottom'],$style['right-bottom-price']]" v-show="rightCurrent===4">   
+                    <div id="electric-right-bottom-line1" :class="$style.linebar1"></div>
+                    <div id="electric-right-bottom-line2" :class="$style.linebar2"></div>
+                </div>
+            </div>
+        </div>
+</template>
+
+<script>
+import cardText from './electric/card.vue';
+import tableBar from './genery/tablebarcomp.vue';
+import 'echarts/map/js/province/zhejiang.js';
+import jzMap from './chartconfig/zjMap.js';
+import {categoryCount, categoryCost} from './chartconfig/staticData.js';
+import ConfigLine from './chartconfig/electricLine.js';
+import ConfigLineSmall from './chartconfig/electricLineSmall.js';
+import {provinceMap, cityMap} from './chartconfig/generyMap.js';
+import {ConfigElePie1, ConfigElePie2} from './chartconfig/electricPie.js';
+import ConfigPieLine from './chartconfig/electricPieAndLine.js';
+import { cityDataArr } from './cityMapCode.js';
+import {
+    getProvinceParam,
+    getCityParam,
+    searchVal,
+    searchValArr,
+    searchEncsArr,
+    searchValsArr,
+    searchMapData
+}
+    from './dataUtil.js';
+import {
+    electricBasicPage,
+    cityEncodeArr,
+    cityCodeArr,
+    cityNameArr,
+    countyEncodeArr,
+    getCountyCode,
+    getCountyName
+}
+    from './electric/origindata.js';
+
+export default {
+    data () {
+        return {
+            leftCurrent: 1,
+            rightCurrent: 1,
+            sourceData: {},
+            rightBottom: {
+                eleOfficePoint: [],
+                elecountList: [],
+                elecostList: [],
+                elePriceList: []
+            },
+            buttonStyle: {
+                backgroundColor: 'rgba(16, 162, 249, 1)'
+            },
+            currentCity: 'A33',
+            currentCityArr: cityNameArr,
+            currentCityCodeArr: cityCodeArr,
+            mapMoudle: 'province'
+        };
+    },
+    components: {
+        cardText,
+        tableBar
+    },
+    computed: {
+        currentMonth() {
+            return this.$store.getters.month;
+        },
+        allCount() {
+            return searchVal(this.currentCity, 'NHDP0036', this.sourceData) || 0;
+        },
+        allCountRa() {
+            return (searchVal(this.currentCity, 'NHDP0038', this.sourceData, 4) * 100).toFixed(2) || 0;
+        },
+        allCost() {
+            return searchVal(this.currentCity, 'NHDP0037', this.sourceData) || 0;
+        },
+        allCostRa() {
+            return (searchVal(this.currentCity, 'NHDP0039', this.sourceData, 4) * 100).toFixed(2) || 0;
+        },
+        allException() {
+            const encodes = [];
+            for (let index = 113; index < 119; index++) {
+                encodes.push(`NHDP0${index}`);
+            }
+            const arr = searchEncsArr(encodes, this.currentCity, this.sourceData);
+            return arr && parseInt(eval(arr.join('+')));
+        }
+        // pueType() {
+        //     const encodes = ['NHDP0062', 'NHDP0063'];
+
+        //     let data = searchValsArr(encodes, jzMap.arrCode);
+        //     return {
+        //         xAxisData: jzMap.arrName,
+        //         pueAdata: data[0],
+        //         pueBdata: data[1]
+        //     };
+        // }
+    },
+    methods: {
+        goBack() {
+            this.mapMoudle = 'province';
+            this.currentCity = 'A33';
+            this.currentCityArr = cityNameArr;
+        },
+        leftViewNumber() {
+            this.leftCurrent = 1;
+        },
+        leftViewMoney() {
+            this.leftCurrent = 2;
+        },
+        resizeChart() {
+            let charts = this.$store.getters.chartsArr;
+            const arr = ['chart4', 'chart5', 'chart6', 'chart7'];
+            for (let item in charts) {
+                (charts[item] && arr.includes(item)) && charts[item].resize();
+            }
+        },
+        rightViewPointNum() {
+            this.rightCurrent = 1;
+        },
+        rightViewNumber() {
+            this.rightCurrent = 2;
+        },
+        rightViewMoney() {
+            this.rightCurrent = 3;
+        },
+        rightViewPrice() {
+            this.rightCurrent = 4;
+        },
+        goElectricQuantity() {
+            this.$router.push({name: 'ElectricDetail', params: {page: 'quantity'}});
+        },
+        goElectricPrice() {
+            this.$router.push({name: 'ElectricDetail', params: {page: 'price'}});
+        },
+        goExceptionPage() {
+            this.$router.push({name: 'ElectricExc', params: {text: '666'}});
+        },
+        getAxiosData(date) {
+            let param1 = getProvinceParam(date, this.currentCity, electricBasicPage);
+            let param2;
+            if (this.mapMoudle !== 'city') { // 省级查看视图，查省级数据和所有市级数据
+                param2 = getCityParam(date, cityCodeArr, cityEncodeArr);
+            } else { // 省级查看视图，查某个市级数据和所有区县级数据
+                let countryCodeArr = getCountyCode(cityDataArr, this.currentCity);
+                param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
+            }
+            let data = param1 + ',' + param2;
+            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+                paramArrs: data
+            });
+            this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
+                this.sourceData = response.data;
+                this.setPUEData();
+                this.setLeftBottom();
+                this.setMap(this.sourceData, this.currentCity);
+                // this.mapMoudle === 'city' ? this.setRightBottomCountry() : this.setRightBottom();
+                this.setRightBottom();
+            }).catch((error) => {
+                console.warn(error);
+            });
+        },
+        setPUEData() {
+            let line = this.$echarts.init(document.getElementById('electric-all-lt'));
+            this.$store.commit('setCharts', {name: 'chart1', val: line});
+            const lineOption = JSON.parse(JSON.stringify(ConfigLine));
+            const encodes = ['NHDP0062', 'NHDP0063'];
+            let data = [];
+            let pueType = {};
+            if (this.mapMoudle === 'city') {
+                let codeArr = this.currentCityCodeArr;
+                let cityArr = this.currentCityArr;
+
+                data = searchValsArr(encodes, codeArr, this.sourceData);
+                pueType = {
+                    xAxisData: cityArr,
+                    pueAdata: data[0],
+                    pueBdata: data[1]
+                };
+            }
+            if (this.mapMoudle === 'province') {
+                data = searchValsArr(encodes, jzMap.arrCode, this.sourceData);
+                pueType = {
+                    xAxisData: jzMap.arrName,
+                    pueAdata: data[0],
+                    pueBdata: data[1]
+                };
+            }
+            lineOption.yAxis[0].max = 3;
+            lineOption.yAxis[0].min = 1;
+            lineOption.yAxis[0].splitNumber = 5;
+            let a = pueType.pueAdata.map((ele) => {
+                let obj = {};
+                obj.name = parseFloat(ele).toFixed(2) + '';
+                if (ele < 1) {
+                    obj.value = 1;
+                } else if (ele <= 3) {
+                    obj.value = parseFloat(ele).toFixed(2);
+                } else {
+                    obj.value = 3;
+                }
+                return obj;
+            });
+            let b = pueType.pueBdata.map((ele) => {
+                let obj = {};
+                obj.name = parseFloat(ele).toFixed(2) + '';
+                if (ele < 1) {
+                    obj.value = 1;
+                } else if (ele <= 3) {
+                    obj.value = parseFloat(ele).toFixed(2);
+                } else {
+                    obj.value = 3;
+                }
+                return obj;
+            });
+            lineOption.label.formatter = (params) => {
+                if (params.value === 1 || params.value === 3) {
+                    if (Number(params.name) === 0) {
+                        return 0;
+                    }
+                    return params.name;
+                } else {
+                    return params.value;
+                }
+            };
+            lineOption.xAxis[0].data = pueType.xAxisData && pueType.xAxisData;
+            lineOption.series[0].data = a && a;
+            lineOption.series[1].data = b && b;
+            line.setOption(lineOption);
+        },
+        setLeftBottom() {
+            const configOption = JSON.parse(JSON.stringify(ConfigPieLine));
+            let pieLine = this.$echarts.init(document.getElementById('electric-all-lb'));
+            this.$store.commit('setCharts', {name: 'chart2', val: pieLine});
+
+            const encodes1 = ['NHDP0052', 'NHDP0053', 'NHDP0054', 'NHDP0055', 'NHDP0056'];
+            const encodes2 = ['NHDP0057', 'NHDP0058', 'NHDP0059', 'NHDP0060', 'NHDP0061'];
+            let dataEcount = [];
+            let dataEcost = [];
+            if (this.mapMoudle === 'city') {
+                let codeArr = this.currentCityCodeArr;
+                let cityArr = this.currentCityArr;
+                dataEcount = searchValsArr(encodes1, codeArr, this.sourceData);
+                dataEcost = searchValsArr(encodes2, codeArr, this.sourceData);
+                configOption.xAxis[0].data = cityArr;
+            }
+            if (this.mapMoudle === 'province') {
+                dataEcount = searchValsArr(encodes1, jzMap.arrCode, this.sourceData);
+                dataEcost = searchValsArr(encodes2, jzMap.arrCode, this.sourceData);
+            }
+            let dataPieCount = searchEncsArr(encodes1, this.currentCity, this.sourceData);
+            let dataPieCost = searchEncsArr(encodes2, this.currentCity, this.sourceData);
+            if (this.leftCurrent === 1) {
+                configOption.legend.data = categoryCount;
+                configOption.series[0].data = dataPieCount;
+                configOption.series[0].name = '电量占比';
+                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCount, dataEcount));
+            }
+            if (this.leftCurrent === 2) {
+                configOption.legend.data = categoryCost;
+                configOption.series[0].name = '电费占比';
+                configOption.series[0].data = dataPieCost;
+                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCost, dataEcost));
+            }
+
+            pieLine.setOption(configOption);
+        },
+        setMap(arr, code) {
+            let map = this.$echarts.init(document.getElementById('electric-right-top'));
+            this.$store.commit('setCharts', {name: 'chart3', val: map});
+            if (this.mapMoudle !== 'city') {
+                let codes = jzMap.arrCode;
+                const encodes = ['NHDP0036', 'NHDP0037'];
+                let data = searchMapData(codes, encodes, arr, 'city');
+                const mapconfig = JSON.parse(JSON.stringify(provinceMap));
+                mapconfig.title.text = '当年累计用电';
+                mapconfig.tooltip.formatter = function(params) {
+                    return `<div>${params.data.name}</div><div>累计用电量：${params.data.value}万度</div> <div>累计电费：${params.data.value1}万元</div>`;
+                };
+                mapconfig.series[0].data = data;
+                map.setOption(mapconfig);
+            } else {
+                let name = jzMap.mapName[code];
+                this.$echarts.registerMap(name, jzMap.mapJson[name]);
+                const mapconfig = JSON.parse(JSON.stringify(cityMap));
+                let clickCode = jzMap.mapCode[name];
+                let subCodeCount = jzMap.countryCodeCount[clickCode];
+                let subCodes = addCodes(clickCode, subCodeCount);
+                const encodes = ['NHDP0036', 'NHDP0037'];
+                let data2 = searchMapData(subCodes, encodes, arr, 'country');
+                mapconfig.title.text = '当年累计用电';
+                mapconfig.tooltip.formatter = function(params) {
+                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
+                };
+                mapconfig.series[0].map = name;
+                mapconfig.series[0].data = data2;
+                map.setOption(mapconfig);
+            }
+            map.on('click', (param) => {
+                if (this.mapMoudle === 'city') {
+                    return;
+                }
+                this.mapMoudle = 'city';
+                let clickCode = jzMap.mapCode[param.name];
+
+                this.currentCityArr = getCountyName(cityDataArr, clickCode);
+                this.currentCityCodeArr = getCountyCode(cityDataArr, clickCode);
+                this.currentCity = clickCode;
+            });
+        },
+        setRightBottom() {
+            let encodes1 = [];
+            let encodes2 = [];
+            if (this.rightCurrent === 4) {
+                encodes1 = ['NHDP0103', 'NHDP0104', 'NHDP0105', 'NHDP0106', 'NHDP0107'];
+                encodes2 = ['NHDP0108', 'NHDP0109', 'NHDP0110', 'NHDP0111', 'NHDP0112'];
+                const Xdata2 = ['转供电', '铁塔转供', '铁塔直供', '协议栈转供', '其他'];
+                this.$nextTick(() => {
+                    let line1 = this.$echarts.init(document.getElementById('electric-right-bottom-line1'));
+                    let line2 = this.$echarts.init(document.getElementById('electric-right-bottom-line2'));
+                    // this.$store.commit('setCharts', {name: 'chart4', val: line1});
+                    // this.$store.commit('setCharts', {name: 'chart5', val: line2});
+                    const lineOption1 = JSON.parse(JSON.stringify(ConfigLineSmall));
+                    const lineOption2 = JSON.parse(JSON.stringify(ConfigLineSmall));
+                    let data1 = searchEncsArr(encodes1, this.currentCity, this.sourceData);
+                    let data2 = searchEncsArr(encodes2, this.currentCity, this.sourceData);
+                    // data1 = data1.map((ele) => {
+                    //     return ele ? parseInt(ele) : 0;
+                    // });
+                    // data2 = data2.map((ele) => {
+                    //     return ele ? parseInt(ele) : 0;
+                    // });
+                    // console.log(data1);
+                    // let val = data1[0];
+                    // data1[0] = {
+                    //     value: val,
+                    //     itemStyle: {
+                    //         // color: '#ffa848',
+                    //         borderColor: '#fff',
+                    //         borderWidth: 5
+                    //     }
+                    // };
+                    lineOption1.series[0].data = data1;
+                    lineOption1.series[0].color = (params) => {
+                        const colorList = ['#ffa848', '#fad04e', '#fad04e', '#fad04e', '#fad04e'];
+                        return colorList[params.dataIndex];
+                    };
+                    lineOption2.series[0].data = data2;
+                    lineOption2.series[0].name = '转供电';
+                    lineOption2.legend.data = ['转供电'];
+                    lineOption2.series[0].color = (params) => {
+                        const colorList = ['#24c6ff', '#9fcff8', '#9fcff8', '#9fcff8', '#9fcff8'];
+                        return colorList[params.dataIndex];
+                    };
+                    lineOption2.xAxis[0].data = Xdata2;
+                    line1.setOption(lineOption1);
+                    line2.setOption(lineOption2);
+                });
+
+                return;
+            }
+            if (this.rightCurrent === 1) {
+                encodes1 = ['NHDP0081', 'NHDP0077', 'NHDP0078', 'NHDP0079', 'NHDP0080'];
+                encodes2 = ['NHDP0086', 'NHDP0082', 'NHDP0083', 'NHDP0084', 'NHDP0085'];
+            }
+            if (this.rightCurrent === 2) {
+                encodes1 = ['NHDP0068', 'NHDP0064', 'NHDP0065', 'NHDP0066', 'NHDP0067'];
+                encodes2 = ['NHDP0073', 'NHDP0069', 'NHDP0070', 'NHDP0071', 'NHDP0072'];
+            }
+            if (this.rightCurrent === 3) {
+                encodes1 = ['NHDP0094', 'NHDP0090', 'NHDP0091', 'NHDP0092', 'NHDP0093'];
+                encodes2 = ['NHDP0099', 'NHDP0095', 'NHDP0096', 'NHDP0097', 'NHDP0098'];
+            }
+            let offPoint1 = searchEncsArr(encodes1, this.currentCity, this.sourceData);
+            let offPoint2 = searchEncsArr(encodes2, this.currentCity, this.sourceData);
+            // this.rightBottom.eleOfficePoint = [getElectricItem(offPoint1, 1), getElectricItem(offPoint2, 2)];
+
+            let pie1 = this.$echarts.init(document.getElementById('electric-right-bottom'));
+            let pie2 = this.$echarts.init(document.getElementById('electric-right-bottompie2'));
+
+            // this.$store.commit('setCharts', {name: 'chart6', val: pie1});
+            // this.$store.commit('setCharts', {name: 'chart7', val: pie2});
+            ConfigElePie1.series[0].data = [
+                {value: offPoint2[0], name: '转供电'},
+                {value: offPoint1[0], name: '直供电'},
+            ];
+            ConfigElePie2.series[0].data = [
+                {value: 8, name: '转供电', label: getLabel('B', offPoint2.slice(1))},
+                {value: 20, name: '转供电', label: {show: false}, labelLine: {show: false}},
+                {value: 8, name: '直供电', label: getLabel('A', offPoint1.slice(1))},
+            ];
+            let all = parseFloat(offPoint1[0]) + parseFloat(offPoint2[0]);
+            let point2 = parseFloat(offPoint2[0]);
+            // let startAngle = 270 - (parseFloat(point2 / (all * 2)).toFixed(2)) * 360;
+            // ConfigElePie1.series[0].startAngle = startAngle;
+            let angle = (parseFloat(point2 / all).toFixed(2)) * 360;
+            let startAngle = angle >= 80 ? 0 : 320 + angle / 2;
+            ConfigElePie1.series[0].startAngle = startAngle;
+            pie2.setOption(ConfigElePie2);
+
+            pie1.setOption(ConfigElePie1);
+        },
+        setRightBottomCountry() {
+
+        }
+    },
+    created() {
+        this.getAxiosData(this.currentMonth);
+    },
+    beforeDestroy() {
+
+    },
+    mounted() {
+        // let map = this.$echarts.init(document.getElementById('electric-right-top'));
+        // let pie2 = this.$echarts.init(document.getElementById('electric-right-bottom'));
+
+        // map.setOption(provinceMap);
+        // pie2.setOption(ConfigElePie);
+        // console.log(this.$refs);
+    },
+    watch: {
+        currentMonth: function(val, oldVal) {
+            this.getAxiosData(val);
+        },
+        currentCity: function(val, oldVal) {
+            this.getAxiosData(this.currentMonth);
+        },
+        leftCurrent() {
+            this.setLeftBottom();
+        },
+        rightCurrent() {
+            // this.this.$nextTick(() => {
+            this.setRightBottom();
+            // });
+
+            // this.resizeChart();
+        }
+    }
+
+};
+function getDataLineBar(category, dataArr) {
+    const array = [];
+    category.forEach((ele, index) => {
+        let obj = {
+            name: ele,
+            type: 'bar',
+            stack: '用量',
+            barWidth: '13',
+            barCategoryGap: '10%',
+            data: dataArr[index]
+        };
+        array.push(obj);
+    });
+    return array;
+}
+function getDataPie(category, dataArr) {
+    const array = [];
+    category.forEach((ele, index) => {
+        let obj = {
+            name: ele,
+            value: dataArr[index]
+        };
+        array.push(obj);
+    });
+    return array;
+}
+
+function addCodes(code, count) {
+    let arr = [];
+    for (let index = 1; index <= count; index++) {
+        index > 9 ? arr.push(`${code}${index}`) : arr.push(`${code}0${index}`);
+    }
+    return arr;
+}
+function getElectricItem(valArr, type) {
+    // let arr = type === 1 ? [{name: '直供电', value: 0}] : [{name: '转供电', value: 0}];
+    let arr = [];
+    const staticData = type === 1 ? ['直供电', '大工业', '居民生活', '一般商业', '其他'] : ['转供电', '铁塔转供', '铁塔直供', '协议栈转供', '其他'];
+    valArr.forEach(function (ele, index) {
+        arr.push({
+            name: staticData[index],
+            val: (ele ? parseInt(ele) : 0)
+        });
+    });
+    return arr;
+}
+function getLabel(type, data, width) {
+    width = width || 312;
+    let tempTitle = type === 'A' ? ('{legend1|}{valueHead|大工业}{splitline|}{legend2|}{valueHead|一般工商}{splitline|}' +
+    '{legend3|}{valueHead|居民生活}{splitline|}{legend4|}{valueHead|不明}')
+        : ('{legend1|}{valueHead|铁塔直供}{splitline|}{legend2|}{valueHead|铁塔转供}{splitline|}' +
+    '{legend3|}{valueHead|其他转供}{splitline|}{legend4|}{valueHead|不明}');
+    const tempVal = type === 'A' ? `{legend5|}{valueHead|${parseInt(data[0])}}{splitline|}{legend5|}{valueHead|${parseInt(data[2])}}{splitline|}{legend5|}{valueHead|${parseInt(data[1])}}{splitline|}{legend5|}{valueHead|${parseInt(data[3])}}`
+        : `{legend5|}{valueHead|${parseInt(data[1])}}{splitline|}{legend5|}{valueHead|${parseInt(data[0])}}{splitline|}{legend5|}{valueHead|${parseInt(data[2])}}{splitline|}{legend5|}{valueHead|${parseInt(data[3])}}`;
+    let all = 0;
+    data.forEach(element => {
+        all += Number(element);
+    });
+    let widthArr = [];
+    data.forEach(ele => {
+        let wid = parseInt(Number(ele) / all * width);
+        widthArr.push(wid);
+    });
+    const label = {
+        normal: {
+            formatter: [
+                '{bara1|}{bara2|}{bara3|}{bara4|}',
+                '{hr|}',
+                tempTitle,
+                tempVal
+            ].join('\n'),
+            backgroundColor: 'rgba(103, 179, 238, 0.5)',
+            // borderColor: '#777',
+            borderWidth: 0,
+            position: 'right',
+            borderRadius: 1,
+            padding: [0, 0, 0, 0],
+            rich: {
+                // ['#ffed8b', '#ffa848', '#70fed2', '#6668ff', '#3dd55a']
+                bara1: {
+                    width: widthArr[0],
+                    backgroundColor: '#ffed8b',
+
+                },
+                bara2: {
+                    width: widthArr[1],
+                    backgroundColor: '#ffa848',
+
+                },
+                bara3: {
+                    width: widthArr[2],
+                    backgroundColor: '#70fed2',
+
+                },
+                bara4: {
+                    width: widthArr[3],
+                    backgroundColor: '#6668ff',
+
+                },
+                legend1: {
+                    width: 6,
+                    backgroundColor: '#ffed8b',
+                },
+                legend2: {
+                    width: 6,
+                    backgroundColor: '#ffa848',
+                },
+                legend3: {
+                    width: 6,
+                    backgroundColor: '#70fed2',
+                },
+                legend4: {
+                    width: 6,
+                    backgroundColor: '#6668ff',
+                },
+                legend5: {
+                    width: 6,
+                    backgroundColor: 'rgba(255, 255, 255, 0)',
+                },
+                splitline: {
+                    width: 2,
+                    backgroundColor: '#0067c0',
+                    height: 20,
+                },
+                valueHead: {
+                    width: 70,
+                    height: 20,
+                    color: '#fff',
+                    // padding: [0, 10, 0, 5],
+                    align: 'left',
+                    // backgroundColor: 'rgba(103, 179, 238, 0.5)',
+                },
+                hr: {
+                    borderColor: '#0067c0',
+                    width: '100%',
+                    borderWidth: 1.5,
+                    height: 0
+                }
+            }
+        }
+    };
+    return label;
+}
+</script>
+
+<style lang="scss" module>
+    .content{
+        height: 90%;
+        width: 100%;
+        margin-top: 20px;
+        position: absolute;
+        top: 7%;
+        overflow-y: hidden;
+        &>div{
+
+            background-color: rgba(16,162,249,0.1);
+            border: 0.08rem solid rgba(16,162,249,0.5);
+            position: absolute;
+            border-radius: 0.6rem;
+        }
+        .left-top{
+            left: 3%;
+            width:52%;
+            height: 17%;
+            background:none;
+            border: none;
+            &>div{
+                position: absolute;
+                height: 100%;
+                width: 35%;
+                background-color: rgba(16,162,249,0.4);
+                border: 0.08rem solid rgba(16,162,249,0.5);
+                border-radius: 0.6rem;
+            }
+            .left-top-m{
+                left:37.5%;             
+            }
+            .left-top-r{
+                left:75%;
+                width: 25%;
+            }
+        }
+        .left-bottom{
+            left: 3%;
+            top:20%;
+            width:52%;
+            height: 75%;
+            &>div{
+                width:100%;
+            }
+            .left-bottom-t{
+                height: 40%;
+                &>div{
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+            .left-bottom-m{
+                //background-color: #ffea00;
+                height: 7%;
+                text-align: center;             
+            }
+            .left-bottom-b{
+                height: 52%;
+                &>div{
+                    height: 100%;
+                    width: 100%;
+                }                  
+            }
+        }
+        .right-all{
+            height: 95%;
+            right: 3%;
+            width:40%;
+            .right-top{
+                height:55%;               
+            }
+            .right-top-back{
+                top:20px;
+                right: 10px;
+                position: absolute;
+            }
+            .right-mid{
+                height: 5%;
+                // padding-left: calc(50% - 116px);
+                // position: absolute;
+                // z-index: 101;
+                text-align: center;
+            }
+            .right-bottom{
+                height:37%;
+                position: relative;
+                .pie{
+                    position: absolute;
+                    float: left;
+                    height: 100%;
+                    display: inline-block;
+                    width: 100%;
+                }
+                .tablebar{
+                    float: left;
+                    height: 100%;
+                    display: inline-block;
+                    width: 60%;
+                    .bar{
+                        height: 20%;
+                        width: 60%;
+                    }
+                    .top{
+                        position: absolute;
+                        top:35%
+                    }
+                    .bottom{
+                        position: absolute;
+                        top:60%
+                    }
+                }
+                .linebar1,.linebar2{
+                    height: 49%;
+                    width: 100%;
+                }
+            }
+        }
+    }
+  
+</style>
+
+
