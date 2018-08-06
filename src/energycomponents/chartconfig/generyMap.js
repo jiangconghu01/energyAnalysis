@@ -1,4 +1,3 @@
-
 const provinceMap = {
     title: {
         text: '当年累计能耗发生量',
@@ -13,10 +12,10 @@ const provinceMap = {
         trigger: 'item',
         confine: true,
         formatter: '{b}<br/>{c}'
-        // formatter: function(params, ticket, callback) {
-        //     // console.log(params, '3453495348573535');
-        //     return params.name;
-        // }
+            // formatter: function(params, ticket, callback) {
+            //     // console.log(params, '3453495348573535');
+            //     return params.name;
+            // }
     },
     // legend: {
     //     x: 'right',
@@ -47,14 +46,17 @@ const provinceMap = {
         // ],
         color: ['#0052bc', '#b9effe']
     },
-    roam: true,
+    //roam: true,
     series: [{
         type: 'map',
         // selectedMode: 'single',
         map: '浙江',
         zoom: 1.1,
-        data: [
-        ],
+        mapLocation: {
+            x: "center",
+            y: "center"
+        },
+        data: [],
         itemStyle: {
             normal: {
                 label: {
@@ -86,9 +88,9 @@ const cityMap = {
     tooltip: {
         trigger: 'item',
         formatter: '{b}<br/>{c}'
-        // formatter: (p) => {
-        //     console.log(p);
-        // }
+            // formatter: (p) => {
+            //     console.log(p);
+            // }
     },
     dataRange: {
         orient: 'vertical',
@@ -104,13 +106,15 @@ const cityMap = {
         calculable: true,
         color: ['#0052bc', '#b9effe']
     },
-    roam: true,
+    //roam: true,
     series: [{
         type: 'map',
-        map: '',
         zoom: 0.9,
-        data: [
-        ],
+        mapLocation: {
+            x: "center",
+            y: "center"
+        },
+        data: [],
         itemStyle: {
             normal: {
                 label: {
@@ -120,7 +124,7 @@ const cityMap = {
                 },
                 borderColor: '#fff',
             },
-            emphasis: {label: {show: true}},
+            emphasis: { label: { show: true } },
         }
     }],
 
@@ -138,4 +142,4 @@ const cityMap = {
 //     }
 //     return result.join('');
 // }
-export {provinceMap, cityMap};
+export { provinceMap, cityMap };

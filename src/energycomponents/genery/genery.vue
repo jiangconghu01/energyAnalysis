@@ -5,7 +5,7 @@
                 <div :class="$style['left-top-tip']" :style="getSize">
                     <span>总能源费(万元)</span>
                     <span :class="$style['left-top-tipval']">{{leftTop.allCost}}</span>
-                    <span>总耗能量(万度)</span>
+                    <span>总耗能量(吨标煤)</span>
                     <span :class="$style['left-top-tipval']">{{leftTop.allCount}}</span>
                 </div>
                 <div :class="$style['left-top-tip-exception']" v-if="negativeList.length">
@@ -155,6 +155,7 @@ export default {
             return '';
         },
         goBack() {
+            debugger
             this.mapMoudle = 'province';
             this.currentCity = 'A33';
             this.currentCityArr = cityNameArr;
@@ -328,22 +329,24 @@ export default {
             this.rightBottom = generyRBData(arr, code);
         },
         setMap(arr, code) {
+                            debugger
             let map = this.$echarts.init(document.getElementById('genery-right-top'));
-            this.$store.commit('setCharts', {name: 'chart3', val: map});
-            if (this.mapMoudle !== 'city') {
+                this.$store.commit('setCharts', {name: 'chart3', val: map});
+            if (this.mapMoudle === 'province') {
                 let codes = jzMap.arrCode;
                 const encodes = ['NHDP0005', 'NHDP0006'];
                 let data = searchMapData(codes, encodes, arr, 'city');
-                const mapconfig = JSON.parse(JSON.stringify(provinceMap));
+                let mapconfig = JSON.parse(JSON.stringify(provinceMap));
                 mapconfig.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
                 };
                 mapconfig.series[0].data = data;
+                //mapconfig.roam=false;
                 map.setOption(mapconfig);
             } else {
                 let name = jzMap.mapName[code];
                 this.$echarts.registerMap(name, jzMap.mapJson[name]);
-                const mapconfig = JSON.parse(JSON.stringify(cityMap));
+                let mapconfig = JSON.parse(JSON.stringify(cityMap));
 
                 let clickCode = jzMap.mapCode[name];
                 let subCodeCount = jzMap.countryCodeCount[clickCode];
@@ -355,10 +358,13 @@ export default {
                 };
                 mapconfig.series[0].map = name;
                 mapconfig.series[0].data = data2;
+
+                mapconfig.roam=true;
                 map.setOption(mapconfig);
             }
             map.on('click', (param) => {
                 if (this.mapMoudle === 'city') {
+                    console.log(param.name);
                     return;
                 }
                 this.mapMoudle = 'city';
@@ -439,14 +445,14 @@ function addCodes(code, count) {
             .left-top-tip{
                 position: absolute;
                 left: 45%;
-                top: 50%;
+                top: 51%;
                 transform: translateY(-57%) translateX(-50%);
-                width: 80px;
+                width: 100px;
                 height: 120px;
                 padding-top: 40px;
                 color: #fff;
                 span{
-                    width: 80px;
+                    width: 100px;
                     display: inline-block;
                     text-align: center;
                     font-size: 12px;
