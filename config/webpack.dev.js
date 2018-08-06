@@ -14,7 +14,7 @@ module.exports = merge(common, {
             '/czxt/*': {
                 // target: 'http://rap2api.taobao.org/app/mock/18550',
                 // target: 'http://134.96.245.118:7001/',
-                target: 'http://0.0.0.0:3000/',
+                target: 'http://localhost:3000/',
                 changeOrigin: true,
                 secure: false,
             }
