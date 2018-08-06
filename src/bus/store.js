@@ -54,6 +54,7 @@ function validataOS() {
         return 'NUll';
     }
 }
+
 function beforeMonth() {
     let date = new Date();
     let year = date.getFullYear();

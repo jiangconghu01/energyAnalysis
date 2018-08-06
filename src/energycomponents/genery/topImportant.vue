@@ -40,7 +40,6 @@
 </template>
 
 <script>
-
 import ratioComp2 from './ratiocomp2.vue';
 import ratioComp3 from './ratiocomp3.vue';
 import {provinceMap, cityMap} from '../chartconfig/generyMap.js';
@@ -136,9 +135,6 @@ export default {
             left: 3%;
             width:55%;
             height: 45%;
-            .first{
-
-            }
             .second{
                 left:50%;
             }
