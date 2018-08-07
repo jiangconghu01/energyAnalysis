@@ -109,7 +109,7 @@ const cityMap = {
     //roam: true,
     series: [{
         type: 'map',
-        zoom: 0.9,
+        zoom: 1.1,
         mapLocation: {
             x: "center",
             y: "center"

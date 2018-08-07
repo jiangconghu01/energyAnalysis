@@ -25,6 +25,7 @@ const generyAllProvince = (() => {
 const cityEncodeArr = ['NHDP0005', 'NHDP0006', 'NHDP0009', 'NHDP0010', 'NHDP0013', 'NHDP0014', 'NHDP0015', 'NHDP0016'];
 const cityCodeArr = getCityCode(provinceData);
 const cityNameArr = getCityName(provinceData);
+
 function getCityCode(provinceData) {
     const cityCodeArr = [];
     const arr = provinceData.subCityArr;
@@ -33,6 +34,7 @@ function getCityCode(provinceData) {
     }
     return cityCodeArr;
 }
+
 function getCityName(provinceData) {
     const cityNameArr = [];
     const arr = provinceData.subCityArr;
@@ -59,6 +61,7 @@ function getCountyCode(cityDataArr, cityCode) {
     }
     return countyCodeArr;
 }
+
 function getCountyName(cityDataArr, cityCode) {
     const countyNameArr = [];
     let targetCity = {};
@@ -73,6 +76,23 @@ function getCountyName(cityDataArr, cityCode) {
     }
     return countyNameArr;
 }
+
+function getCountyCodeOne(cityDataArr, cityName) {
+    //const countyCodeArr = [];
+    let a = ''
+    for (let i = 0; i < cityDataArr.length; i++) {
+        let sub = cityDataArr[i].subCityArr;
+        for (let index = 0; index < sub.length; index++) {
+            const element = sub[index];
+            if (element.cityName === cityName) {
+                //countyCodeArr.push(element.cityCode);
+                a = element.cityCode;
+            }
+
+        }
+    }
+    return a;
+}
 export {
     generyAllProvince,
     cityEncodeArr,
@@ -80,5 +100,6 @@ export {
     cityNameArr,
     countyEncodeArr,
     getCountyCode,
-    getCountyName
+    getCountyName,
+    getCountyCodeOne
 };

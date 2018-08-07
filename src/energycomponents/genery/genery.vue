@@ -92,13 +92,15 @@ import {
     cityNameArr,
     countyEncodeArr,
     getCountyCode,
-    getCountyName
+    getCountyName,
+    getCountyCodeOne
 }
     from './origindata.js';
 export default {
     data () {
         return {
             sourceData: {},
+            sourceCountryData: {},
             leftTop: {},
             leftBottom: {},
             rightTop: {},
@@ -114,7 +116,8 @@ export default {
             currentCityArr: cityNameArr,
             mapMoudle: 'province',
             hoverLine: '',
-            tipHtCon: 280
+            tipHtCon: 280,
+            countryNameOne:''
 
         };
     },
@@ -155,7 +158,6 @@ export default {
             return '';
         },
         goBack() {
-            debugger
             this.mapMoudle = 'province';
             this.currentCity = 'A33';
             this.currentCityArr = cityNameArr;
@@ -168,10 +170,14 @@ export default {
         getAxiosData(date) {
             let param1 = getProvinceParam(date, this.currentCity, generyAllProvince);
             let param2;
-            if (this.currentCity === 'A33') { // 省级总览
+            if (this.mapMoudle=== 'province') { // 省级总览
                 param2 = getCityParam(date, cityCodeArr, cityEncodeArr);
-            } else {
+            } else if(this.mapMoudle=== 'city') {
                 let countryCodeArr = getCountyCode(cityDataArr, this.currentCity);
+                param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
+            }else{
+                let countryCodeArr =[this.currentCity];
+           // console.log(a);
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
             }
 
@@ -183,6 +189,16 @@ export default {
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
+                
+                if(this.mapMoudle === 'country'){
+                    this.sourceCountryData = response.data;
+                     this.setLeftTop(this.sourceCountryData, this.currentCity);
+                    this.setLeftBottom(this.sourceCountryData, this.currentCity);
+                    this.setRightBottom(this.sourceCountryData, this.currentCity);
+                    this.setMap(this.sourceCountryData, this.currentCity);
+                    return;
+                }
+                debugger
                 this.sourceData = response.data;
                 this.setLeftTop(this.sourceData, this.currentCity);
                 this.setLeftBottom(this.sourceData, this.currentCity);
@@ -281,8 +297,11 @@ export default {
                     return parseFloat(val * 100).toFixed(2) + '%';
                 }
             };
-
-            option.xAxis[0].data = this.currentCityArr;
+            if (this.mapMoudle === 'country'){
+                option.xAxis[0].data=[this.countryNameOne];
+            }else{
+                 option.xAxis[0].data = this.currentCityArr;
+            }
             option.series[0].data = this.leftBottom.listPersentNet;
             option.series[1].data = this.leftBottom.listPersentIDC;
             const max = Math.max(Math.max.apply(null, this.leftBottom.listPersentNet), Math.max.apply(null, this.leftBottom.listPersentIDC));
@@ -290,7 +309,7 @@ export default {
             let guid = this.leftBottom.guideVal;
             let warn = this.leftBottom.warnVal;
             let len = this.currentCityArr.length - 1;
-            option.yAxis[0].min = min;
+            option.yAxis[0].min=this.mapMoudle === 'country'? 0:min;
             option.yAxis[0].max = max > warn ? max : warn;
             option.series[1].markLine = {
                 symbol: ['none'],
@@ -306,30 +325,13 @@ export default {
                     },
                 }]
             };
-            // {
-            //     coord: [len, guid]
-            // }
-            // option.series[1].markLine.data[1] = [
-            //     {
-            //         symbol: ['none'],
-            //         lineStyle: {
-            //             color: '#fad04e'
-            //         },
-            //         name: '预警值\n' + warn,
-            //         coord: [0, warn]
-            //     },
-            //     {
-            //         coord: [len, warn]
-            //     }
-            // ];
-
             line.setOption(option);
         },
         setRightBottom(arr, code) {
             this.rightBottom = generyRBData(arr, code);
         },
         setMap(arr, code) {
-                            debugger
+                            //debugger
             let map = this.$echarts.init(document.getElementById('genery-right-top'));
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
             if (this.mapMoudle === 'province') {
@@ -343,7 +345,7 @@ export default {
                 mapconfig.series[0].data = data;
                 //mapconfig.roam=false;
                 map.setOption(mapconfig);
-            } else {
+            } else if(this.mapMoudle === 'city'){
                 let name = jzMap.mapName[code];
                 this.$echarts.registerMap(name, jzMap.mapJson[name]);
                 let mapconfig = JSON.parse(JSON.stringify(cityMap));
@@ -356,15 +358,29 @@ export default {
                 mapconfig.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
                 };
+                
                 mapconfig.series[0].map = name;
                 mapconfig.series[0].data = data2;
 
-                mapconfig.roam=true;
+               // mapconfig.roam=true;
                 map.setOption(mapconfig);
+            }else{
+
             }
+            map.off('click');
             map.on('click', (param) => {
+                debugger
+                if( this.mapMoudle === 'country'){
+                     this.currentCity = getCountyCodeOne(cityDataArr,param.name);
+                     this.currentCityArr=[param.name];
+                     this.countryNameOne=param.name;
+                     return;
+                }
                 if (this.mapMoudle === 'city') {
-                    console.log(param.name);
+                    this.mapMoudle = 'country';
+                     this.countryNameOne=param.name;
+                    //console.log(param.name);
+                   this.currentCity = getCountyCodeOne(cityDataArr,param.name);
                     return;
                 }
                 this.mapMoudle = 'city';
@@ -388,10 +404,10 @@ export default {
         // this.$echarts.registerMap(this.mapName, zjMapjson);
         // map.setOption(provinceMap);
         // console.log(this.$refs['all-left-top'].clientHeight);
-        this.tipHtCon = this.$refs['all-left-top'].clientHeight;
-        window.onresize = () => {
-            this.tipHtCon = this.$refs['all-left-top'].clientHeight;
-        };
+        // this.tipHtCon = this.$refs['all-left-top'].clientHeight;
+        // window.onresize = () => {
+        //     this.tipHtCon = this.$refs['all-left-top'].clientHeight;
+        // };
     },
     watch: {
         currentMonth: function(val, oldVal) {

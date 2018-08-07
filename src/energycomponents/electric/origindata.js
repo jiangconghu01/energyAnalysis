@@ -58,6 +58,7 @@ const exceEncodeArr = (() => {
 })();
 const cityCodeArr = getCityCode(provinceData);
 const cityNameArr = getCityName(provinceData);
+
 function getCityCode(provinceData) {
     const cityCodeArr = [];
     const arr = provinceData.subCityArr;
@@ -66,6 +67,7 @@ function getCityCode(provinceData) {
     }
     return cityCodeArr;
 }
+
 function getCityName(provinceData) {
     const cityNameArr = [];
     const arr = provinceData.subCityArr;
@@ -91,6 +93,24 @@ function getCountyCode(cityDataArr, cityCode) {
     }
     return countyCodeArr;
 }
+
+function getCountyCodeOne(cityDataArr, cityName) {
+    //const countyCodeArr = [];
+    let a = ''
+    for (let i = 0; i < cityDataArr.length; i++) {
+        let sub = cityDataArr[i].subCityArr;
+        for (let index = 0; index < sub.length; index++) {
+            const element = sub[index];
+            if (element.cityName === cityName) {
+                //countyCodeArr.push(element.cityCode);
+                a = element.cityCode;
+            }
+
+        }
+    }
+    return a;
+}
+
 function getCountyName(cityDataArr, cityCode) {
     const countyNameArr = [];
     let targetCity = {};
@@ -116,5 +136,6 @@ export {
     getCountyName,
     detailEncodeArr,
     detailEncodeArr2,
-    exceEncodeArr
+    exceEncodeArr,
+    getCountyCodeOne
 };
