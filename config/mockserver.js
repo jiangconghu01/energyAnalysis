@@ -1,10 +1,10 @@
 const Koa = require('koa');
 const app = new Koa();
 
-app.use(async (ctx) => {
+app.use(async(ctx) => {
     // console.log(ctx.url);
     if (ctx.url === '/' && ctx.method === 'GET') {
-    // 当GET请求时候返回表单页面
+        // 当GET请求时候返回表单页面
         let html = `
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
       <h1>koa2 request post method</h1>
@@ -20,7 +20,7 @@ app.use(async (ctx) => {
     `;
         ctx.body = html;
     } else if (ctx.url === '/' && ctx.method === 'POST') {
-    // 当POST请求的时候，解析POST表单里的数据，并显示出来
+        // 当POST请求的时候，解析POST表单里的数据，并显示出来
         let postData = await parsePostData(ctx);
         ctx.body = postData;
     } else if (ctx.url === '/czxt/pages/wjhx/getIdWjhxParm.do' && ctx.method === 'POST') {
@@ -42,7 +42,7 @@ app.use(async (ctx) => {
         });
         ctx.body = postData;
     } else {
-    // 其他请求显示404
+        // 其他请求显示404
         ctx.body = '<h1>404！！！ o(╯□╰)o</h1>';
     }
 });
@@ -53,6 +53,7 @@ const persentage = ['NHDP0011', 'NHDP0012', 'NHDP0015', 'NHDP0016', 'NHDP0038', 
 const point = ['NHDP0062', 'NHDP0063'];
 const negative = ['NHDP0007', 'NHDP0008'];
 const juzhanshu = ['NHDP0018', 'NHDP0019', 'NHDP0020', 'NHDP0021', 'NHDP0022'];
+
 function getCZXTData(reqStr) {
     let str = '';
     let reqArr = reqStr.split('],[');
@@ -71,20 +72,22 @@ function getCZXTData(reqStr) {
         } else if (negative.includes(ele[2])) {
             // return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${-(Math.random() * 5000) + 10}","indexCode":"${ele[2]}"}`;
             return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${(Math.random() * 5000) + 10}","indexCode":"${ele[2]}"}`;
-        } else if (juzhanshu.includes(ele[2])) {
-            switch (ele[2]) {
-            case 'NHDP0018':
-                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"17","indexCode":"${ele[2]}"}`;
-            case 'NHDP0019':
-                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"140","indexCode":"${ele[2]}"}`;
-            case 'NHDP0020':
-                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"299","indexCode":"${ele[2]}"}`;
-            case 'NHDP0021':
-                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"33567","indexCode":"${ele[2]}"}`;
-            case 'NHDP0022':
-                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"69234","indexCode":"${ele[2]}"}`;
-            }
-        } else {
+        }
+        // else if (juzhanshu.includes(ele[2])) {
+        //     switch (ele[2]) {
+        //     case 'NHDP0018':
+        //         return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"17","indexCode":"${ele[2]}"}`;
+        //     case 'NHDP0019':
+        //         return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"140","indexCode":"${ele[2]}"}`;
+        //     case 'NHDP0020':
+        //         return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"299","indexCode":"${ele[2]}"}`;
+        //     case 'NHDP0021':
+        //         return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"33567","indexCode":"${ele[2]}"}`;
+        //     case 'NHDP0022':
+        //         return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"69234","indexCode":"${ele[2]}"}`;
+        //     }
+        // } 
+        else {
             return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${Math.random() * 5000 + 100}","indexCode":"${ele[2]}"}`;
             // return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${0}","indexCode":"${ele[2]}"}`;
         }
@@ -120,9 +123,9 @@ function parseQueryStr(queryStr) {
     let queryData = {};
     let queryStrList = queryStr.split('&');
     console.log(queryStrList);
-    for (let [ index, queryStr ] of queryStrList.entries()) {
+    for (let [index, queryStr] of queryStrList.entries()) {
         let itemList = queryStr.split('=');
-        queryData[ itemList[0] ] = decodeURIComponent(itemList[1]);
+        queryData[itemList[0]] = decodeURIComponent(itemList[1]);
     }
     return queryData;
 }

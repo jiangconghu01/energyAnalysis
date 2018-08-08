@@ -129,19 +129,8 @@ export default {
 
     },
     methods: {
-
-    },
-    created() {
-
-    },
-    updated() {
-        // console.log(this.data, this.first);
-
-    },
-    mounted() {
-        console.log(this.data.slice(1));
-        console.log(this.maxLog);
-        let t = this.$echarts.init(document.getElementById(this.itemid));
+    setBar(){
+     let t = this.$echarts.init(document.getElementById(this.itemid));
         const configco = JSON.parse(JSON.stringify(config));
         const isNor = this.type === 'normal';
         // console.log(this.subList, this.subListLog);
@@ -203,6 +192,22 @@ export default {
         };
 
         t.setOption(configco);
+        }
+    },
+    created() {
+
+    },
+    updated() {
+        // console.log(this.data, this.first);
+
+    },
+    mounted() {
+        this.setBar();
+    },
+    watch:{
+        subList(){
+             this.setBar();
+        }
     }
 };
 </script>
