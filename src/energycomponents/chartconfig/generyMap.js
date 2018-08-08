@@ -46,7 +46,7 @@ const provinceMap = {
         // ],
         color: ['#0052bc', '#b9effe']
     },
-    //roam: true,
+    roam: true,
     series: [{
         type: 'map',
         // selectedMode: 'single',
@@ -106,7 +106,7 @@ const cityMap = {
         calculable: true,
         color: ['#0052bc', '#b9effe']
     },
-    //roam: true,
+    roam: true,
     series: [{
         type: 'map',
         zoom: 1.1,

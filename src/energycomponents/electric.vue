@@ -31,7 +31,7 @@
             </div>
             <div id="electric-right-all" :class="$style['right-all']">
                 <div id="electric-right-top" :class="$style['right-top']"></div>
-                <div v-show="mapMoudle==='city'" id="electric-right-topcity" :class="[$style['right-top-back']]">
+                <div v-show="mapMoudle==='city' || mapMoudle==='country'" id="electric-right-topcity" :class="[$style['right-top-back']]">
                         <i-button type="primary" @click="goBack()" :style="{borderColor: '#fff'}">
                             <Icon type="chevron-left"></Icon>
                             返回
@@ -130,7 +130,8 @@ export default {
             currentCityArr: cityNameArr,
             currentCityCodeArr: cityCodeArr,
             mapMoudle: 'province',
-            countryNameOne:''
+            countryNameOne:'',
+            countryParentName:''
         };
     },
     components: {
@@ -260,6 +261,24 @@ export default {
                 console.warn(error);
             });
         },
+        getAxiosDataToCountryMap(date,cityName){
+            const code=jzMap.mapCode[cityName];
+            let param1 = getProvinceParam(date, code, electricBasicPage);
+            let countryCodeArr = getCountyCode(cityDataArr, code);
+            let param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
+
+            let data = param1 + ',' + param2;
+            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+                paramArrs: data
+            });
+            this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
+               this.sourceData = response.data;
+               const countryToUpdateCityMap=true;
+                this.setMap(this.sourceData, code,countryToUpdateCityMap);
+            }).catch((error) => {
+                console.warn(error);
+            });
+        },
         setPUEData(arr) {
             let line = this.$echarts.init(document.getElementById('electric-all-lt'));
             this.$store.commit('setCharts', {name: 'chart1', val: line});
@@ -267,9 +286,7 @@ export default {
             const encodes = ['NHDP0062', 'NHDP0063'];
             let data = [];
             let pueType = {};
-            debugger
             if (this.mapMoudle === 'country') {
-                debugger
                 let codeArr = [this.currentCity];
                 let cityArr = [this.countryNameOne];
 
@@ -385,10 +402,12 @@ export default {
 
             pieLine.setOption(configOption);
         },
-        setMap(arr, code) {
-            let map = this.$echarts.init(document.getElementById('electric-right-top'));
-            this.$store.commit('setCharts', {name: 'chart3', val: map});
+        setMap(arr, code,countryToUpdateCityMap) {
+            let map = {};
             if (this.mapMoudle=== 'province') {
+                map = this.$echarts.init(document.getElementById('electric-right-top'));
+                map.clear();
+                this.$store.commit('setCharts', {name: 'chart3', val: map});        
                 let codes = jzMap.arrCode;
                 const encodes = ['NHDP0036', 'NHDP0037'];
                 let data = searchMapData(codes, encodes, arr, 'city');
@@ -400,6 +419,8 @@ export default {
                 mapconfig.series[0].data = data;
                 map.setOption(mapconfig);
             } else if(this.mapMoudle=== 'city'){
+                map = this.$echarts.init(document.getElementById('electric-right-top'));
+                map.clear();                
                 let name = jzMap.mapName[code];
                 this.$echarts.registerMap(name, jzMap.mapJson[name]);
                 const mapconfig = JSON.parse(JSON.stringify(cityMap));
@@ -416,7 +437,26 @@ export default {
                 mapconfig.series[0].data = data2;
                 map.setOption(mapconfig);
             }else{
-                
+                if(this.countryParentName && countryToUpdateCityMap){
+                map = this.$echarts.init(document.getElementById('electric-right-top'));
+                map.clear();
+                let name = this.countryParentName;                
+                this.$echarts.registerMap(name, jzMap.mapJson[name]);
+                const mapconfig = JSON.parse(JSON.stringify(cityMap));
+                let clickCode = jzMap.mapCode[name];
+                let subCodeCount = jzMap.countryCodeCount[clickCode];
+                let subCodes = addCodes(clickCode, subCodeCount);
+                const encodes = ['NHDP0036', 'NHDP0037'];
+                let data2 = searchMapData(subCodes, encodes, this.sourceData, 'country');
+                mapconfig.title.text = '当年累计用电';
+                mapconfig.tooltip.formatter = function(params) {
+                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
+                };
+                mapconfig.series[0].map = name;
+                mapconfig.series[0].data = data2;
+                map.setOption(mapconfig);   
+                }
+            
             }
             map.off('click');
             map.on('click', (param) => {
@@ -434,7 +474,7 @@ export default {
                 }
                 this.mapMoudle = 'city';
                 let clickCode = jzMap.mapCode[param.name];
-
+                this.countryParentName=param.name;
                 this.currentCityArr = getCountyName(cityDataArr, clickCode);
                 this.currentCityCodeArr = getCountyCode(cityDataArr, clickCode);
                 this.currentCity = clickCode;
@@ -492,16 +532,16 @@ export default {
                 return;
             }
             if (this.rightCurrent === 1) {
-                encodes1 = ['NHDP0081', 'NHDP0077', 'NHDP0078', 'NHDP0079', 'NHDP0080'];
-                encodes2 = ['NHDP0086', 'NHDP0082', 'NHDP0083', 'NHDP0084', 'NHDP0085'];
+                encodes1 = ['NHDP0081', 'NHDP0077', 'NHDP0079', 'NHDP0078', 'NHDP0080'];
+                encodes2 = ['NHDP0086', 'NHDP0083', 'NHDP0082', 'NHDP0084', 'NHDP0085'];
             }
             if (this.rightCurrent === 2) {
-                encodes1 = ['NHDP0068', 'NHDP0064', 'NHDP0065', 'NHDP0066', 'NHDP0067'];
-                encodes2 = ['NHDP0073', 'NHDP0069', 'NHDP0070', 'NHDP0071', 'NHDP0072'];
+                encodes1 = ['NHDP0068', 'NHDP0064', 'NHDP0066', 'NHDP0065', 'NHDP0067'];
+                encodes2 = ['NHDP0073', 'NHDP0070', 'NHDP0069', 'NHDP0071', 'NHDP0072'];
             }
             if (this.rightCurrent === 3) {
-                encodes1 = ['NHDP0094', 'NHDP0090', 'NHDP0091', 'NHDP0092', 'NHDP0093'];
-                encodes2 = ['NHDP0099', 'NHDP0095', 'NHDP0096', 'NHDP0097', 'NHDP0098'];
+                encodes1 = ['NHDP0094', 'NHDP0090', 'NHDP0092', 'NHDP0091', 'NHDP0093'];
+                encodes2 = ['NHDP0099', 'NHDP0096', 'NHDP0095', 'NHDP0097', 'NHDP0098'];
             }
             let offPoint1 = searchEncsArr(encodes1, this.currentCity, arr);
             let offPoint2 = searchEncsArr(encodes2, this.currentCity, arr);
@@ -552,6 +592,7 @@ export default {
     },
     watch: {
         currentMonth: function(val, oldVal) {
+            this.mapMoudle === 'country' && this.getAxiosDataToCountryMap(val,this.countryParentName);
             this.getAxiosData(val);
         },
         currentCity: function(val, oldVal) {
@@ -622,8 +663,8 @@ function getLabel(type, data, width) {
     '{legend3|}{valueHead|居民生活}{splitline|}{legend4|}{valueHead|不明}')
         : ('{legend1|}{valueHead|铁塔直供}{splitline|}{legend2|}{valueHead|铁塔转供}{splitline|}' +
     '{legend3|}{valueHead|其他转供}{splitline|}{legend4|}{valueHead|不明}');
-    const tempVal = type === 'A' ? `{legend5|}{valueHead|${parseInt(data[0])}}{splitline|}{legend5|}{valueHead|${parseInt(data[2])}}{splitline|}{legend5|}{valueHead|${parseInt(data[1])}}{splitline|}{legend5|}{valueHead|${parseInt(data[3])}}`
-        : `{legend5|}{valueHead|${parseInt(data[1])}}{splitline|}{legend5|}{valueHead|${parseInt(data[0])}}{splitline|}{legend5|}{valueHead|${parseInt(data[2])}}{splitline|}{legend5|}{valueHead|${parseInt(data[3])}}`;
+    const tempVal = type === 'A' ? `{legend5|}{valueHead|${parseInt(data[0])}}{splitline|}{legend5|}{valueHead|${parseInt(data[1])}}{splitline|}{legend5|}{valueHead|${parseInt(data[2])}}{splitline|}{legend5|}{valueHead|${parseInt(data[3])}}`
+        : `{legend5|}{valueHead|${parseInt(data[0])}}{splitline|}{legend5|}{valueHead|${parseInt(data[1])}}{splitline|}{legend5|}{valueHead|${parseInt(data[2])}}{splitline|}{legend5|}{valueHead|${parseInt(data[3])}}`;
     let all = 0;
     data.forEach(element => {
         all += Number(element);
