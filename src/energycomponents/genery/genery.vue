@@ -352,7 +352,7 @@ export default {
             this.rightBottom = generyRBData(arr, code);
         },
         setMap(arr, code,countryToUpdateCityMap) {
-                let map={};
+                let map='';
             if (this.mapMoudle === 'province') {
                 map = this.$echarts.init(document.getElementById('genery-right-top'));
                 map.clear();
@@ -390,32 +390,35 @@ export default {
                // mapconfig.roam=true;
                 map.setOption(mapconfig);
             }else{
+                const initmap=cityMap;
+                const datajzMap=jzMap;
                 if(this.countryParentName && countryToUpdateCityMap){
                    
                 map = this.$echarts.init(document.getElementById('genery-right-top'));
                 map.clear();
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
-                let name = this.countryParentName;
-                this.$echarts.registerMap(name, jzMap.mapJson[name]);
-                let mapconfig = JSON.parse(JSON.stringify(cityMap));
+                const cityName = this.countryParentName;
+                this.$echarts.registerMap(cityName, jzMap.mapJson[cityName]);
+                const mapconfig2 = JSON.parse(JSON.stringify(initmap));
 
-                let clickCode = jzMap.mapCode[name];
-                let subCodeCount = jzMap.countryCodeCount[clickCode];
-                let subCodes = addCodes(clickCode, subCodeCount);
-                let data2 = searchMapData(subCodes, ['NHDP0005', 'NHDP0006'], this.sourceData2, 'country');
-                mapconfig.tooltip.formatter = function(params) {
+                
+                const clickCode2 = datajzMap.mapCode[cityName];
+                const subCodeCount2 = datajzMap.countryCodeCount[clickCode2];
+                const subCodes2 = addCodes(clickCode2, subCodeCount2);
+                const data2 = searchMapData(subCodes2, ['NHDP0005', 'NHDP0006'], arr, 'country');
+                mapconfig2.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
                 };
                 
-                mapconfig.series[0].map = name;
-                mapconfig.series[0].data = data2;
+                mapconfig2.series[0].map = name;
+                mapconfig2.series[0].data = data2;
 
-                map.setOption(mapconfig);
+                map.setOption(mapconfig2);
                 }
 
             }
-            map.off('click');
-            map.on('click', (param) => {
+           map && map.off('click');
+           map && map.on('click', (param) => {
                 if( this.mapMoudle === 'country'){
                      this.currentCity = getCountyCodeOne(cityDataArr,param.name);
                      this.currentCityArr=[param.name];

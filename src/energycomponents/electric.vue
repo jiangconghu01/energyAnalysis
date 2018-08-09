@@ -248,8 +248,8 @@ export default {
                     this.sourceCountryData = response.data;
                     this.setPUEData(this.sourceCountryData );
                     this.setLeftBottom(this.sourceCountryData );
-                    this.setMap(this.sourceCountryData , this.currentCity);
                     this.setRightBottom(this.sourceCountryData );
+                    this.setMap(this.sourceCountryData , this.currentCity);
                    return;
                }
                this.sourceData = response.data;
@@ -403,7 +403,7 @@ export default {
             pieLine.setOption(configOption);
         },
         setMap(arr, code,countryToUpdateCityMap) {
-            let map = {};
+            let map = '';
             if (this.mapMoudle=== 'province') {
                 map = this.$echarts.init(document.getElementById('electric-right-top'));
                 map.clear();
@@ -458,8 +458,8 @@ export default {
                 }
             
             }
-            map.off('click');
-            map.on('click', (param) => {
+            map && map.off('click');
+            map && map.on('click', (param) => {
                 if( this.mapMoudle === 'country'){
                      this.currentCity = getCountyCodeOne(cityDataArr,param.name);
                      this.currentCityArr=[param.name];
@@ -772,15 +772,15 @@ function getLabel(type, data, width) {
             border-radius: 0.6rem;
         }
         .left-top{
-            left: 3%;
-            width:52%;
+            left: 2%;
+            width:53%;
             height: 17%;
             background:none;
             border: none;
             &>div{
                 position: absolute;
                 height: 100%;
-                width: 35%;
+                width: 36%;
                 background-color: rgba(16,162,249,0.4);
                 border: 0.08rem solid rgba(16,162,249,0.5);
                 border-radius: 0.6rem;
@@ -794,9 +794,9 @@ function getLabel(type, data, width) {
             }
         }
         .left-bottom{
-            left: 3%;
+            left: 2%;
             top:20%;
-            width:52%;
+            width:53%;
             height: 75%;
             &>div{
                 width:100%;
@@ -845,13 +845,13 @@ function getLabel(type, data, width) {
                 position: relative;
                 .pie{
                     position: absolute;
-                    float: left;
+                    //float: left;
                     height: 100%;
                     display: inline-block;
                     width: 100%;
                 }
                 .tablebar{
-                    float: left;
+                    //float: left;
                     height: 100%;
                     display: inline-block;
                     width: 60%;

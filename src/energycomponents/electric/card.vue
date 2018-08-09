@@ -3,17 +3,17 @@
         <Row style="height:12%;">
         </Row>
         <Row style="height:30%;">
-            <i-col span="14" :class="$style.line">
+            <i-col span="16" :class="$style.line">
                 <div>
                     <img v-if="type==='dl'" src="../../static/electric/dl.png" alt="">
                     <img v-else-if="type==='df'" src="../../static/electric/money.png" alt="">
                     <img v-else src="../../static/electric/denger.png" alt="">
-                    <span v-if="type==='dl'">总电量</span>
-                    <span v-else-if="type==='df'">总电费</span>
+                    <span v-if="type==='dl'">总电量(万度)</span>
+                    <span v-else-if="type==='df'">总电费(万元)</span>
                     <span v-else>异常</span>
                 </div>
             </i-col>
-            <i-col span="10" :class="$style.line"><span :class="$style.num">{{number?number:0}}</span></i-col>
+            <i-col span="8" :class="$style.line"><span :class="$style.num">{{number?number:0}}</span></i-col>
         </Row>
         <Row style="height:30%;">
             <div v-if="type==='dl'">
@@ -88,9 +88,9 @@ export default {
     width: 100%;
     height: 100%;
     color: white;
-    font-size: 18px;
+    font-size: 16px;
     @media screen and (max-width: 1100px){
-        font-size: 16px;
+        font-size: 14px;
     }
     .line{
        &>div{
@@ -115,6 +115,9 @@ export default {
             // }
             font-size: 14px;
             cursor: pointer;
+            @media screen and (max-width: 1100px){
+                font-size: 12px;
+            }
         }
     }
 

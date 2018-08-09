@@ -79,14 +79,14 @@ export default {
         },
         subListLog() {
             const a = this.data.slice(1);
-            let b = a.map((ele) => {
+            const logDataArr = a.map((ele) => {
                 return {
                     name: ele.name,
-                    val: Math.log10(parseFloat(ele.val)),
+                    val: Math.log10(parseFloat(ele.val > 0 ? ele.val : 1)),
                     val2: ele.val
                 };
             });
-            return b;
+            return logDataArr;
         },
         subListLogMistake() {
             const a = this.subListLog;

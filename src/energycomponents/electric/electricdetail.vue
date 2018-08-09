@@ -174,7 +174,7 @@ export default {
             });
         },
         setMap(arr, code, countryToUpdateCityMap) {
-            let map ={};
+            let map ='';
             // const encodes = ['NHDP0036', 'NHDP0037'];
             let encodes = this.current === 1 ? ['NHDP0036'] : ['NHDP0037'];
             let title = this.current === 1 ? '电量当年累计值' : '电费当年累计值';
@@ -227,8 +227,8 @@ export default {
                 map.setOption(mapconfig);
                 }
             }
-            map.off('click');
-            map.on('click', (param) => {
+           map && map.off('click');
+           map && map.on('click', (param) => {
                 if(this.mapMoudle === 'country'){
                     this.currentCity = getCountyCodeOne(cityDataArr,param.name);
                     this.currentCityArr=[param.name];
