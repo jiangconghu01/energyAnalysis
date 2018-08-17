@@ -179,7 +179,7 @@ function getCurrent(path) {
             }
             .logo-img{
                 height: 100%;
-                font-size: 22px;
+                font-size: 20px;
                 color: #fff;
                 vertical-align: bottom;
                 padding-top:8px;
@@ -190,7 +190,7 @@ function getCurrent(path) {
                 vertical-align: bottom;
                 color: #fff;
                 font-size: 16px;
-                padding-top:14px;
+                padding-top:12px;
             }
         }
         .nav{
@@ -249,8 +249,8 @@ function getCurrent(path) {
                     text-align: right;
                     vertical-align: bottom;
                     img{
-                        width: 20px;
-                        height: 18px;
+                        width: 16px;
+                        height: 15px;
                     }
 
                 }
@@ -290,7 +290,7 @@ function getCurrent(path) {
     text-shadow:0 0 0 white;
         font-size: 14px;
         cursor: pointer;
-        padding-left: 15%;
+        padding-left: 10%;
     }
     .ivu-date-picker-focused input.ivu-input{
         -webkit-box-shadow: none;

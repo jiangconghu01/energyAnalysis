@@ -136,6 +136,21 @@ function addDoubleArr(arr) {
     });
     return a;
 }
+// 累加二维数组为一个数组，对应位置相加
+function addDoubleArr2(arr) {
+    let a = [];
+    arr.forEach((ele, index) => {
+        if (index === 0) {
+            a = ele.map(e => parseFloat(e));
+        } else {
+            for (let index = 0; index < ele.length; index++) {
+                const element = parseFloat(ele[index]);
+                a[index] += element;
+            }
+        }
+    });
+    return a;
+}
 // 根据编码数组和cityCodes查出所有对应的值
 function searchMapDataItem(code, encodes, arr, type) {
     let data = {};
@@ -209,6 +224,28 @@ function getMonthsParam(months, encodes, code) {
     }
     paramStr = paramStr.substring(0, paramStr.length - 1);
     return paramStr;
+}
+//根据多个有对应关系的数组，组合对某个值排序之后导出排序顺序后的数组
+function getSortMapArr(type, basic, ...rest) {
+    const result = [];
+    const arr = [];
+    const len = rest.length;
+    for (let i = 0, length = basic.length; i < length; i++) {
+        const temp = {};
+        temp['arr0'] = basic[i];
+        for (let k = 0; k < len; k++) {
+            temp['arr' + (k + 1)] = rest[k][i];
+        }
+        arr.push(temp);
+    }
+    const sortArr = arr.sort((a, b) => {
+        return type === 'drop' ? (parseFloat(b['arr0']) - parseFloat(a['arr0'])) : (parseFloat(a['arr0']) - parseFloat(b['arr0']));
+    });
+    for (let i = 0; i < len + 1; i++) {
+        let subResultArr = sortArr.map(ele => ele['arr' + i]);
+        result.push(subResultArr);
+    }
+    return result;
 }
 
 function generyRBData(arr, code) {
@@ -297,5 +334,7 @@ export {
     getMonthsArr,
     getMonthsParam,
     searchMapData,
-    addDoubleArr
+    addDoubleArr,
+    addDoubleArr2,
+    getSortMapArr
 };

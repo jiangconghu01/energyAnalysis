@@ -1,5 +1,4 @@
-const cityMap =
-[
+const cityMap = [
     '杭州市',
     '宁波市',
     '温州市',
@@ -10,7 +9,9 @@ const cityMap =
     '衢州市',
     '舟山市',
     '台州市',
-    '丽水市'
+    '丽水市',
+    '省传输局',
+    '股份研发'
 ];
 const categoryCount = [
     '通信机房用电量',
@@ -27,11 +28,11 @@ const categoryCost = [
     '办公营销和其他电费'
 ];
 const topImpData = [
-    {title: '能源费占收入比排名', subtitle: '(当前累计)', leg1: '能源费', leg2: '收入'},
-    {title: '能源费占付现成本比排名', subtitle: '(当前累计)', leg1: '能源费', leg2: '付现成本'},
-    {title: 'IDC机房电费与收入比Top10', subtitle: '(当前累计)', leg1: 'IDC机房电费', leg2: '收入'},
-    {title: 'IDC客户电费与收入比Top10', subtitle: '(当前累计)', leg1: 'IDC客户电费', leg2: '收入'},
-    {title: '实际能耗费波动Top10', leg1: '本月', leg2: '上月'}
+    { title: '能源费占收入比排名', subtitle: '(当前累计)', leg1: '能源费', leg2: '收入' },
+    { title: '能源费占付现成本比排名', subtitle: '(当前累计)', leg1: '能源费', leg2: '付现成本' },
+    { title: 'IDC机房电费与收入比Top10', subtitle: '(当前累计)', leg1: 'IDC机房电费', leg2: '收入' },
+    { title: 'IDC客户电费与收入比Top10', subtitle: '(当前累计)', leg1: 'IDC客户电费', leg2: '收入' },
+    { title: '实际能耗费波动Top10', leg1: '本月', leg2: '上月' }
 ];
 const detailXarr = ['定额线', '大工业用电', '居民生活用电', '一般商业', '其他'];
 const tableTh = [
@@ -81,4 +82,4 @@ const tableTd = [
 const topData = [
 
 ];
-export {cityMap, categoryCount, categoryCost, detailXarr, tableTh, tableThCurrent, tableTd, topImpData};
+export { cityMap, categoryCount, categoryCost, detailXarr, tableTh, tableThCurrent, tableTd, topImpData };

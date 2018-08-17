@@ -47,6 +47,14 @@ const provinceData = {
         cityName: '舟山市',
         mapCode: '330900',
         cityCode: 'A3311',
+    }, {
+        cityName: '省传输局',
+        mapCode: '',
+        cityCode: 'A3312',
+    }, {
+        cityName: '股份研发',
+        mapCode: '',
+        cityCode: 'A3314',
     }]
 };
 
@@ -332,7 +340,7 @@ const cityDataArr = [{
         cityName: '松阳县',
         cityCode: 'A330909'
     }, {
-        cityName: '景宁畲族自治县',
+        cityName: '景宁县',
         cityCode: 'A330910'
     }]
 }, {
@@ -388,4 +396,4 @@ const cityDataArr = [{
         cityCode: 'A331105'
     }]
 }];
-export {provinceData, cityDataArr};
+export { provinceData, cityDataArr };

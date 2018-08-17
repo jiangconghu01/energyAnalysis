@@ -88,7 +88,6 @@ export default {
     methods: {
         getAxiosData() {
             const codes = JSON.parse(JSON.stringify(zjMap.arrCode));
-            codes.push('A3312', 'A3314');
             codes.unshift('A33');
             let data = '';
             const monthsArr = getCurentMonthArr(this.currentMonth);

@@ -38,7 +38,13 @@
                             <Icon type="chevron-left"></Icon>
                             返回
                         </i-button>
-                </div>   
+                </div>
+                <div v-show="mapMoudle==='province' || mapMoudle==='company'" :class="[$style['right-top-company']]">
+                    <ul>
+                        <li :class="$style['company-name']"  @click="goCompany('省传输局')">省传输局</li>
+                        <li :class="$style['company-name']" @click="goCompany('股份研发')">股份研发</li>
+                    </ul>
+                </div>                    
             </div>
         </div>
 </template>
@@ -117,6 +123,11 @@ export default {
         goback() {
             this.$router.replace({name: 'Electric'});
         },
+        goCompany(name){
+            this.mapMoudle = 'company';
+            this.currentCity = jzMap.mapCode[name];
+            this.currentCityArr = [name]; 
+        },
         backProvince() {
             this.mapMoudle = 'province';
             this.currentCity = 'A33';
@@ -174,6 +185,9 @@ export default {
             });
         },
         setMap(arr, code, countryToUpdateCityMap) {
+            if(this.mapMoudle === 'company'){
+                return;
+            }
             let map ='';
             // const encodes = ['NHDP0036', 'NHDP0037'];
             let encodes = this.current === 1 ? ['NHDP0036'] : ['NHDP0037'];
@@ -186,6 +200,13 @@ export default {
                 const mapconfig = JSON.parse(JSON.stringify(provinceMap));
                 let codes = jzMap.arrCode;
                 let data = searchMapData(codes, encodes, arr, 'city');
+                let max=0;
+                data.forEach(ele=>{
+                    if(parseFloat(ele.value)>max){
+                        max=Math.ceil(parseFloat(ele.value));
+                    }
+                });
+                mapconfig.dataRange.max=max;
                 mapconfig.title.text = title;
                 mapconfig.series[0].data = data;
                 mapconfig.tooltip.formatter = `{b}<br/>{c}${unit}`;
@@ -202,6 +223,13 @@ export default {
                 let subCodes = addCodes(clickCode, subCodeCount);
 
                 let data2 = searchMapData(subCodes, encodes, arr, 'country');
+                let max=0;
+                data2.forEach(ele=>{
+                    if(parseFloat(ele.value)>max){
+                        max=Math.ceil(parseFloat(ele.value));
+                    }
+                });
+                mapconfig.dataRange.max=max;
                 mapconfig.title.text = title;
                 mapconfig.series[0].map = name;
                 mapconfig.series[0].data = data2;
@@ -220,6 +248,13 @@ export default {
                 let subCodes = addCodes(clickCode, subCodeCount);
 
                 let data2 = searchMapData(subCodes, encodes, this.sourceData2, 'country');
+                let max=0;
+                data2.forEach(ele=>{
+                    if(parseFloat(ele.value)>max){
+                        max=Math.ceil(parseFloat(ele.value));
+                    }
+                });
+                mapconfig.dataRange.max=max;
                 mapconfig.title.text = title;
                 mapconfig.series[0].map = name;
                 mapconfig.series[0].data = data2;
@@ -288,6 +323,15 @@ export default {
                 dataLineCost = searchValsArr(['NHDP0051'], codeArr, arr);
                 configOption.xAxis[0].data = cityArr;
             }
+            if (this.mapMoudle === 'company') {
+                let codeArr = [this.currentCity];
+                let cityArr =  [jzMap.mapName[this.currentCity]];
+                dataEcount = searchValsArr(encodes1, codeArr, arr);
+                dataEcost = searchValsArr(encodes2, codeArr, arr);
+                dataLineCount = searchValsArr(['NHDP0050'], codeArr, arr);
+                dataLineCost = searchValsArr(['NHDP0051'], codeArr, arr);
+                configOption.xAxis[0].data = cityArr;
+            }
             if (this.mapMoudle === 'province') {
                 dataEcount = searchValsArr(encodes1, jzMap.arrCode, arr);
                 dataEcost = searchValsArr(encodes2, jzMap.arrCode,arr);
@@ -306,7 +350,11 @@ export default {
                 configOption.series[0].data = [];
                 configOption.series.push.apply(configOption.series, getDataLineBar(detailXarr, dataEcost));
             }
-            configOption.grid.y2 = '15%';
+            //configOption.grid.y2 = '15%';
+            configOption.grid.y2 = 40;
+            if(this.mapMoudle === 'province' || this.mapMoudle === 'city'){
+                configOption.xAxis[0].axisLabel.rotate = 35;
+            }
             barLine.setOption(configOption);
         },
         setLeftTop(monthsArr, encodes, code, monthsxArr) {
@@ -505,6 +553,25 @@ function addCodes(code, count) {
                 top:20px;
                 right: 10px;
                 position: absolute;
+            }
+            .right-top-company{
+                position: absolute;
+                right: 5%;
+                bottom: 15%;
+                ul li{
+                    list-style: none;
+                    color:#fff;
+                    width:80px;
+                    height: 40px;
+                    line-height: 40px;
+                    background-color: rgba(16, 162, 249, 0.7);
+                    padding-left:5px;
+                    margin-top: 5px;
+                    border: 1px solid rgba(16, 162, 249, 0.5);
+                    border-radius: 4px;
+                    cursor: pointer;
+                    text-align: center;
+                }
             }
         }
     }
