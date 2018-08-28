@@ -12,10 +12,10 @@ const provinceMap = {
         trigger: 'item',
         confine: true,
         formatter: '{b}<br/>{c}'
-            // formatter: function(params, ticket, callback) {
-            //     // console.log(params, '3453495348573535');
-            //     return params.name;
-            // }
+        // formatter: function(params, ticket, callback) {
+        //     // console.log(params, '3453495348573535');
+        //     return params.name;
+        // }
     },
     // legend: {
     //     x: 'right',
@@ -46,15 +46,15 @@ const provinceMap = {
         // ],
         color: ['#0052bc', '#b9effe']
     },
-    roam: true,
+    roam: false,
     series: [{
         type: 'map',
         // selectedMode: 'single',
         map: '浙江',
         zoom: 1.1,
         mapLocation: {
-            x: "center",
-            y: "center"
+            x: 'center',
+            y: 'center'
         },
         data: [],
         itemStyle: {
@@ -88,9 +88,9 @@ const cityMap = {
     tooltip: {
         trigger: 'item',
         formatter: '{b}<br/>{c}'
-            // formatter: (p) => {
-            //     console.log(p);
-            // }
+        // formatter: (p) => {
+        //     console.log(p);
+        // }
     },
     dataRange: {
         orient: 'vertical',
@@ -111,8 +111,8 @@ const cityMap = {
         type: 'map',
         zoom: 1.1,
         mapLocation: {
-            x: "center",
-            y: "center"
+            x: 'center',
+            y: 'center'
         },
         data: [],
         itemStyle: {
