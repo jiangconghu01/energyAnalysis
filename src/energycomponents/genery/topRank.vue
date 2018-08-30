@@ -21,7 +21,32 @@
 <script>
 import ConfigScatter from '../chartconfig/rankScatter.js';
 import ConfigBar from '../chartconfig/rankBar.js';
-import {x1, y1, name1} from './test.js';
+import {
+    topOffice,
+    officeBasicNum,
+    officeMap,
+    topTianyi,
+    tianyiBasicNum,
+    tianyiMap,
+    topCommunication,
+    communicationBasicNum,
+    communicationMap
+} from '../chartconfig/topBasicConfig.js';
+import {
+    offx,
+    offy,
+    offbar
+} from './toptest/office.js'
+import {
+    tianx,
+    tiany,
+    tianbar
+} from './toptest/tianyi.js'
+import {
+    comx,
+    comy,
+    combar
+} from './toptest/com.js'
 export default {
     data () {
         return {
@@ -36,32 +61,48 @@ export default {
             let scatterTitle = '';
             let scatterMarkline = [];
             let barTitle = '';
+            let names = [];
+            let xs = [];
+            let ys = [];
+            let barsd = [];
             if (this.home === 'office') {
                 scatterTitle = 'TOP-50办公大楼';
-                scatterMarkline = ['累计单位面积电耗\n(万度)', '累计单位面积\n电耗同比增长\n(%)'];
+                scatterMarkline = ['累计单位面积电耗\n(度)', '累计单位面积\n电耗同比增长\n(%)'];
                 barTitle = '累计人均电费同比(%)';
+                names = topOffice;
+                xs = offx;
+                ys = offy;
+                barsd = offbar;
             }
             if (this.home === 'tianyi') {
                 scatterTitle = 'TOP-50天翼卖场';
                 scatterMarkline = ['累计单位台席电耗\n(万度)', '累计单位台席\n电耗同比增长\n(%)'];
                 barTitle = '累计单位台席电费同比(%)';
+                names = topTianyi;
+                xs = tianx;
+                ys = tiany;
+                barsd = tianbar;
             }
             if (this.home === 'communication') {
                 scatterTitle = 'TOP-80通信局站';
                 scatterMarkline = ['PUE值', 'PUE同比增幅(%)'];
                 barTitle = '累计单位资产电费同比(%)';
                 ConfigScatter.legend.x = 'center';
+                names = topCommunication;
+                xs = comx;
+                ys = comy;
+                barsd = combar;             
             }
             ConfigScatter.title.text = scatterTitle;
             ConfigScatter.series[0].markLine.data[0].label.formatter = scatterMarkline[1];
             ConfigScatter.series[0].markLine.data[1].label.formatter = scatterMarkline[0];
-            let x = x1.map((e) => {
+            let x = xs.map((e) => {
                 return Number(e);
             });
-            let y = y1.map((e) => {
+            let y = ys.map((e) => {
                 return Number(e);
             });
-            console.log(Math.max(...x), 'wwwwwwww', ...y);
+           // console.log(Math.max(...x), 'wwwwwwww', ...y);
             let maxX = Math.max(...x);
             let maxY = Math.max(...y);
 
@@ -69,9 +110,13 @@ export default {
             ConfigScatter.yAxis[0].max = maxY;
             ConfigScatter.series[0].markLine.data[0].yAxis = (Math.min(...y) + maxY) / 2;
             ConfigScatter.series[0].markLine.data[1].xAxis = (Math.min(...x) + maxX) / 2;
-            ConfigScatter.series[0].data = getDoubleArr(name1, x, y);
-            console.log(getDoubleArr(name1, x, y));
+            ConfigScatter.series[0].data = getDoubleArr(names, x, y);
+            //console.log(getDoubleArr(names, x, y));
+            debugger
             ConfigBar.title.text = barTitle;
+            const d = getSortArr(names,barsd);
+            ConfigBar.yAxis[0].data = d.name;
+            ConfigBar.series[0].data = d.val;
             scatter.setOption(ConfigScatter);
             bar.setOption(ConfigBar);
         }
@@ -106,6 +151,32 @@ function getDoubleArr(names, arr1, arr2) {
             value: [arr1[index], arr2[index]]});
     }
     return d;
+}
+//排序后得出对应数组
+function getSortArr(names,datas){
+    let t=[];
+    const target = {
+        name: [],
+        val: []
+    };
+    for(let i = 0;i < names.length; i++){
+        t.push({
+            name: names[i],
+            val: datas[i] 
+        });
+    }
+    t = t.sort((a,b)=>{
+        return a.val - b.val;
+    });
+    // for (let [key, value] of Object.entries(t)) { 
+    //     target.name.push(key);
+    //     target.val.push(value);
+    // }
+    t.forEach(ele =>{
+        target.name.push(ele.name);
+        target.val.push(ele.val);       
+    });
+    return target;
 }
 </script>
 

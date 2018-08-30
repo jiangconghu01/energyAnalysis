@@ -58,10 +58,10 @@ export default {
     },
     watch: {
         currentTab(val, old) {
-            if (val !== 1) {
-                alert('开发进行中，敬请期待');
-                this.toGeneryPage();
-            }
+            // if (val !== 1) {
+            //     alert('开发进行中，敬请期待');
+            //     this.toGeneryPage();
+            // }
         }
     },
     beforeRouteEnter (to, from, next) { // 刷新页面时候确定tab标签位置

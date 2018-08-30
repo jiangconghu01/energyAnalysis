@@ -156,7 +156,7 @@ let tianbar =
 0.008807946
 0.087360232`.split('\n').map((ele) => {
         return parseFloat(ele).toFixed(4);
-    });;
+    });
 export { tianx, tiany, tianbar };
 
 // [{ dt: '201801' }, { dt: '201809' }, { dt: '201803' }, { dt: '201805' }].sort((a, b) => {

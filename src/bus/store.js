@@ -6,7 +6,7 @@ const state = {
     month: beforeMonth(),
     chartsArr: charts,
     systemType: validataOS(),
-    module: 'devno'
+    module: 'dev'
 
 };
 const getters = {

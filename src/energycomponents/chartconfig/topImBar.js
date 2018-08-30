@@ -1,4 +1,4 @@
-import {cityMap} from './staticData.js';
+import { cityMap } from './staticData.js';
 let data = (() => {
     const data = [];
     const x = [];
@@ -6,7 +6,7 @@ let data = (() => {
         data.unshift(parseInt(Math.random() * 10) / 10 + 0.1);
         // index % 2 === 0 ? x.unshift('增长排名 ' + index + '0%') : x.unshift('排名 ' + index + '0%');
         // index % 2 === 0 ? x.unshift('增长排名') : x.unshift('排名');
-        index % 2 === 0 ? x.unshift({value: '排名wrwe', per: index}) : x.unshift({value: '排名', per: index});
+        index % 2 === 0 ? x.unshift({ value: '排名wrwe', per: index }) : x.unshift({ value: '排名', per: index });
     }
     data.sort((a, b) => a - b);
     return {
@@ -48,68 +48,63 @@ const option = {
         x2: 0,
         y2: '5%'
     },
-    xAxis: [
-        {
-            type: 'value',
-            boundaryGap: [0, 0.01],
-            max: 1.2,
-            min: 0,
-            axisLabel: {
-                show: false
-            },
-            splitLine: {
-                show: false,
-            },
-            axisLine: {
-                show: false
-            },
-            axisTick: {
-                show: false
-            }
+    xAxis: [{
+        type: 'value',
+        boundaryGap: [0, 0.01],
+        max: 1.2,
+        min: 0,
+        axisLabel: {
+            show: false
+        },
+        splitLine: {
+            show: false,
+        },
+        axisLine: {
+            show: false
+        },
+        axisTick: {
+            show: false
         }
-    ],
-    yAxis: [
-        {
-            type: 'category',
-            // data: ['巴西', '印尼', '美国', '印度', '中国', '世界'],
-            data: data.x,
-            axisLabel: {
-                // align: 'right',
-                margin: 6, // ---刻度标签与轴线之间的距离
-                color: '#fff', // ---默认取轴线的颜色
-                fontSize: 12,
-                fontWeight: 200,
-                formatter: (data) => {
-                    // console.log(data);
-                    // return `{name}|${data.name}{value}|${data.value * 100}%`;
-                    return `{name|${data}}{value|22%}`;
+    }],
+    yAxis: [{
+        type: 'category',
+        // data: ['巴西', '印尼', '美国', '印度', '中国', '世界'],
+        data: data.x,
+        axisLabel: {
+            // align: 'right',
+            margin: 6, // ---刻度标签与轴线之间的距离
+            color: '#fff', // ---默认取轴线的颜色
+            fontSize: 12,
+            fontWeight: 200,
+            formatter: (data) => {
+                // console.log(data);
+                // return `{name}|${data.name}{value}|${data.value * 100}%`;
+                return `{name|${data}}{value|22%}`;
+            },
+            rich: {
+                name: {
+                    width: 55,
+                    align: 'left',
+                    padding: [0, 0, 0, 5]
                 },
-                rich: {
-                    name: {
-                        width: 55,
-                        align: 'left',
-                        padding: [0, 0, 0, 5]
-                    },
-                    value: {
-                        width: 25,
-                        align: 'left',
-                        padding: [0, 5, 0, 0]
-                    }
+                value: {
+                    width: 25,
+                    align: 'left',
+                    padding: [0, 5, 0, 0]
                 }
-            },
-            splitLine: {
-                show: false
-            },
-            axisLine: {
-                show: false,
-            },
-            axisTick: {
-                show: false
             }
+        },
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            show: false,
+        },
+        axisTick: {
+            show: false
         }
-    ],
-    series: [
-        {
+    }],
+    series: [{
             name: '能源费',
             type: 'bar',
             color: '#ffcc00',

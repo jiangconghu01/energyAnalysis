@@ -4,8 +4,7 @@ import Introduce from '../components/introduce.vue';
 import Data from '../components/datascreen.vue';
 Vue.use(Router);
 export default new Router({
-    routes: [
-        {
+    routes: [{
             path: '/',
             name: 'Introduce',
             component: Introduce,
@@ -16,5 +15,4 @@ export default new Router({
             component: Data,
         },
     ],
-})
-;
+});

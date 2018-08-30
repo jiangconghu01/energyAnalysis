@@ -103,8 +103,7 @@ const option = {
             fontWeight: 200
         }
     },
-    xAxis: [
-        {
+    xAxis: [{
             type: 'value',
             scale: true,
             max: 205,
@@ -148,47 +147,44 @@ const option = {
         }
 
     ],
-    yAxis: [
-        {
-            type: 'value',
-            scale: true,
-            max: 75,
-            axisLabel: {
-                margin: 8, // ---刻度标签与轴线之间的距离
-                color: '#fff', // ---默认取轴线的颜色
-                fontSize: 12,
-                fontWeight: 200,
-                formatter: '{value}'
-            },
-            splitLine: {
-                show: true,
-                lineStyle: {
-                    color: '#fff',
-                    width: 1,
-                    type: 'solid',
-                    opacity: 0.1 // ---类型
-                }
-            },
-            axisLine: {
-                show: false
-            },
-            axisTick: {
-                show: false
+    yAxis: [{
+        type: 'value',
+        scale: true,
+        max: 75,
+        axisLabel: {
+            margin: 8, // ---刻度标签与轴线之间的距离
+            color: '#fff', // ---默认取轴线的颜色
+            fontSize: 12,
+            fontWeight: 200,
+            formatter: '{value}'
+        },
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#fff',
+                width: 1,
+                type: 'solid',
+                opacity: 0.1 // ---类型
             }
+        },
+        axisLine: {
+            show: false
+        },
+        axisTick: {
+            show: false
         }
-    ],
-    series: [
-        {
+    }],
+    series: [{
             name: '优',
             type: 'scatter',
-            data: randomDataArray(),
+            data: [],
             // markPoint: {
             //     data: [
             //         {type: 'max', name: '最大值'},
             //         {type: 'min', name: '最小值'}
             //     ]
             // },
-            symbolSize: function (data) {
+            symbolSize: function(data) {
                 // console.log(data, data[1]);
                 return 10;
             },
@@ -203,25 +199,26 @@ const option = {
                 symbol: ['none', 'arrow'],
                 silent: true,
                 data: [{
-                    yAxis: 52,
-                    lineStyle: {
-                        type: 'solid',
-                        color: '#ffcc00'
+                        yAxis: 52,
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#ffcc00'
+                        },
+                        label: {
+                            formatter: 'PUE同比增幅'
+                        }
                     },
-                    label: {
-                        formatter: 'PUE同比增幅'
+                    {
+                        xAxis: 175,
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#ffcc00'
+                        },
+                        label: {
+                            formatter: 'PUE'
+                        }
                     }
-                },
-                {
-                    xAxis: 175,
-                    lineStyle: {
-                        type: 'solid',
-                        color: '#ffcc00'
-                    },
-                    label: {
-                        formatter: 'PUE'
-                    }
-                }]
+                ]
             }
         },
         // {

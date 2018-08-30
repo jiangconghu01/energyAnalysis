@@ -1,12 +1,65 @@
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p,
-blockquote, pre, a, abbr, acronym, address, big,
-cite, code, del, dfn, em, font, img,
-ins, kbd, q, s, samp, small, strike,
-strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-center, u, b, i {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+center,
+u,
+b,
+i {
     margin: 0;
     padding: 0;
     border: 0;
@@ -17,29 +70,42 @@ center, u, b, i {
     font-family: inherit;
     vertical-align: baseline
 }
+
 // body {
 //     line-height: 1
 // }
 :focus {
     outline: 0
 }
-ol, ul {
+
+ol,
+ul {
     list-style: none
 }
+
 table {
     border-collapse: collapse;
     border-spacing: 0
 }
-blockquote:before, blockquote:after, q:before, q:after {
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
     content: ""
 }
-blockquote, q {
+
+blockquote,
+q {
     quotes: ""
 }
-input, textarea {
+
+input,
+textarea {
     margin: 0;
     padding: 0
 }
+
 hr {
     margin: 0;
     padding: 0;
@@ -48,13 +114,13 @@ hr {
     background-color: #000;
     height: 1px
 }
+
 .router-link-active {
     text-decoration: none;
 }
-html,body{
+
+html,
+body {
     height: 100%;
     font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
-}
-body>div{
-    height: 100%;
 }
