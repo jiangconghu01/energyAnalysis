@@ -3,7 +3,7 @@
         <div :class="$style.tab">
             <div>
             <div :class="[$style['tab-item'],$style.first,this.currentTab==1?$style.current:'']" @click="toGeneryPage()"><span>总体情况</span></div>
-            <div :class="[$style['tab-item'],this.currentTab==2?$style.current:'']" @click="toGeneryImpotent()"><span>重点价值TOP</span></div>
+            <div :style="dev && {display:'none'}" :class="[$style['tab-item'],this.currentTab==2?$style.current:'']" @click="toGeneryImpotent()"><span>重点价值TOP</span></div>
             <div :class="[$style['tab-item'],this.currentTab==3?$style.current:'']" @click="toGeneryOffice()"><span>TOP-50办公大楼</span></div>
             <div :class="[$style['tab-item'],this.currentTab==4?$style.current:'']" @click="toGeneryTyi()"><span>TOP-50天翼卖场</span></div>
             <div :class="[$style['tab-item'],$style.last,this.currentTab==5?$style.current:'']" @click="toGeneryCommunication()"><span>TOP-80通信局</span></div>
@@ -20,7 +20,8 @@ export default {
         return {
             home: true,
             czxtData: null,
-            currentTab: 1
+            currentTab: 1,
+            dev: this.$store.getters.module !== 'dev'
         };
     },
     methods: {
@@ -58,9 +59,12 @@ export default {
     },
     watch: {
         currentTab(val, old) {
-            if (val !== 1) {
-                alert('开发进行中，敬请期待');
-                this.toGeneryPage();
+            if (val === 2) {
+                this.$Message.info({
+                    content: '功能尚未开发，页面为模拟数据',
+                    duration: 3,
+                    closable: true
+                });
             }
         }
     },

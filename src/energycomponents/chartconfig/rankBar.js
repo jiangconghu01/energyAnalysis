@@ -1,4 +1,4 @@
-import {cityMap} from './staticData.js';
+import { cityMap } from './staticData.js';
 let data = (() => {
     const data = [];
     const x = [];
@@ -24,8 +24,21 @@ const option = {
             fontWeight: 300
         }
     },
+    legend: {
+        data: ['同比增长', '同比负增长'],
+        color: ['#ffcc00', '#94ef30'],
+        right: 10,
+        top: '10',
+        textStyle: {
+            color: '#FFF'
+        }
+    },
     tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        formatter: function(params) {
+            return `${params[0].name}</br>
+            ${params[0].seriesName}:${params[0].data.value2}`;
+        }
     },
     calculable: true,
     grid: {
@@ -34,68 +47,62 @@ const option = {
         x2: 100,
         // y2: '25%'
     },
-    xAxis: [
-        {
-            type: 'value',
-            boundaryGap: [0, 0.01],
-            max: 1.2,
-            min: 0,
-            axisLabel: {
-                margin: 8, // ---刻度标签与轴线之间的距离
-                color: '#fff', // ---默认取轴线的颜色
-                fontSize: 12,
-                fontWeight: 200,
-                formatter: (val) => {
-                    return `${val * 100}%`;
-                }
-            },
-            splitLine: {
-                show: true,
-                lineStyle: {
-                    color: '#fff',
-                    width: 1,
-                    type: 'solid',
-                    opacity: 0.1 // ---类型
-                }
-            },
-            axisLine: {
-                show: false
-            },
-            axisTick: {
-                show: false
+    xAxis: [{
+        type: 'value',
+        boundaryGap: [0, 0.01],
+        //max: 1.2,
+        //min: -2,
+        axisLabel: {
+            margin: 8, // ---刻度标签与轴线之间的距离
+            color: '#fff', // ---默认取轴线的颜色
+            fontSize: 12,
+            fontWeight: 200,
+            formatter: (val) => {
+                return `${val * 100}%`;
             }
-        }
-    ],
-    yAxis: [
-        {
-            type: 'category',
-            // data: ['巴西', '印尼', '美国', '印度', '中国', '世界'],
-            data: data.x,
-            axisLabel: {
-                margin: 8, // ---刻度标签与轴线之间的距离
-                color: '#fff', // ---默认取轴线的颜色
-                fontSize: 12,
-                fontWeight: 200,
-            },
-            splitLine: {
-                show: false
-            },
-            axisLine: {
-                show: true,
-                lineStyle: {
-                    color: '#fff',
-                    width: 1,
-                    type: 'solid',
-                    opacity: 0.1
-                },
-            },
-            axisTick: {
-                show: false
+        },
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#fff',
+                width: 1,
+                type: 'solid',
+                opacity: 0.1 // ---类型
             }
+        },
+        axisLine: {
+            show: false
+        },
+        axisTick: {
+            show: false
         }
-    ],
-    dataZoom: [
-        {
+    }],
+    yAxis: [{
+        type: 'category',
+        data: data.x,
+        axisLabel: {
+            margin: 8, // ---刻度标签与轴线之间的距离
+            color: '#fff', // ---默认取轴线的颜色
+            fontSize: 12,
+            fontWeight: 200,
+        },
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            show: true,
+            lineStyle: {
+                color: '#fff',
+                width: 1,
+                type: 'solid',
+                opacity: 0.1
+            },
+        },
+        axisTick: {
+            show: false
+        }
+    }],
+    dataZoom: [{
             type: 'slider',
             yAxisIndex: 0,
             filterMode: 'empty',
@@ -122,17 +129,40 @@ const option = {
         //     filterMode: 'empty'
         // }
     ],
-    series: [
-        {
-            name: '同比增长',
-            type: 'bar',
-            color: '#ffcc00',
-            barWidth: '12', // ---柱形宽度
-            barCategoryGap: '10%', // ---柱形间距
-            // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
-            data: data.d
-        }
-    ]
+    series: [{
+        name: '同比',
+        type: 'bar',
+        stack: 'yy',
+        //color: '#ffcc00','#94ef30'
+        color: function(params) {
+            //console.log(params);
+            if (parseFloat(params.data.value2) < 0) {
+                return '#94ef30';
+            }
+            return '#ffcc00';
+        },
+        barWidth: '12', // ---柱形宽度
+        barCategoryGap: '10%', // ---柱形间距
+        label: {
+            position: 'right',
+            formatter: function(params) {
+                return params.data.value2;
+            }
+        },
+        data: data.d
+    }, {
+        name: '同比负增长',
+        type: 'bar',
+        stack: 'yy',
+        color: '#94ef30',
+        data: []
+    }, {
+        name: '同比增长',
+        type: 'bar',
+        stack: 'yy',
+        color: '#ffcc00',
+        data: []
+    }]
 };
 
 export default option;

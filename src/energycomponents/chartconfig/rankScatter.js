@@ -94,17 +94,16 @@ const option = {
     ],
     legend: {
         data: ['优', '良', '中', '差'],
-        x: 'right', // 图例显示在右边
-        y: 'top', // 图例在垂直方向上面显示居中
-        top: 10,
+        right: 10,
+        y: 'center',
+        orient: 'vertical',
         textStyle: {
             color: '#FFF',
             fontSize: 12,
             fontWeight: 200
         }
     },
-    xAxis: [
-        {
+    xAxis: [{
             type: 'value',
             scale: true,
             max: 205,
@@ -148,50 +147,60 @@ const option = {
         }
 
     ],
-    yAxis: [
-        {
-            type: 'value',
-            scale: true,
-            max: 75,
-            axisLabel: {
-                margin: 8, // ---刻度标签与轴线之间的距离
-                color: '#fff', // ---默认取轴线的颜色
-                fontSize: 12,
-                fontWeight: 200,
-                formatter: '{value}'
-            },
-            splitLine: {
-                show: true,
-                lineStyle: {
-                    color: '#fff',
-                    width: 1,
-                    type: 'solid',
-                    opacity: 0.1 // ---类型
-                }
-            },
-            axisLine: {
-                show: false
-            },
-            axisTick: {
-                show: false
+    yAxis: [{
+        type: 'value',
+        scale: true,
+        max: 75,
+        axisLabel: {
+            margin: 8, // ---刻度标签与轴线之间的距离
+            color: '#fff', // ---默认取轴线的颜色
+            fontSize: 12,
+            fontWeight: 200,
+            formatter: '{value}'
+        },
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#fff',
+                width: 1,
+                type: 'solid',
+                opacity: 0.1 // ---类型
             }
+        },
+        axisLine: {
+            show: false
+        },
+        axisTick: {
+            show: false
         }
+    }],
+    color: [
+        '#fa150d',
+        '#fa7b78', // 红
+        '#ff66ec',
+        '#ffa900', // 橙
+        '#e9e025', // 黄
+        '#e2e07e',
+        '#94ef30', // 绿
+        '#6bdaff', // 蓝
+        '#419eff',
+        '#6668ff', // 紫
+        '#ffffff' // 白
     ],
-    series: [
-        {
+    series: [{
             name: '优',
             type: 'scatter',
-            data: randomDataArray(),
+            data: [],
             // markPoint: {
             //     data: [
             //         {type: 'max', name: '最大值'},
             //         {type: 'min', name: '最小值'}
             //     ]
             // },
-            symbolSize: function (data) {
-                // console.log(data, data[1]);
-                return 10;
-            },
+            // symbolSize: function(data) {
+            //     // console.log(data, data[1]);
+            //     return 10;
+            // },
             label: {
                 show: true,
                 color: '#fff',
@@ -203,25 +212,26 @@ const option = {
                 symbol: ['none', 'arrow'],
                 silent: true,
                 data: [{
-                    yAxis: 52,
-                    lineStyle: {
-                        type: 'solid',
-                        color: '#ffcc00'
+                        yAxis: 52,
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#ffcc00'
+                        },
+                        label: {
+                            formatter: 'PUE同比增幅'
+                        }
                     },
-                    label: {
-                        formatter: 'PUE同比增幅'
+                    {
+                        xAxis: 175,
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#ffcc00'
+                        },
+                        label: {
+                            formatter: 'PUE'
+                        }
                     }
-                },
-                {
-                    xAxis: 175,
-                    lineStyle: {
-                        type: 'solid',
-                        color: '#ffcc00'
-                    },
-                    label: {
-                        formatter: 'PUE'
-                    }
-                }]
+                ]
             }
         },
         // {

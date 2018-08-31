@@ -14,9 +14,8 @@ const ConfigElePie1 = {
         formatter: '{b} <br/>{c} ({d}%)'
     },
     legend: {
-        orient: 'horizontal', // 布局  横向布局图例标记居文字的左边 vertical则反之
+        orient: 'horizontal',
         x: 'right', // 图例显示在右边
-        // y: 'top', // 图例在垂直方向上面显示居中
         y: 0,
         data: ['直供电', '转供电'],
         textStyle: {
@@ -26,32 +25,30 @@ const ConfigElePie1 = {
         }
     },
     // calculable: true,
-    series: [
-        {
-            name: '各部占比',
-            type: 'pie',
-            radius: '55%',
-            zoom: 1.6,
-            center: ['20%', '50%'],
-            data: [
-                {value: 0, name: '直供电'},
-                {value: 0, name: '转供电'},
-            ],
-            color: ['#ffa354', '#24c6ff'],
-            startAngle: -60,
-            hoverAnimation: false,
-            itemStyle: {
-                normal: {
-                    label: {
-                        position: 'inner',
-                        show: true,
-                        formatter: '{b}\n {d}%'
-                    }
+    series: [{
+        name: '各部占比',
+        type: 'pie',
+        radius: '55%',
+        zoom: 1.6,
+        center: ['20%', '50%'],
+        data: [
+            { value: 0, name: '直供电' },
+            { value: 0, name: '转供电' },
+        ],
+        color: ['#ffa354', '#24c6ff'],
+        startAngle: -60,
+        hoverAnimation: false,
+        itemStyle: {
+            normal: {
+                label: {
+                    position: 'inner',
+                    show: true,
+                    formatter: '{b}\n {d}%'
                 }
-
             }
+
         }
-    ]
+    }]
 };
 
 // 显示label用的
@@ -82,31 +79,28 @@ const ConfigElePie2 = {
     //     }
     // },
     calculable: true,
-    series: [
-        {
-            name: '各部占比',
-            type: 'pie',
-            radius: '55%',
-            zoom: 1.6,
-            center: ['20%', '50%'],
-            data: [
-            ],
-            // color: ['rgba(255,255,255,0)'],
-            color: ['#fff'],
-            startAngle: 0,
-            hoverAnimation: false,
-            itemStyle: {
-                normal: {
-                    label: {
-                        position: 'right',
-                        show: true,
-                        formatter: '{b}\n {d}%'
-                    }
+    series: [{
+        name: '各部占比',
+        type: 'pie',
+        radius: '55%',
+        zoom: 1.6,
+        center: ['20%', '50%'],
+        data: [],
+        // color: ['rgba(255,255,255,0)'],
+        color: ['#fff'],
+        startAngle: 0,
+        hoverAnimation: false,
+        itemStyle: {
+            normal: {
+                label: {
+                    position: 'right',
+                    show: true,
+                    formatter: '{b}\n {d}%'
                 }
-
             }
+
         }
-    ]
+    }]
 };
 
-export {ConfigElePie1, ConfigElePie2};
+export { ConfigElePie1, ConfigElePie2 };
