@@ -24,8 +24,21 @@ const option = {
             fontWeight: 300
         }
     },
+    legend: {
+        data: ['同比增长', '同比负增长'],
+        color: ['#ffcc00', '#94ef30'],
+        right: 10,
+        top: '10',
+        textStyle: {
+            color: '#FFF'
+        }
+    },
     tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        formatter: function(params) {
+            return `${params[0].name}</br>
+            ${params[0].seriesName}:${params[0].data.value2}`;
+        }
     },
     calculable: true,
     grid: {
@@ -38,7 +51,7 @@ const option = {
         type: 'value',
         boundaryGap: [0, 0.01],
         //max: 1.2,
-        //min: 0,
+        //min: -2,
         axisLabel: {
             margin: 8, // ---刻度标签与轴线之间的距离
             color: '#fff', // ---默认取轴线的颜色
@@ -117,13 +130,38 @@ const option = {
         // }
     ],
     series: [{
-        name: '同比增长',
+        name: '同比',
         type: 'bar',
-        color: '#ffcc00',
+        stack: 'yy',
+        //color: '#ffcc00','#94ef30'
+        color: function(params) {
+            //console.log(params);
+            if (parseFloat(params.data.value2) < 0) {
+                return '#94ef30';
+            }
+            return '#ffcc00';
+        },
         barWidth: '12', // ---柱形宽度
         barCategoryGap: '10%', // ---柱形间距
-        // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
+        label: {
+            position: 'right',
+            formatter: function(params) {
+                return params.data.value2;
+            }
+        },
         data: data.d
+    }, {
+        name: '同比负增长',
+        type: 'bar',
+        stack: 'yy',
+        color: '#94ef30',
+        data: []
+    }, {
+        name: '同比增长',
+        type: 'bar',
+        stack: 'yy',
+        color: '#ffcc00',
+        data: []
     }]
 };
 

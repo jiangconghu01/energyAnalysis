@@ -60,60 +60,75 @@ export default {
             let bar = this.$echarts.init(document.getElementById('rank-right-all'));
             let scatterTitle = '';
             let scatterMarkline = [];
-            let barTitle = '';
             let names = [];
             let xs = [];
             let ys = [];
+            let scatterLegend = [];
+            let seriesCount = [];
+            let barTitle = '';
             let barsd = [];
             if (this.home === 'office') {
                 scatterTitle = 'TOP-50办公大楼';
                 scatterMarkline = ['累计单位面积电耗\n(度)', '累计单位面积\n电耗同比增长\n(%)'];
-                barTitle = '累计人均电费同比(%)';
                 names = topOffice;
                 xs = offx;
                 ys = offy;
+                scatterLegend = getKeys(officeMap);
+                seriesCount = officeMap;
+                barTitle = '累计人均电费同比(%)';
                 barsd = offbar;
             }
             if (this.home === 'tianyi') {
                 scatterTitle = 'TOP-50天翼卖场';
                 scatterMarkline = ['累计单位台席电耗\n(万度)', '累计单位台席\n电耗同比增长\n(%)'];
-                barTitle = '累计单位台席电费同比(%)';
                 names = topTianyi;
                 xs = tianx;
                 ys = tiany;
+                scatterLegend = getKeys(tianyiMap);
+                seriesCount = tianyiMap;
+                barTitle = '累计单位台席电费同比(%)';
                 barsd = tianbar;
             }
             if (this.home === 'communication') {
                 scatterTitle = 'TOP-80通信局站';
-                scatterMarkline = ['PUE值', 'PUE同比增幅(%)'];
-                barTitle = '累计单位资产电费同比(%)';
-                ConfigScatter.legend.x = 'center';
+                scatterMarkline = ['PUE值', 'PUE同比\n增幅(%)'];
+                //ConfigScatter.legend.x = 'center';
                 names = topCommunication;
                 xs = comx;
                 ys = comy;
+                scatterLegend = getKeys(communicationMap);
+                seriesCount = communicationMap;
+                barTitle = '累计单位资产电费同比(%)';
                 barsd = combar;             
             }
+            //清除之前数据
+            scatter.clear();
+            //设置title和markline
             ConfigScatter.title.text = scatterTitle;
-            ConfigScatter.series[0].markLine.data[0].label.formatter = scatterMarkline[1];
-            ConfigScatter.series[0].markLine.data[1].label.formatter = scatterMarkline[0];
             let x = xs.map((e) => {
                 return Number(e);
             });
             let y = ys.map((e) => {
                 return Number(e);
             });
-           // console.log(Math.max(...x), 'wwwwwwww', ...y);
             let maxX = Math.max(...x);
             let maxY = Math.max(...y);
 
             ConfigScatter.xAxis[0].max = maxX;
             ConfigScatter.yAxis[0].max = maxY;
+            const datas = getDoubleArr(names, x, y);
+            ConfigScatter.legend.data = scatterLegend;
+            ConfigScatter.series = getScatterSeries(seriesCount, datas);
+            ConfigScatter.series[0].markLine.data[0].label.formatter = scatterMarkline[1];
+            ConfigScatter.series[0].markLine.data[1].label.formatter = scatterMarkline[0];
             ConfigScatter.series[0].markLine.data[0].yAxis = (Math.min(...y) + maxY) / 2;
             ConfigScatter.series[0].markLine.data[1].xAxis = (Math.min(...x) + maxX) / 2;
-            ConfigScatter.series[0].data = getDoubleArr(names, x, y);
-            //console.log(getDoubleArr(names, x, y));
-            debugger
+
+            // let maxbar = Math.max(...barsd);
+            // let minbar = Math.min(...barsd);
             ConfigBar.title.text = barTitle;
+            // ConfigBar.xAxis[0].max = maxbar;
+            // ConfigBar.xAxis[0].min = minbar;
             const d = getSortArr(names,barsd);
             ConfigBar.yAxis[0].data = d.name;
             ConfigBar.series[0].data = d.val;
@@ -147,8 +162,12 @@ export default {
 function getDoubleArr(names, arr1, arr2) {
     const d = [];
     for (let index = 0; index < arr1.length; index++) {
-        d.push({name: names[index],
-            value: [arr1[index], arr2[index]]});
+        d.push({
+                name: names[index],
+                value: [arr1[index], arr2[index]],
+                symbolSize: (10 + parseInt(Math.random()*20))
+
+            });
     }
     return d;
 }
@@ -174,9 +193,109 @@ function getSortArr(names,datas){
     // }
     t.forEach(ele =>{
         target.name.push(ele.name);
-        target.val.push(ele.val);       
+        const v = ele.val;
+        (v > 2 || v < -2) ? target.val.push({
+            name: ele.name,
+            value: 2,
+            value2: v,
+            label: {
+                show: true
+            }
+        }) :
+        target.val.push({
+            name: ele.name,
+            value: Math.abs(v),
+            value2: v
+        })
+        //target.val.push(ele.val);       
     });
     return target;
+}
+//取出对象的keys,截掉一位
+function getKeys(obj){
+    let tar = Object.keys(obj);
+    tar = tar.map(ele => ele.slice(0,2));
+    return tar;
+}
+//散点图系列拼接
+function getScatterSeries(names, datas){
+    const target = [];
+    const nameArr = Object.keys(names);
+    // for(let [key, value] in Object.entries(names) ){
+    //     const item = {
+    //         name: key.slice(0,2),
+    //         type: 'scatter',
+    //         data: [],
+    //         label: {
+    //             show: true,
+    //             color: '#fff',
+    //             formatter: function(params) {
+    //                 return `${params.name}`;
+    //             }
+    //         }
+    //     }
+    // }
+    let startNum = 0;
+    for (let index = 0; index < nameArr.length; index++) {
+        const ele = nameArr[index];
+
+        let item = {};
+        if(index === 0){
+        item = {
+            name: ele.slice(0,2),
+            type: 'scatter',
+            data: datas.slice(startNum, startNum + names[ele]),
+            label: {
+                show: false,
+                color: '#fff',
+                formatter: function(params) {
+                    return `${params.name}`;
+                }
+            },
+            markLine: {
+                symbol: ['none', 'arrow'],
+                silent: true,
+                data: [{
+                        yAxis: 52,
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#ffcc00'
+                        },
+                        label: {
+                            formatter: 'PUE同比增幅'
+                        }
+                    },
+                    {
+                        xAxis: 175,
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#ffcc00'
+                        },
+                        label: {
+                            formatter: 'PUE'
+                        }
+                    }]
+                }
+            }
+        }else{
+            item = {
+                name: ele.slice(0,2),
+                type: 'scatter',
+                data: datas.slice(startNum, startNum + names[ele]),
+                label: {
+                    show: false,
+                    color: '#fff',
+                    formatter: function(params) {
+                        return `${params.name}`;
+                    }
+                }
+            }
+        }
+        target.push(item);
+        startNum += names[ele];
+    }
+    return target;
+
 }
 </script>
 

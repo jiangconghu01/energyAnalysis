@@ -94,9 +94,9 @@ const option = {
     ],
     legend: {
         data: ['优', '良', '中', '差'],
-        x: 'right', // 图例显示在右边
-        y: 'top', // 图例在垂直方向上面显示居中
-        top: 10,
+        right: 10,
+        y: 'center',
+        orient: 'vertical',
         textStyle: {
             color: '#FFF',
             fontSize: 12,
@@ -174,6 +174,19 @@ const option = {
             show: false
         }
     }],
+    color: [
+        '#fa150d',
+        '#fa7b78', // 红
+        '#ff66ec',
+        '#ffa900', // 橙
+        '#e9e025', // 黄
+        '#e2e07e',
+        '#94ef30', // 绿
+        '#6bdaff', // 蓝
+        '#419eff',
+        '#6668ff', // 紫
+        '#ffffff' // 白
+    ],
     series: [{
             name: '优',
             type: 'scatter',
@@ -184,10 +197,10 @@ const option = {
             //         {type: 'min', name: '最小值'}
             //     ]
             // },
-            symbolSize: function(data) {
-                // console.log(data, data[1]);
-                return 10;
-            },
+            // symbolSize: function(data) {
+            //     // console.log(data, data[1]);
+            //     return 10;
+            // },
             label: {
                 show: true,
                 color: '#fff',

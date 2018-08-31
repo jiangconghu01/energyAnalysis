@@ -80,7 +80,8 @@ let comy =
     1.68
     0.88
     1.85`.split('\n').map((ele) => {
-        return parseFloat(ele).toFixed(2);
+        const a = parseFloat(ele).toFixed(2);
+        return a < 5 ? a : 0;
     });
 let comx =
     `-0.173469388
@@ -164,7 +165,8 @@ let comx =
     -0.256637168
     -0.706666667
     5.607142857`.split('\n').map((ele) => {
-        return parseFloat(ele).toFixed(4);
+        const a = parseFloat(ele).toFixed(4);
+        return (a > 2 || a < -2) ? 0 : a;
     });;
 const combar =
     `-0.0133302
@@ -248,7 +250,9 @@ const combar =
     0.052276721
     -0.050797931
     -0.015606118`.split('\n').map((ele) => {
-        return parseFloat(ele).toFixed(4);
+        const a = parseFloat(ele).toFixed(4);
+        //return (a > 2 || a < -2) ? 0 : a;
+        return a;
     });;
 
 export { comx, comy, combar }

@@ -52,8 +52,7 @@ const topOffice =
     岱山综合`.split('\n');
 const officeBasicNum = 1001;
 const officeMap = {
-        '省公司': 1,
-        '杭州市': 5,
+        '杭州市': 6,
         '宁波市': 6,
         '温州市': 7,
         '嘉兴市': 5,

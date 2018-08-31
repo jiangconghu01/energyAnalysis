@@ -6,7 +6,7 @@ let data = (() => {
         data.unshift(parseInt(Math.random() * 10) / 10 + 0.1);
         // index % 2 === 0 ? x.unshift('增长排名 ' + index + '0%') : x.unshift('排名 ' + index + '0%');
         // index % 2 === 0 ? x.unshift('增长排名') : x.unshift('排名');
-        index % 2 === 0 ? x.unshift({ value: '排名wrwe', per: index }) : x.unshift({ value: '排名', per: index });
+        index % 2 === 0 ? x.unshift({ value: '非真实数', per: index }) : x.unshift({ value: '模拟数', per: index });
     }
     data.sort((a, b) => a - b);
     return {

@@ -6,7 +6,7 @@ const state = {
     month: beforeMonth(),
     chartsArr: charts,
     systemType: validataOS(),
-    module: 'dev'
+    module: process.env.NODE_ENV === 'development' ? 'dev' : 'devno'
 
 };
 const getters = {

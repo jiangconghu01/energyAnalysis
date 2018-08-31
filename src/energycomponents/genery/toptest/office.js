@@ -48,7 +48,10 @@ let offy =
 0.008129206
 0.003043439
 0.02009874
-0`.split('\n').map(ele => { return parseInt(parseFloat(ele) * 10000) });
+0`.split('\n').map(ele => {
+        const a = parseInt(parseFloat(ele) * 10000);
+        return a < 800 ? a : 0;
+    });
 let offx =
     `0.294244653
 0.010020183
@@ -100,7 +103,8 @@ let offx =
 0.008807946
 0.087360232
 0`.split('\n').map((ele) => {
-        return parseFloat(ele).toFixed(4);
+        const a = parseFloat(ele).toFixed(4);
+        return (a > 2 || a < -2) ? 0 : a;
     });;
 const offbar =
     `1.238715218
@@ -153,7 +157,9 @@ const offbar =
 0.982345376
 1.052276721
 0`.split('\n').map((ele) => {
-        return parseFloat(ele).toFixed(4);
+        const a = parseFloat(ele).toFixed(4);
+        //return (a > 2 || a < -2) ? 0 : a;
+        return a;
     });;
 
 export { offx, offy, offbar }
