@@ -51,7 +51,7 @@ const provinceMap = {
         type: 'map',
         // selectedMode: 'single',
         map: '浙江',
-        zoom: 1.1,
+        zoom: 1,
         mapLocation: {
             x: 'center',
             y: 'center'

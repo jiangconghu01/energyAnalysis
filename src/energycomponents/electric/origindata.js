@@ -95,17 +95,16 @@ function getCountyCode(cityDataArr, cityCode) {
 }
 
 function getCountyCodeOne(cityDataArr, cityName) {
-    //const countyCodeArr = [];
-    let a = ''
+    // const countyCodeArr = [];
+    let a = '';
     for (let i = 0; i < cityDataArr.length; i++) {
         let sub = cityDataArr[i].subCityArr;
         for (let index = 0; index < sub.length; index++) {
             const element = sub[index];
             if (element.cityName === cityName) {
-                //countyCodeArr.push(element.cityCode);
+                // countyCodeArr.push(element.cityCode);
                 a = element.cityCode;
             }
-
         }
     }
     return a;

@@ -36,6 +36,12 @@
                             <Icon type="chevron-left"></Icon>
                             返回
                         </i-button>
+                </div>
+                <div v-show="mapMoudle==='province' || mapMoudle==='company'" :class="[$style['right-top-company']]">
+                    <ul>
+                        <li :class="$style['company-name']"  @click="goCompany('省传输局')">省传输局</li>
+                        <li :class="$style['company-name']" @click="goCompany('股份研发')">股份研发</li>
+                    </ul>
                 </div>                
                 <div  :class="$style['right-mid']">
                     <Button-group>
@@ -81,7 +87,7 @@ import cardText from './electric/card.vue';
 import tableBar from './genery/tablebarcomp.vue';
 import 'echarts/map/js/province/zhejiang.js';
 import jzMap from './chartconfig/zjMap.js';
-import {categoryCount, categoryCost} from './chartconfig/staticData.js';
+import {categoryCount, categoryCost, cityMap as zjCitysArr } from './chartconfig/staticData.js';
 import ConfigLine from './chartconfig/electricLine.js';
 import ConfigLineSmall from './chartconfig/electricLineSmall.js';
 import {provinceMap, cityMap} from './chartconfig/generyMap.js';
@@ -95,7 +101,9 @@ import {
     searchValArr,
     searchEncsArr,
     searchValsArr,
-    searchMapData
+    searchMapData,
+    addDoubleArr2,
+    getSortMapArr
 }
     from './dataUtil.js';
 import {
@@ -106,6 +114,7 @@ import {
     countyEncodeArr,
     getCountyCode,
     getCountyName,
+
     getCountyCodeOne
 }
     from './electric/origindata.js';
@@ -193,6 +202,11 @@ export default {
             this.currentCity = 'A33';
             this.currentCityArr = cityNameArr;
         },
+        goCompany(name){
+            this.mapMoudle = 'company';
+            this.currentCity = jzMap.mapCode[name];
+            this.currentCityArr = [name]; 
+        },
         leftViewNumber() {
             this.leftCurrent = 1;
         },
@@ -235,7 +249,10 @@ export default {
             } else if(this.mapMoudle=== 'city'){ // 省级查看视图，查某个市级数据和所有区县级数据
                 let countryCodeArr = getCountyCode(cityDataArr, this.currentCity);
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
-            } else {
+            } else if(this.mapMoudle=== 'company'){
+                let countryCodeArr =[this.currentCity];
+                param2 = getCityParam(date, countryCodeArr, ['NHDP0062','NHDP0063']);
+            }else {
                let countryCodeArr =[this.currentCity];
                 param2 = getCityParam(date, countryCodeArr, ['NHDP0062','NHDP0063']);
             }
@@ -308,6 +325,17 @@ export default {
                     pueBdata: data[1]
                 };
             }
+            if (this.mapMoudle === 'company') {
+                let codeArr = [this.currentCity];
+                let cityArr = [jzMap.mapName[this.currentCity]];
+
+                data = searchValsArr(encodes, codeArr,arr);
+                pueType = {
+                    xAxisData: cityArr,
+                    pueAdata: data[0],
+                    pueBdata: data[1]
+                };
+            }
             if (this.mapMoudle === 'province') {
                 data = searchValsArr(encodes, jzMap.arrCode, arr);
                 pueType = {
@@ -353,6 +381,9 @@ export default {
                     return params.value;
                 }
             };
+            if(this.mapMoudle === 'province' || this.mapMoudle === 'city'){
+                lineOption.xAxis[0].axisLabel.rotate = 35;
+            }
             lineOption.xAxis[0].data = pueType.xAxisData && pueType.xAxisData;
             lineOption.series[0].data = a && a;
             lineOption.series[1].data = b && b;
@@ -367,42 +398,65 @@ export default {
             const encodes2 = ['NHDP0057', 'NHDP0058', 'NHDP0059', 'NHDP0060', 'NHDP0061'];
             let dataEcount = [];
             let dataEcost = [];
+             let cityArr = [];
             if (this.mapMoudle === 'country') {
                 let codeArr = [this.currentCity];
-                let cityArr = [this.countryNameOne];
+                cityArr = [this.countryNameOne];
                 dataEcount = searchValsArr(encodes1, codeArr, arr);
                 dataEcost = searchValsArr(encodes2, codeArr, arr);
-                configOption.xAxis[0].data = cityArr;
+                //configOption.xAxis[0].data = cityArr;
             }
             if (this.mapMoudle === 'city') {
                 let codeArr = this.currentCityCodeArr;
-                let cityArr = this.currentCityArr;
+                cityArr = this.currentCityArr;
                 dataEcount = searchValsArr(encodes1, codeArr, arr);
                 dataEcost = searchValsArr(encodes2, codeArr, arr);
-                configOption.xAxis[0].data = cityArr;
+               // configOption.xAxis[0].data = cityArr;
+            }
+            if (this.mapMoudle === 'company') {
+                let codeArr = [this.currentCity];
+                cityArr = [jzMap.mapName[this.currentCity]];
+                dataEcount = searchValsArr(encodes1, codeArr, arr);
+                dataEcost = searchValsArr(encodes2, codeArr, arr);
+               // configOption.xAxis[0].data = cityArr;
             }
             if (this.mapMoudle === 'province') {
+                cityArr = zjCitysArr;
                 dataEcount = searchValsArr(encodes1, jzMap.arrCode, arr);
                 dataEcost = searchValsArr(encodes2, jzMap.arrCode, arr);
             }
+           
             let dataPieCount = searchEncsArr(encodes1, this.currentCity, arr);
             let dataPieCost = searchEncsArr(encodes2, this.currentCity, arr);
             if (this.leftCurrent === 1) {
                 configOption.legend.data = categoryCount;
                 configOption.series[0].data = dataPieCount;
                 configOption.series[0].name = '电量占比';
-                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCount, dataEcount));
+                const sum=addDoubleArr2(dataEcount);
+                const results=getSortMapArr('drop',sum,cityArr,...dataEcount);
+               // console.log(cityArr,dataEcount,sum,results,results[1],results.slice(2));
+                configOption.xAxis[0].data = results[1];
+                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCount, results.slice(2)));
             }
             if (this.leftCurrent === 2) {
                 configOption.legend.data = categoryCost;
                 configOption.series[0].name = '电费占比';
                 configOption.series[0].data = dataPieCost;
-                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCost, dataEcost));
+                const sum=addDoubleArr2(dataEcost);
+                const results=getSortMapArr('drop',sum,cityArr,...dataEcost);
+                configOption.xAxis[0].data = results[1];
+                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCost, results.slice(2)));
             }
-
+            if(this.mapMoudle === 'province' || this.mapMoudle === 'city'){
+                configOption.xAxis[0].axisLabel.rotate = 35;
+            }
+            console.log(configOption);
             pieLine.setOption(configOption);
         },
         setMap(arr, code,countryToUpdateCityMap) {
+            if(this.mapMoudle === 'company'){
+                return;
+            }
             let map = '';
             if (this.mapMoudle=== 'province') {
                 map = this.$echarts.init(document.getElementById('electric-right-top'));
@@ -416,6 +470,13 @@ export default {
                 mapconfig.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>累计用电量：${params.data.value}万度</div> <div>累计电费：${params.data.value1}万元</div>`;
                 };
+                let max=0;
+                data.forEach(ele=>{
+                    if(parseFloat(ele.value)>max){
+                        max=Math.ceil(parseFloat(ele.value));
+                    }
+                });
+                mapconfig.dataRange.max=max;
                 mapconfig.series[0].data = data;
                 map.setOption(mapconfig);
             } else if(this.mapMoudle=== 'city'){
@@ -433,6 +494,13 @@ export default {
                 mapconfig.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
                 };
+                let max=0;
+                data2.forEach(ele=>{
+                    if(parseFloat(ele.value)>max){
+                        max=Math.ceil(parseFloat(ele.value));
+                    }
+                });
+                mapconfig.dataRange.max=max;
                 mapconfig.series[0].map = name;
                 mapconfig.series[0].data = data2;
                 map.setOption(mapconfig);
@@ -452,6 +520,13 @@ export default {
                 mapconfig.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
                 };
+                let max=0;
+                data2.forEach(ele=>{
+                    if(parseFloat(ele.value)>max){
+                        max=Math.ceil(parseFloat(ele.value));
+                    }
+                });
+                mapconfig.dataRange.max=max;
                 mapconfig.series[0].map = name;
                 mapconfig.series[0].data = data2;
                 map.setOption(mapconfig);   
@@ -553,8 +628,8 @@ export default {
             // this.$store.commit('setCharts', {name: 'chart6', val: pie1});
             // this.$store.commit('setCharts', {name: 'chart7', val: pie2});
             ConfigElePie1.series[0].data = [
-                {value: offPoint2[0], name: '转供电'},
-                {value: offPoint1[0], name: '直供电'},
+                {value: offPoint2[0]?Number(offPoint2[0]):0, name: '转供电'},
+                {value: offPoint1[0]?Number(offPoint1[0]):0, name: '直供电'},
             ];
             ConfigElePie2.series[0].data = [
                 {value: 8, name: '转供电', label: getLabel('B', offPoint2.slice(1))},
@@ -565,12 +640,12 @@ export default {
             let point2 = parseFloat(offPoint2[0]);
             // let startAngle = 270 - (parseFloat(point2 / (all * 2)).toFixed(2)) * 360;
             // ConfigElePie1.series[0].startAngle = startAngle;
-            let angle = (parseFloat(point2 / all).toFixed(2)) * 360;
+            let angle = all === 0 ? 0 : (parseFloat(point2 / all).toFixed(2)) * 360;
             let startAngle = angle >= 80 ? 0 : 320 + angle / 2;
             ConfigElePie1.series[0].startAngle = startAngle;
             pie2.setOption(ConfigElePie2);
 
-            pie1.setOption(ConfigElePie1);
+           all ?  pie1.setOption(ConfigElePie1) : pie1.clear();
         },
         setRightBottomCountry() {
 
@@ -670,10 +745,14 @@ function getLabel(type, data, width) {
         all += Number(element);
     });
     let widthArr = [];
-    data.forEach(ele => {
-        let wid = parseInt(Number(ele) / all * width);
-        widthArr.push(wid);
-    });
+    if(all>0){
+        data.forEach(ele => {
+            let wid = parseInt(Number(ele) / all * width);
+            widthArr.push(wid);
+        });
+    }else{
+        widthArr = [78,78,78,77];
+    }
     const label = {
         normal: {
             formatter: [
@@ -832,6 +911,24 @@ function getLabel(type, data, width) {
                 top:20px;
                 right: 10px;
                 position: absolute;
+            }
+            .right-top-company{
+                position: absolute;
+                right: 5%;
+                bottom: 55%;
+                ul li{
+                    list-style: none;
+                    color:#fff;
+                    width:60px;
+                    height: 30px;
+                    line-height: 30px;
+                    background-color: rgba(16, 162, 249, 0.7);
+                    padding-left:5px;
+                    margin-top: 5px;
+                    border: 1px solid rgba(16, 162, 249, 0.5);
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
             }
             .right-mid{
                 height: 5%;

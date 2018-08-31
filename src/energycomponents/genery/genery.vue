@@ -20,8 +20,8 @@
                 <div :class="$style['left-bottom-tip']">
                     <div :class="$style['table-title']">
                         <ul>
-                            <li> 大网综合能耗（万度）</li>
-                            <li>&nbsp;IDC电耗（万度）</li>
+                            <li> 大网综合能耗（吨标煤）</li>
+                            <li>IDC电耗（吨标煤）</li>
                         </ul>
                     </div>
                     <table>
@@ -39,12 +39,19 @@
                 </div>
             </div>
             <div id="genery-right-all" :class="$style['right-all']">
-                <div id="genery-right-top" :class="$style['right-top']" ref="echarts"></div>
+                <div id="genery-right-top" :class="$style['right-top']"></div>
+                <!-- <div id="genery-right-top2" :class="$style['right-top']" style="z-index:1000;width:50%;"></div> -->
                 <div v-show="mapMoudle==='city' || mapMoudle==='country'" id="genery-right-topcity" :class="[$style['right-top-back']]">
                         <i-button type="primary" @click="goBack()" :style="{borderColor: '#fff'}">
                             <Icon type="chevron-left"></Icon>
                             返回
                         </i-button>
+                </div>
+                <div v-show="mapMoudle==='province' || mapMoudle==='company'" :class="[$style['right-top-company']]">
+                    <ul>
+                        <li :class="$style['company-name']"  @click="goCompany('省传输局')">省传输局</li>
+                        <li :class="$style['company-name']" @click="goCompany('股份研发')">股份研发</li>
+                    </ul>
                 </div>
                 <div id="genery-right-bottom" :class="$style['right-bottom']">
                     <div :class="$style['table-item']">
@@ -82,7 +89,8 @@ import {
     searchVal,
     searchValArr,
     generyRBData,
-    searchMapData
+    searchMapData,
+    getSortMapArr
 }
     from '../dataUtil.js';
 import {
@@ -164,6 +172,11 @@ export default {
             this.currentCityArr = cityNameArr; 
             //this.$router.push({name: 'All'});
         },
+        goCompany(name){
+            this.mapMoudle = 'company';
+            this.currentCity = jzMap.mapCode[name];
+            this.currentCityArr = [name]; 
+        },
         houverBox() {
             setTimeout(() => {
                 this.hoverLine && this.hoverLine.resize();
@@ -177,9 +190,11 @@ export default {
             } else if(this.mapMoudle=== 'city') {
                 let countryCodeArr = getCountyCode(cityDataArr, this.currentCity);
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
+            }else if(this.mapMoudle=== 'company'){
+                let countryCodeArr =[this.currentCity];
+                param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
             }else{
                 let countryCodeArr =[this.currentCity];
-           // console.log(a);
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
             }
 
@@ -191,7 +206,6 @@ export default {
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
-                
                 if(this.mapMoudle === 'country'){
                     this.sourceCountryData = response.data;
                      this.setLeftTop(this.sourceCountryData, this.currentCity);
@@ -294,12 +308,18 @@ export default {
             pie.setOption(ConfigPie);
         },
         setLeftBottom(arr, code) {
+            const sortArr=getSortMapArr('',
+                searchValArr('NHDP0015', arr),
+                this.currentCityArr,
+                searchValArr('NHDP0016', arr),
+                searchValArr('NHDP0009', arr),
+                searchValArr('NHDP0010', arr));
             this.leftBottom = {
-                listNetCost: searchValArr('NHDP0009', arr),
-                listIDCCost: searchValArr('NHDP0010', arr),
-                listCity: this.currentCityArr,
-                listPersentNet: searchValArr('NHDP0015', arr),
-                listPersentIDC: searchValArr('NHDP0016', arr),
+                listNetCost: sortArr[3],
+                listIDCCost:  sortArr[4],
+                listCity:  sortArr[1],
+                listPersentNet:  sortArr[0],
+                listPersentIDC:  sortArr[2],
                 guideVal: searchVal(code, 'NHDP0011', arr),
                 warnVal: searchVal(code, 'NHDP0012', arr)
             };
@@ -314,33 +334,49 @@ export default {
                 color: '#fff',
                 fontSize: 12,
                 fontWeight: 200,
+                //rotate:30,
                 formatter: (val) => {
                     return parseFloat(val * 100).toFixed(2) + '%';
                 }
             };
+            if(this.mapMoudle === 'province' || this.mapMoudle === 'city'){
+                option.xAxis[0].axisLabel.rotate = 35;
+            }
+            
+ 
             if (this.mapMoudle === 'country'){
                 option.xAxis[0].data=[this.countryNameOne];
             }else{
-                 option.xAxis[0].data = this.currentCityArr;
+                // option.xAxis[0].data = this.currentCityArr;
+                 option.xAxis[0].data = sortArr[1];
             }
-            option.series[0].data = this.leftBottom.listPersentNet;
-            option.series[1].data = this.leftBottom.listPersentIDC;
+            // option.series[0].data = this.leftBottom.listPersentNet;
+            // option.series[1].data = this.leftBottom.listPersentIDC;
+            option.series[0].data = sortArr[2];
+            option.series[1].data = sortArr[0];
             const max = Math.max(Math.max.apply(null, this.leftBottom.listPersentNet), Math.max.apply(null, this.leftBottom.listPersentIDC));
             const min = Math.min(Math.min.apply(null, this.leftBottom.listPersentNet), Math.min.apply(null, this.leftBottom.listPersentIDC));
             let guid = this.leftBottom.guideVal;
             let warn = this.leftBottom.warnVal;
             let len = this.currentCityArr.length - 1;
-            option.yAxis[0].min=this.mapMoudle === 'country'? 0:min;
+            option.yAxis[0].min=this.mapMoudle === 'country' || this.mapMoudle === 'company'? 0:min;
             option.yAxis[0].max = max > warn ? max : warn;
-            option.series[1].markLine = {
+            option.series[2].markLine = {
                 symbol: ['none'],
                 // silent: true,
                 data: [{
                     yAxis: guid,
-                },
+                    lineStyle: {
+                        color: '#7bfcfd'
+                    },
+                }
+               ]
+            };
+            option.series[3].markLine = {
+                symbol: ['none'],
+                data: [
                 {
                     yAxis: warn,
-                    // yAxis: 0.9,
                     lineStyle: {
                         color: '#ffa354'
                     },
@@ -352,7 +388,10 @@ export default {
             this.rightBottom = generyRBData(arr, code);
         },
         setMap(arr, code,countryToUpdateCityMap) {
-                let map='';
+            if(this.mapMoudle === 'company'){
+                return;
+            }
+            let map='';
             if (this.mapMoudle === 'province') {
                 map = this.$echarts.init(document.getElementById('genery-right-top'));
                 map.clear();
@@ -364,6 +403,14 @@ export default {
                 mapconfig.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
                 };
+                //console.log(data);
+                let max=0;
+                data.forEach(ele=>{
+                    if(parseFloat(ele.value)>max){
+                        max=Math.ceil(parseFloat(ele.value));
+                    }
+                });
+                mapconfig.dataRange.max=max;
                 mapconfig.series[0].data = data;
                 //mapconfig.roam=false;
                 map.setOption(mapconfig);
@@ -383,7 +430,13 @@ export default {
                 mapconfig.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
                 };
-                
+                let max=0;
+                data2.forEach(ele=>{
+                    if(parseFloat(ele.value)>max){
+                        max=Math.ceil(parseFloat(ele.value));
+                    }
+                });
+                mapconfig.dataRange.max=max;
                 mapconfig.series[0].map = name;
                 mapconfig.series[0].data = data2;
 
@@ -392,24 +445,32 @@ export default {
             }else{
                 const initmap=cityMap;
                 const datajzMap=jzMap;
+                const searchMapData2=searchMapData;
                 if(this.countryParentName && countryToUpdateCityMap){
                    
                 map = this.$echarts.init(document.getElementById('genery-right-top'));
                 map.clear();
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
                 const cityName = this.countryParentName;
-                this.$echarts.registerMap(cityName, jzMap.mapJson[cityName]);
+                this.$echarts.registerMap(cityName, datajzMap.mapJson[cityName]);
+                console.log(datajzMap.mapJson[cityName]);
                 const mapconfig2 = JSON.parse(JSON.stringify(initmap));
 
                 
                 const clickCode2 = datajzMap.mapCode[cityName];
                 const subCodeCount2 = datajzMap.countryCodeCount[clickCode2];
                 const subCodes2 = addCodes(clickCode2, subCodeCount2);
-                const data2 = searchMapData(subCodes2, ['NHDP0005', 'NHDP0006'], arr, 'country');
+                const data2 = searchMapData2(subCodes2, ['NHDP0005', 'NHDP0006'], arr, 'country');
                 mapconfig2.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
                 };
-                
+                let max=0;
+                data2.forEach(ele=>{
+                    if(parseFloat(ele.value)>max){
+                        max=Math.ceil(parseFloat(ele.value));
+                    }
+                });
+                mapconfig2.dataRange.max=max;
                 mapconfig2.series[0].map = name;
                 mapconfig2.series[0].data = data2;
 
@@ -427,7 +488,7 @@ export default {
                 }
                 if (this.mapMoudle === 'city') {
                     this.mapMoudle = 'country';
-                     this.countryNameOne=param.name;
+                     this.countryNameOne=param.name; 
                     //console.log(param.name);
                    this.currentCity = getCountyCodeOne(cityDataArr,param.name);
                     return;
@@ -593,7 +654,7 @@ function addCodes(code, count) {
                 }
                 table{
                     float: left;
-                    
+                    margin-top:5px;
                     width: calc(100% - 100px);
                     height: 100%;
                     text-align: center; 
@@ -639,6 +700,24 @@ function addCodes(code, count) {
             .right-top-back{
                 top:20px;
                 right: 10px;
+            }
+            .right-top-company{
+                position: absolute;
+                right: 5%;
+                bottom: 55%;
+                ul li{
+                    list-style: none;
+                    color:#fff;
+                    width:60px;
+                    height: 30px;
+                    line-height: 30px;
+                    background-color: rgba(16, 162, 249, 0.7);
+                    padding-left:5px;
+                    margin-top: 5px;
+                    border: 1px solid rgba(16, 162, 249, 0.5);
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
             }
             .right-bottom{
                 width: 100%;

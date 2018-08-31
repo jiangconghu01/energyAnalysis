@@ -153,3 +153,75 @@ export { x1, y1, name1 };
 // [{ dt: '201801' }, { dt: '201809' }, { dt: '201803' }, { dt: '201805' }].sort((a, b) => {
 //     return parseInt(a.dt) - parseInt(b.dt);
 // });
+const a = [8, 4, 5, 2, 9];
+const b = [4, 6, 7, 8, 2];
+const c = ['w', 't', 'e', 'u', 'k'];
+//= >>>>
+// 根据多个有对应关系的数组，组合对某个值排序之后导出排序顺序后的数组
+function getSortMapArr(type, basic, ...rest) {
+    const result = [];
+    const arr = [];
+    const len = rest.length;
+    for (let i = 0, length = basic.length; i < length; i++) {
+        const temp = {};
+        temp['arr0'] = basic[i];
+        for (let k = 0; k < len; k++) {
+            temp['arr' + (k + 1)] = rest[k][i];
+        }
+        arr.push(temp);
+    }
+    const sortArr = arr.sort((a, b) => {
+        return type === 'drop' ? (parseFloat(b['arr0']) - parseFloat(a['arr0'])) : (parseFloat(a['arr0']) - parseFloat(b['arr0']));
+    });
+    for (let i = 0; i < len + 1; i++) {
+        let subResultArr = sortArr.map(ele => ele['arr' + i]);
+        result.push(subResultArr);
+    }
+    return result;
+}
+
+// 根据多个有对应关系的数组，组合对某个值排序之后导出排序顺序后的数组
+function getSortMapArr2(type, basic) {
+    const result = [];
+    const arr = [];
+    const len = arguments.length - 2;
+    // console.log(arguments, [].slice.apply(arguments));
+    for (let i = 0, length = basic.length; i < length; i++) {
+        const temp = {};
+        temp['arr0'] = basic[i];
+        for (let k = 0; k < len; k++) {
+            temp['arr' + (k + 1)] = arguments[k + 2][i];
+        }
+        arr.push(temp);
+    }
+    const sortArr = arr.sort(function(a, b) {
+        return type === 'drop' ? (parseFloat(b['arr0']) - parseFloat(a['arr0'])) : (parseFloat(a['arr0']) - parseFloat(b['arr0']));
+    });
+    for (let i = 0; i < len + 1; i++) {
+        let subResultArr = sortArr.map(ele => ele['arr' + i]);
+        result.push(subResultArr);
+    }
+    return result;
+}
+const mapCode = {
+    '杭州市': 'A3301',
+    '宁波市': 'A3302',
+    '温州市': 'A3303',
+    '嘉兴市': 'A3304',
+    '湖州市': 'A3305',
+    '绍兴市': 'A3306',
+    '金华市': 'A3307',
+    '衢州市': 'A3308',
+    '丽水市': 'A3309',
+    '台州市': 'A3310',
+    '舟山市': 'A3311',
+    '省传输局': 'A3312',
+    '股份研发': 'A3314'
+};
+function getvalkey(obj) {
+    const t = {};
+    for (let [key, value] of Object.entries(obj)) { // 翻转浙江个地市级编号和名称
+        t[value] = key;
+    }
+    return t;
+}
