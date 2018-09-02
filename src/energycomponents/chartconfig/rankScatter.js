@@ -104,47 +104,47 @@ const option = {
         }
     },
     xAxis: [{
-            type: 'value',
-            scale: true,
-            max: 205,
-            axisLabel: { // ---坐标轴 标签
-                show: true, // ---是否显示
-                inside: false, // ---是否朝内
-                rotate: 0, // ---旋转角度
-                margin: 8, // ---刻度标签与轴线之间的距离
-                color: '#fff', // ---默认取轴线的颜色
-                fontSize: 12,
-                fontWeight: 200,
-                formatter: (val) => {
-                    return parseFloat(val * 100).toFixed(2) + '%';
-                }
-            },
-            axisTick: { // ---坐标轴 刻度
-                show: true, // ---是否显示
-                inside: false, // ---是否朝内
-                lengt: 3, // ---长度
-                lineStyle: {
-                    // color:'red',          //---默认取轴线的颜色
-                    width: 1,
-                    type: 'solid',
-                },
-            },
-            axisLine: { // ---坐标轴 轴线
-                show: true, // ---是否显示
-                // ------------------- 箭头 -------------------------
-                symbol: ['none'], // ---是否显示轴线箭头
-                // ------------------- 线 -------------------------
-                lineStyle: {
-                    color: '#80a4ce',
-                    width: 1,
-                    type: 'solid',
-                    opacity: 0.5
-                },
-            },
-            splitLine: {
-                show: false
+        type: 'value',
+        scale: true,
+        max: 205,
+        axisLabel: { // ---坐标轴 标签
+            show: true, // ---是否显示
+            inside: false, // ---是否朝内
+            rotate: 0, // ---旋转角度
+            margin: 8, // ---刻度标签与轴线之间的距离
+            color: '#fff', // ---默认取轴线的颜色
+            fontSize: 12,
+            fontWeight: 200,
+            formatter: (val) => {
+                return parseFloat(val * 100).toFixed(2) + '%';
             }
+        },
+        axisTick: { // ---坐标轴 刻度
+            show: true, // ---是否显示
+            inside: false, // ---是否朝内
+            lengt: 3, // ---长度
+            lineStyle: {
+                // color:'red',          //---默认取轴线的颜色
+                width: 1,
+                type: 'solid',
+            },
+        },
+        axisLine: { // ---坐标轴 轴线
+            show: true, // ---是否显示
+            // ------------------- 箭头 -------------------------
+            symbol: ['none'], // ---是否显示轴线箭头
+            // ------------------- 线 -------------------------
+            lineStyle: {
+                color: '#80a4ce',
+                width: 1,
+                type: 'solid',
+                opacity: 0.5
+            },
+        },
+        splitLine: {
+            show: false
         }
+    }
 
     ],
     yAxis: [{
@@ -187,72 +187,80 @@ const option = {
         '#6668ff', // 紫
         '#ffffff' // 白
     ],
-    series: [{
-            name: '优',
-            type: 'scatter',
-            data: [],
-            // markPoint: {
-            //     data: [
-            //         {type: 'max', name: '最大值'},
-            //         {type: 'min', name: '最小值'}
-            //     ]
-            // },
-            // symbolSize: function(data) {
-            //     // console.log(data, data[1]);
-            //     return 10;
-            // },
-            label: {
-                show: true,
-                color: '#fff',
-                formatter: function(params) {
-                    return `${params.name}`;
-                }
-            },
-            markLine: {
-                symbol: ['none', 'arrow'],
-                silent: true,
-                data: [{
-                        yAxis: 52,
-                        lineStyle: {
-                            type: 'solid',
-                            color: '#ffcc00'
-                        },
-                        label: {
-                            formatter: 'PUE同比增幅'
-                        }
-                    },
-                    {
-                        xAxis: 175,
-                        lineStyle: {
-                            type: 'solid',
-                            color: '#ffcc00'
-                        },
-                        label: {
-                            formatter: 'PUE'
-                        }
-                    }
-                ]
-            }
-        },
-        // {
-        //     name: '良',
-        //     type: 'scatter',
-        //     data: randomDataArray(),
-        // },
-        // {
-        //     name: '中',
-        //     type: 'scatter',
-        //     data: randomDataArray(),
-        //     symbolSize: function (data) {
-        //         // console.log(data, data[1]);
-        //         return 18;
-        //     },
-        // },
-        // {
-        //     name: '差',
-        //     type: 'scatter',
-        //     data: randomDataArray(),
-        // }
+    series: [
+    // {
+    //     name: '优',
+    //     type: 'scatter',
+    //     data: [],
+    //     // markPoint: {
+    //     //     data: [
+    //     //         {type: 'max', name: '最大值'},
+    //     //         {type: 'min', name: '最小值'}
+    //     //     ]
+    //     // },
+    //     // symbolSize: function(data) {
+    //     //     // console.log(data, data[1]);
+    //     //     return 10;
+    //     // },
+    //     label: {
+    //         show: true,
+    //         color: '#fff',
+    //         // formatter: function(params) {
+    //         //     return `${params.name}`;
+    //         // },
+    //         emphasis: {
+    //             show: true,
+    //             formatter: function(param) {
+    //                 return param.name;
+    //             },
+    //             position: 'top'
+    //         }
+    //     },
+    //     markLine: {
+    //         symbol: ['none', 'arrow'],
+    //         silent: true,
+    //         data: [{
+    //             yAxis: 52,
+    //             lineStyle: {
+    //                 type: 'solid',
+    //                 color: '#ffcc00'
+    //             },
+    //             label: {
+    //                 formatter: 'PUE同比增幅'
+    //             }
+    //         },
+    //         {
+    //             xAxis: 175,
+    //             lineStyle: {
+    //                 type: 'solid',
+    //                 color: '#ffcc00'
+    //             },
+    //             label: {
+    //                 formatter: 'PUE'
+    //             }
+    //         }
+    //         ]
+    //     }
+    // },
+    //     // {
+    //     //     name: '良',
+    //     //     type: 'scatter',
+    //     //     data: randomDataArray(),
+    //     // },
+    //     // {
+    //     //     name: '中',
+    //     //     type: 'scatter',
+    //     //     data: randomDataArray(),
+    //     //     symbolSize: function (data) {
+    //     //         // console.log(data, data[1]);
+    //     //         return 18;
+    //     //     },
+    //     // },
+    //     // {
+    //     //     name: '差',
+    //     //     type: 'scatter',
+    //     //     data: randomDataArray(),
+    //     // }
     ]
 };
 export default option;

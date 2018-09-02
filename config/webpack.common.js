@@ -38,19 +38,22 @@ module.exports = {
                 //     name: 'jquery',
                 //     enforce: true
                 // },
-                lib2: {
+                echarts: {
                     chunks: 'all',
                     name: 'echarts',
+                    test: /[\\/]node_modules[\\/]echarts[\\/]/,
                     enforce: true
                 },
-                lib3: {
+                vue: {
                     chunks: 'all',
                     name: 'vue',
+                    test: /[\\/]node_modules[\\/]vue[\\/]/,
                     enforce: true
                 },
-                lib4: {
+                axios: {
                     chunks: 'all',
                     name: 'axios',
+                    test: /[\\/]node_modules[\\/]axios[\\/]/,
                     enforce: true
                 }
             }
@@ -89,7 +92,7 @@ module.exports = {
             template: 'src/template/energyAnalysis.html',
             // chunks: ['filetree'],
             chunk: ['vue', 'echarts', 'axios', 'energyAnalysis'],
-            excludeChunks: ['index'],
+            // excludeChunks: ['index'],
             minify: {
                 collapseWhitespace: false
             },

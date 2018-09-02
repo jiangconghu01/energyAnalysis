@@ -36,17 +36,17 @@ import {
     offx,
     offy,
     offbar
-} from './toptest/office.js'
+} from './toptest/office.js';
 import {
     tianx,
     tiany,
     tianbar
-} from './toptest/tianyi.js'
+} from './toptest/tianyi.js';
 import {
     comx,
     comy,
     combar
-} from './toptest/com.js'
+} from './toptest/com.js';
 export default {
     data () {
         return {
@@ -92,18 +92,18 @@ export default {
             if (this.home === 'communication') {
                 scatterTitle = 'TOP-80通信局站';
                 scatterMarkline = ['PUE值', 'PUE同比\n增幅(%)'];
-                //ConfigScatter.legend.x = 'center';
+                // ConfigScatter.legend.x = 'center';
                 names = topCommunication;
                 xs = comx;
                 ys = comy;
                 scatterLegend = getKeys(communicationMap);
                 seriesCount = communicationMap;
                 barTitle = '累计单位资产电费同比(%)';
-                barsd = combar;             
+                barsd = combar;
             }
-            //清除之前数据
+            // 清除之前数据
             scatter.clear();
-            //设置title和markline
+            // 设置title和markline
             ConfigScatter.title.text = scatterTitle;
             let x = xs.map((e) => {
                 return Number(e);
@@ -129,7 +129,7 @@ export default {
             ConfigBar.title.text = barTitle;
             // ConfigBar.xAxis[0].max = maxbar;
             // ConfigBar.xAxis[0].min = minbar;
-            const d = getSortArr(names,barsd);
+            const d = getSortArr(names, barsd);
             ConfigBar.yAxis[0].data = d.name;
             ConfigBar.series[0].data = d.val;
             scatter.setOption(ConfigScatter);
@@ -163,35 +163,35 @@ function getDoubleArr(names, arr1, arr2) {
     const d = [];
     for (let index = 0; index < arr1.length; index++) {
         d.push({
-                name: names[index],
-                value: [arr1[index], arr2[index]],
-                symbolSize: (10 + parseInt(Math.random()*20))
+            name: names[index],
+            value: [arr1[index], arr2[index]],
+            symbolSize: (10 + parseInt(Math.random() * 20))
 
-            });
+        });
     }
     return d;
 }
-//排序后得出对应数组
-function getSortArr(names,datas){
-    let t=[];
+// 排序后得出对应数组
+function getSortArr(names, datas) {
+    let t = [];
     const target = {
         name: [],
         val: []
     };
-    for(let i = 0;i < names.length; i++){
+    for (let i = 0; i < names.length; i++) {
         t.push({
             name: names[i],
-            val: datas[i] 
+            val: datas[i]
         });
     }
-    t = t.sort((a,b)=>{
+    t = t.sort((a, b) => {
         return a.val - b.val;
     });
-    // for (let [key, value] of Object.entries(t)) { 
+    // for (let [key, value] of Object.entries(t)) {
     //     target.name.push(key);
     //     target.val.push(value);
     // }
-    t.forEach(ele =>{
+    t.forEach(ele => {
         target.name.push(ele.name);
         const v = ele.val;
         (v > 2 || v < -2) ? target.val.push({
@@ -201,24 +201,24 @@ function getSortArr(names,datas){
             label: {
                 show: true
             }
-        }) :
-        target.val.push({
-            name: ele.name,
-            value: Math.abs(v),
-            value2: v
         })
-        //target.val.push(ele.val);       
+            : target.val.push({
+                name: ele.name,
+                value: Math.abs(v),
+                value2: v
+            });
+        // target.val.push(ele.val);
     });
     return target;
 }
-//取出对象的keys,截掉一位
-function getKeys(obj){
+// 取出对象的keys,截掉一位
+function getKeys(obj) {
     let tar = Object.keys(obj);
-    tar = tar.map(ele => ele.slice(0,2));
+    tar = tar.map(ele => ele.slice(0, 2));
     return tar;
 }
-//散点图系列拼接
-function getScatterSeries(names, datas){
+// 散点图系列拼接
+function getScatterSeries(names, datas) {
     const target = [];
     const nameArr = Object.keys(names);
     // for(let [key, value] in Object.entries(names) ){
@@ -240,22 +240,29 @@ function getScatterSeries(names, datas){
         const ele = nameArr[index];
 
         let item = {};
-        if(index === 0){
-        item = {
-            name: ele.slice(0,2),
-            type: 'scatter',
-            data: datas.slice(startNum, startNum + names[ele]),
-            label: {
-                show: false,
-                color: '#fff',
-                formatter: function(params) {
-                    return `${params.name}`;
-                }
-            },
-            markLine: {
-                symbol: ['none', 'arrow'],
-                silent: true,
-                data: [{
+        if (index === 0) {
+            item = {
+                name: ele.slice(0, 2),
+                type: 'scatter',
+                data: datas.slice(startNum, startNum + names[ele]),
+                label: {
+                    show: false,
+                    color: '#fff',
+                    formatter: function(params) {
+                        return `${params.name}`;
+                    },
+                    emphasis: {
+                        show: true,
+                        formatter: function(param) {
+                            return param.name;
+                        },
+                        position: 'top'
+                    }
+                },
+                markLine: {
+                    symbol: ['none', 'arrow'],
+                    silent: true,
+                    data: [{
                         yAxis: 52,
                         lineStyle: {
                             type: 'solid',
@@ -276,10 +283,10 @@ function getScatterSeries(names, datas){
                         }
                     }]
                 }
-            }
-        }else{
+            };
+        } else {
             item = {
-                name: ele.slice(0,2),
+                name: ele.slice(0, 2),
                 type: 'scatter',
                 data: datas.slice(startNum, startNum + names[ele]),
                 label: {
@@ -287,15 +294,21 @@ function getScatterSeries(names, datas){
                     color: '#fff',
                     formatter: function(params) {
                         return `${params.name}`;
+                    },
+                    emphasis: {
+                        show: true,
+                        formatter: function(param) {
+                            return param.name;
+                        },
+                        position: 'top'
                     }
                 }
-            }
+            };
         }
         target.push(item);
         startNum += names[ele];
     }
     return target;
-
 }
 </script>
 
