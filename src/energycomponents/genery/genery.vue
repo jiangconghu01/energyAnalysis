@@ -330,6 +330,12 @@ export default {
             // option.yAxis[0].min = 0;
             // option.yAxis[0].max = 1.2;
             // option.yAxis[0].splitNumber = 6;
+            option.label.formatter = function(params) {
+                return Number(params.value) === 0 ? '0' : params.value;
+            }
+            option.series[0].label.formatter = function(params){
+                return Number(params.value) === 0 ? '0' : params.value;
+            }
             option.yAxis[0].axisLabel = {
                 color: '#fff',
                 fontSize: 12,

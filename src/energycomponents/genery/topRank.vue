@@ -11,6 +11,16 @@
                     </Button-group>
 
                 </div>
+                <!-- <div :class="$style['exception-data']">
+                    <ul>
+                        <li>杭州武林：154.567</li>
+                        <li>杭州武林：154.567</li>
+                        <li>杭州武林：154.567</li>
+                        <li>杭州武林：154.567</li>
+                        <li>杭州武林：154.567</li>
+                        <li>杭州武林：154.567</li>
+                    </ul>
+                </div> -->
             </div>
             <div :class="$style['right-all']">
                 <div id="rank-right-all" :class="$style['right-all-chart']"></div>
@@ -58,6 +68,8 @@ export default {
         setCharts() {
             let scatter = this.$echarts.init(document.getElementById('rank-left-all'));
             let bar = this.$echarts.init(document.getElementById('rank-right-all'));
+            this.$store.commit('setCharts', {name: 'chart1', val: scatter});
+            this.$store.commit('setCharts', {name: 'chart2', val: bar});
             let scatterTitle = '';
             let scatterMarkline = [];
             let names = [];
@@ -165,7 +177,7 @@ function getDoubleArr(names, arr1, arr2) {
         d.push({
             name: names[index],
             value: [arr1[index], arr2[index]],
-            symbolSize: (10 + parseInt(Math.random() * 20))
+            symbolSize: (7 + parseInt(Math.random() * 14))
 
         });
     }
@@ -340,6 +352,28 @@ function getScatterSeries(names, datas) {
                 right: 10px;
                 top:10px;
                 color:#fff;
+            }
+            .exception-data{
+                position: absolute;
+                top:10px;
+                right: 2%;
+               // height: 17%;
+                height: 60px;
+                width: 150px;
+                background-color: rgba(16,162,249,0.8);
+                padding: 5px 0;
+                color:#fff;
+                overflow: hidden;
+                border-radius: 5px;
+                ul{
+                    width: calc(100% + 20px);
+                    height: 100%;
+                    overflow: auto;
+                    li{
+                        padding-left:15px;
+                        list-style:none;
+                    }
+                }
             }
 
         }

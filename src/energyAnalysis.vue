@@ -41,6 +41,7 @@
                     <li :class="$style.icon"><img src="./static/tb_rq.png" alt=""></li>
                     <li :class="$style.date"><Date-picker type="month" 
                     placeholder="选择月" 
+                    :disabled = "true"
                     format="yyyy年MM月" 
                     size="small" 
                     style="width: 145px"
@@ -271,6 +272,12 @@ function getCurrent(path) {
 }
 .ivu-date-picker-cells.ivu-date-picker-cells-year{
     width: 130px;
+}
+.ivu-date-picker .ivu-input[disabled]{
+    background-color: rgba(255,255,255,0);
+    opacity: 1;
+    cursor: pointer;
+    color: #fff;
 }
 .ivu-picker-panel-body{
     background-color: rgba(16, 162, 249, 1);
