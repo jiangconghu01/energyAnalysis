@@ -246,7 +246,7 @@ export default {
             let param2;
             if (this.mapMoudle === 'province') { // 省级查看视图，查省级数据和所有市级数据
                 param2 = getCityParam(date, cityCodeArr, cityEncodeArr);
-            } else if(this.mapMoudle=== 'city'){ // 省级查看视图，查某个市级数据和所有区县级数据
+            } else if(this.mapMoudle=== 'city'){ // 市级查看视图，查某个市级数据和所有区县级数据
                 let countryCodeArr = getCountyCode(cityDataArr, this.currentCity);
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
             } else if(this.mapMoudle=== 'company'){
@@ -609,14 +609,17 @@ export default {
             if (this.rightCurrent === 1) {
                 encodes1 = ['NHDP0081', 'NHDP0077', 'NHDP0079', 'NHDP0078', 'NHDP0080'];
                 encodes2 = ['NHDP0086', 'NHDP0083', 'NHDP0082', 'NHDP0084', 'NHDP0085'];
+                ConfigElePie1.tooltip.formatter = '{b} <br/>{c}(个)<br/>占比： {d}%';
             }
             if (this.rightCurrent === 2) {
                 encodes1 = ['NHDP0068', 'NHDP0064', 'NHDP0066', 'NHDP0065', 'NHDP0067'];
                 encodes2 = ['NHDP0073', 'NHDP0070', 'NHDP0069', 'NHDP0071', 'NHDP0072'];
+                ConfigElePie1.tooltip.formatter = '{b} <br/>{c}(万度)<br/>占比：{d}%';
             }
             if (this.rightCurrent === 3) {
                 encodes1 = ['NHDP0094', 'NHDP0090', 'NHDP0092', 'NHDP0091', 'NHDP0093'];
                 encodes2 = ['NHDP0099', 'NHDP0096', 'NHDP0095', 'NHDP0097', 'NHDP0098'];
+                ConfigElePie1.tooltip.formatter = '{b} <br/>{c}(万元)<br/>占比：{d}%';
             }
             let offPoint1 = searchEncsArr(encodes1, this.currentCity, arr);
             let offPoint2 = searchEncsArr(encodes2, this.currentCity, arr);
@@ -631,10 +634,11 @@ export default {
                 {value: offPoint2[0]?Number(offPoint2[0]):0, name: '转供电'},
                 {value: offPoint1[0]?Number(offPoint1[0]):0, name: '直供电'},
             ];
+            const width = parseInt(document.getElementById('electric-right-bottom').clientWidth);
             ConfigElePie2.series[0].data = [
-                {value: 8, name: '转供电', label: getLabel('B', offPoint2.slice(1))},
+                {value: 8, name: '转供电', label: getLabel('B', offPoint2.slice(1), width*0.58)},
                 {value: 20, name: '转供电', label: {show: false}, labelLine: {show: false}},
-                {value: 8, name: '直供电', label: getLabel('A', offPoint1.slice(1))},
+                {value: 8, name: '直供电', label: getLabel('A', offPoint1.slice(1), width*0.58)},
             ];
             let all = parseFloat(offPoint1[0]) + parseFloat(offPoint2[0]);
             let point2 = parseFloat(offPoint2[0]);
@@ -772,7 +776,6 @@ function getLabel(type, data, width) {
                 bara1: {
                     width: widthArr[0],
                     backgroundColor: '#ffed8b',
-
                 },
                 bara2: {
                     width: widthArr[1],

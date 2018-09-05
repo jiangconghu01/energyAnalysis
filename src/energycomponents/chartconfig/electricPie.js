@@ -53,31 +53,6 @@ const ConfigElePie1 = {
 
 // 显示label用的
 const ConfigElePie2 = {
-    // title: {
-    //     text: '',
-    //     left: '5px', // 标题的位置 默认是left，其余还有center、right属性
-    //     // bottom: '20%',
-    //     textStyle: {
-    //         color: '#FFF',
-    //         fontSize: 16,
-    //         fontWeight: 300
-    //     }
-    // },
-    // tooltip: {
-    //     trigger: 'item',
-    //     formatter: '{b} <br/>{c} ({d}%)'
-    // },
-    // legend: {
-    //     orient: 'horizontal', // 布局  横向布局图例标记居文字的左边 vertical则反之
-    //     x: 'left', // 图例显示在右边
-    //     y: 'top', // 图例在垂直方向上面显示居中
-    //     data: ['直供电', '转供电'],
-    //     textStyle: {
-    //         color: '#FFF',
-    //         fontSize: 12,
-    //         fontWeight: 200
-    //     }
-    // },
     calculable: true,
     series: [{
         name: '各部占比',

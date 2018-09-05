@@ -177,7 +177,7 @@ function searchMapDataItem(code, encodes, arr, type) {
 }
 
 function searchMapData(codes, encodes, arr, type) {
-    let data = [];
+    const data = [];
 
     for (let index = 0; index < codes.length; index++) {
         const element = codes[index];
@@ -188,12 +188,12 @@ function searchMapData(codes, encodes, arr, type) {
 }
 // 算出当前日期之前的十二个月字符串
 function getMonthsArr(date) {
-    let monthArr = {
+    const monthArr = {
         xMonths: [],
         sMonths: []
     };
-    let year = parseInt(date.substr(0, 4));
-    let month = parseInt(date.substr(4, 2));
+    const year = parseInt(date.substr(0, 4));
+    const month = parseInt(date.substr(4, 2));
     if (month === 12) {
         for (let index = 1; index <= 12; index++) {
             index > 9 ? monthArr.sMonths.unshift(`${year}${index}`) : monthArr.sMonths.unshift(`${year}0${index}`);
@@ -257,63 +257,63 @@ function generyRBData(arr, code) {
     };
     for (let index = 0; index < arr.length; index++) {
         switch (arr[index].indexCode) {
-        case 'NHDP0017':
-            rb.station.push({ name: '局站数', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0018':
-            rb.station.push({ name: 'A类', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0019':
-            rb.station.push({ name: 'B类', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0020':
-            rb.station.push({ name: 'C类', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0021':
-            rb.station.push({ name: 'D类有机房', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0022':
-            rb.station.push({ name: 'D类无机房', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0023':
-            rb.vehicle.push({ name: '车辆数', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0024':
-            rb.vehicle.push({ name: '管理', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0025':
-            rb.vehicle.push({ name: '生产', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0026':
-            rb.vehicle.push({ name: '应急', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0027':
-            rb.energy.push({ name: '能耗对象数', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0028':
-            rb.energy.push({ name: '通信机房', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0029':
-            rb.energy.push({ name: 'IDC机房', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0030':
-            rb.energy.push({ name: '无线基站', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0031':
-            rb.energy.push({ name: '接入点', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0032':
-            rb.energy.push({ name: '办公营销及其他', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0033':
-            rb.electric.push({ name: '电表回路数', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0034':
-            rb.electric.push({ name: '接口接入', val: parseInt(arr[index].indexVlue) });
-            break;
-        case 'NHDP0035':
-            rb.electric.push({ name: '报账纳管数量', val: parseInt(arr[index].indexVlue) });
-            break;
+            case 'NHDP0017':
+                rb.station.push({ name: '局站数', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0018':
+                rb.station.push({ name: 'A类', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0019':
+                rb.station.push({ name: 'B类', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0020':
+                rb.station.push({ name: 'C类', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0021':
+                rb.station.push({ name: 'D类有机房', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0022':
+                rb.station.push({ name: 'D类无机房', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0023':
+                rb.vehicle.push({ name: '车辆数', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0024':
+                rb.vehicle.push({ name: '管理', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0025':
+                rb.vehicle.push({ name: '生产', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0026':
+                rb.vehicle.push({ name: '应急', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0027':
+                rb.energy.push({ name: '能耗对象数', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0028':
+                rb.energy.push({ name: '通信机房', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0029':
+                rb.energy.push({ name: 'IDC机房', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0030':
+                rb.energy.push({ name: '无线基站', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0031':
+                rb.energy.push({ name: '接入点', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0032':
+                rb.energy.push({ name: '办公营销及其他', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0033':
+                rb.electric.push({ name: '电表回路数', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0034':
+                rb.electric.push({ name: '接口接入', val: parseInt(arr[index].indexVlue) });
+                break;
+            case 'NHDP0035':
+                rb.electric.push({ name: '报账纳管数量', val: parseInt(arr[index].indexVlue) });
+                break;
         }
     }
     return rb;

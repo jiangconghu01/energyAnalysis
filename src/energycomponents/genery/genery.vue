@@ -308,7 +308,7 @@ export default {
             pie.setOption(ConfigPie);
         },
         setLeftBottom(arr, code) {
-            const sortArr=getSortMapArr('',
+            const sortArr=getSortMapArr('drop',
                 searchValArr('NHDP0015', arr),
                 this.currentCityArr,
                 searchValArr('NHDP0016', arr),
@@ -403,11 +403,11 @@ export default {
                 map.clear();
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
                 let codes = jzMap.arrCode;
-                const encodes = ['NHDP0005', 'NHDP0006'];
+                const encodes = ['NHDP0006', 'NHDP0005'];
                 let data = searchMapData(codes, encodes, arr, 'city');
                 let mapconfig = JSON.parse(JSON.stringify(provinceMap));
                 mapconfig.tooltip.formatter = function(params) {
-                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
+                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}(吨标煤)</div> <div>总能耗费：${params.data.value1}(万元)</div>`;
                 };
                 //console.log(data);
                 let max=0;
@@ -432,9 +432,9 @@ export default {
                 let subCodeCount = jzMap.countryCodeCount[clickCode];
                 let subCodes = addCodes(clickCode, subCodeCount);
                 // const encodes = ['NHDP0005', 'NHDP0006'];
-                let data2 = searchMapData(subCodes, ['NHDP0005', 'NHDP0006'], arr, 'country');
+                let data2 = searchMapData(subCodes, ['NHDP0006', 'NHDP0005'], arr, 'country');
                 mapconfig.tooltip.formatter = function(params) {
-                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
+                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}(吨标煤)</div> <div>总能耗费：${params.data.value1}(万元)</div>`;
                 };
                 let max=0;
                 data2.forEach(ele=>{
@@ -459,16 +459,16 @@ export default {
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
                 const cityName = this.countryParentName;
                 this.$echarts.registerMap(cityName, datajzMap.mapJson[cityName]);
-                console.log(datajzMap.mapJson[cityName]);
+                //console.log(datajzMap.mapJson[cityName]);
                 const mapconfig2 = JSON.parse(JSON.stringify(initmap));
 
                 
                 const clickCode2 = datajzMap.mapCode[cityName];
                 const subCodeCount2 = datajzMap.countryCodeCount[clickCode2];
                 const subCodes2 = addCodes(clickCode2, subCodeCount2);
-                const data2 = searchMapData2(subCodes2, ['NHDP0005', 'NHDP0006'], arr, 'country');
+                const data2 = searchMapData2(subCodes2, ['NHDP0006', 'NHDP0005'], arr, 'country');
                 mapconfig2.tooltip.formatter = function(params) {
-                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
+                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}(吨标煤)</div> <div>总能耗费：${params.data.value1}(万元)</div>`;
                 };
                 let max=0;
                 data2.forEach(ele=>{
