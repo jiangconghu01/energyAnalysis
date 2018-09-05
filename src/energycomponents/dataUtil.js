@@ -226,6 +226,7 @@ function getMonthsParam(months, encodes, code) {
     return paramStr;
 }
 // 根据多个有对应关系的数组，组合对某个值排序之后导出排序顺序后的数组
+// 根据多个有对应关系的数组，组合对某个值排序之后导出排序顺序后的数组
 function getSortMapArr(type, basic, ...rest) {
     const result = [];
     const arr = [];
