@@ -102,6 +102,7 @@ import {
     searchEncsArr,
     searchValsArr,
     searchMapData,
+    controlMapLabel,
     addDoubleArr2,
     getSortMapArr
 }
@@ -492,7 +493,7 @@ export default {
                 let data2 = searchMapData(subCodes, encodes, arr, 'country');
                 mapconfig.title.text = '当年累计用电';
                 mapconfig.tooltip.formatter = function(params) {
-                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
+                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}万度</div> <div>总能耗费：${params.data.value1}万元</div>`;
                 };
                 let max=0;
                 data2.forEach(ele=>{
@@ -518,7 +519,7 @@ export default {
                 let data2 = searchMapData(subCodes, encodes, this.sourceData, 'country');
                 mapconfig.title.text = '当年累计用电';
                 mapconfig.tooltip.formatter = function(params) {
-                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}</div> <div>总能耗费：${params.data.value1}</div>`;
+                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}万度</div> <div>总能耗费：${params.data.value1}万元</div>`;
                 };
                 let max=0;
                 data2.forEach(ele=>{
@@ -533,8 +534,11 @@ export default {
                 }
             
             }
+            //map.hideLoading();
+            controlMapLabel(map);
             map && map.off('click');
             map && map.on('click', (param) => {
+                //map.showLoading();
                 if( this.mapMoudle === 'country'){
                      this.currentCity = getCountyCodeOne(cityDataArr,param.name);
                      this.currentCityArr=[param.name];

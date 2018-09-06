@@ -54,7 +54,7 @@
 // import tableBar from './tablebarcomp.vue';
 import 'echarts/map/js/province/zhejiang.js';
 import jzMap from '../chartconfig/zjMap.js';
-import {detailXarr} from '../chartconfig/staticData.js';
+import {detailXarr, labelZoom} from '../chartconfig/staticData.js';
 import ConfigBarLine from '../chartconfig/electricBarAndLine.js';
 import {provinceMap, cityMap} from '../chartconfig/generyMap.js';
 import { cityDataArr } from '../cityMapCode.js';
@@ -66,6 +66,7 @@ import {
     searchEncsArr,
     searchValsArr,
     getMonthsArr,
+    controlMapLabel,
     getMonthsParam
 }
     from '../dataUtil.js';
@@ -262,6 +263,11 @@ export default {
                 map.setOption(mapconfig);
                 }
             }
+           const boxWidth = map ? map.getWidth() : 0;
+           const boxHeight = map ? map.getHeight() : 0;
+           const baseRect = Math.min(boxWidth,boxHeight);
+
+           controlMapLabel(map);
            map && map.off('click');
            map && map.on('click', (param) => {
                 if(this.mapMoudle === 'country'){
@@ -476,6 +482,7 @@ function searchMapDataItem(code, encodes, arr, type) {
         let val = searchVal(code, element, arr);
         data['value' + key] = val;
     }
+    labelZoom.controlArr.includes(data.name) && (data.label = { show: false });
     return data;
 }
 function searchMapData(codes, encodes, arr, type) {

@@ -21,7 +21,8 @@ export default {
             home: true,
             czxtData: null,
             currentTab: 1,
-            dev: this.$store.getters.module !== 'dev'
+            dev: this.$store.getters.module !== 'dev',
+            test: 'test'
         };
     },
     methods: {
@@ -100,15 +101,15 @@ function getCurrent(path) {
 
 <style lang="scss" module>
   .genery{
-    height: 86%;
+    height: 85%;
     width: 100%;
     // margin-top: 20px;
     position: absolute;
     box-sizing: border-box;
-    top:9%;
+    top:10%;
     .tab{
         width: 100%;
-        height: 4%;
+        height: 5%;
         position: relative;
         min-height:25px;
         &>div{

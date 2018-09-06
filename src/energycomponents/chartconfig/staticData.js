@@ -82,4 +82,11 @@ const tableTd = [
 const topData = [
 
 ];
-export { cityMap, categoryCount, categoryCost, detailXarr, tableTh, tableThCurrent, tableTd, topImpData };
+//配置需要缩放显示的区县名称
+const labelZoom = {
+    '杭州': ['拱墅区', '下城区', '上城区', '滨江区'],
+    '宁波': ['江东区', '镇海区'],
+    '绍兴': ['越城区'],
+    controlArr: ['拱墅区', '下城区', '上城区', '滨江区', '江东区', '镇海区', '越城区']
+}
+export { cityMap, categoryCount, categoryCost, detailXarr, tableTh, tableThCurrent, tableTd, topImpData, labelZoom };

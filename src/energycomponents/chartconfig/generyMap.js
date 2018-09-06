@@ -12,10 +12,10 @@ const provinceMap = {
         trigger: 'item',
         confine: true,
         formatter: '{b}<br/>{c}'
-        // formatter: function(params, ticket, callback) {
-        //     // console.log(params, '3453495348573535');
-        //     return params.name;
-        // }
+            // formatter: function(params, ticket, callback) {
+            //     // console.log(params, '3453495348573535');
+            //     return params.name;
+            // }
     },
     // legend: {
     //     x: 'right',
@@ -46,7 +46,7 @@ const provinceMap = {
         // ],
         color: ['#0052bc', '#b9effe']
     },
-    roam: false,
+    roam: true,
     series: [{
         type: 'map',
         // selectedMode: 'single',
@@ -88,9 +88,9 @@ const cityMap = {
     tooltip: {
         trigger: 'item',
         formatter: '{b}<br/>{c}'
-        // formatter: (p) => {
-        //     console.log(p);
-        // }
+            // formatter: (p) => {
+            //     console.log(p);
+            // }
     },
     dataRange: {
         orient: 'vertical',

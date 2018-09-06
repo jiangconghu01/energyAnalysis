@@ -115,9 +115,7 @@ export default {
 <style lang="scss" module>
     .content{
         position: relative;
-        height: 96%;
-        margin-top: 20px;
-       // margin-bottom: 30px;
+        height: 100%;
         &>div{
 
             background-color: rgba(16,162,249,0.1);
@@ -132,6 +130,7 @@ export default {
             top:2%;
         }
         .left-top{
+            top: 3%;
             left: 3%;
             width:55%;
             height: 45%;
@@ -141,7 +140,7 @@ export default {
         }
         .left-bottom{
             left: 3%;
-            top:50%;
+            top:53%;
             width:55%;
             height: 45%;
             .second{
@@ -152,6 +151,7 @@ export default {
             height: 45%;
             right: 3%;
             width:37%;
+            top: 3%;
             .right-top-map{
                 width: 100%;
                 height: 100%;
@@ -163,7 +163,7 @@ export default {
             }
         }
         .right-bottom{
-            top:50%;
+            top:53%;
             height: 45%;
             right: 3%;
             width:37%;

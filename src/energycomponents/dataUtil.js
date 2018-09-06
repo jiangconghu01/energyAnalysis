@@ -1,4 +1,5 @@
 import jzMap from './chartconfig/zjMap.js';
+import { labelZoom } from './chartconfig/staticData.js';
 import { cityDataArr } from './cityMapCode.js';
 // 请求浙江省参数
 const zhjCode = 'A33';
@@ -173,6 +174,7 @@ function searchMapDataItem(code, encodes, arr, type) {
         let val = searchVal(code, element, arr);
         data['value' + key] = val;
     }
+    labelZoom.controlArr.includes(data.name) && (data.label = { show: false });
     return data;
 }
 
@@ -185,6 +187,66 @@ function searchMapData(codes, encodes, arr, type) {
         item && data.push(item);
     }
     return data;
+}
+//节流函数简版
+const throttle = (function() {
+    var last = 0;
+    return function(method, context, time) {
+        var current = +new Date();
+        if (current - last > time) {
+            method.apply(context, arguments);
+            last = current;
+        }
+    }
+})();
+
+function controlMapLabel(map) {
+    const boxWidth = map ? map.getWidth() : 0;
+    const boxHeight = map ? map.getHeight() : 0;
+    const baseRect = Math.min(boxWidth, boxHeight);
+    //地图缩放显示label控制130-900
+    map.off('georoam');
+    map.on('georoam', (data) => {
+        if (!data['zoom']) {
+            return;
+        }
+
+        throttle(co, null, 500);
+    });
+
+    function co() {
+        const config = map.getOption();
+        const sw = config.series[0].zoom * baseRect;
+        let data2 = config.series[0].data;
+        if (sw > 150 && sw < 900) {
+            data2 = data2.map((ele) => {
+                ele.label = {
+                    show: !labelZoom.controlArr.includes(ele.name)
+                }
+                return ele;
+            });
+        }
+        if (sw > 900) {
+            data2 = data2.map((ele) => {
+                if (labelZoom.controlArr.includes(ele.name)) {
+                    ele.label = {
+                        show: true
+                    }
+                }
+                return ele;
+            });
+        }
+        if (sw < 150) {
+            data2 = data2.map((ele) => {
+                ele.label = {
+                    show: false
+                }
+                return ele;
+            });
+        }
+        config.series[0].data = data2;
+        map.setOption(config);
+    }
 }
 // 算出当前日期之前的十二个月字符串
 function getMonthsArr(date) {
@@ -335,6 +397,7 @@ export {
     getMonthsArr,
     getMonthsParam,
     searchMapData,
+    controlMapLabel,
     addDoubleArr,
     addDoubleArr2,
     getSortMapArr

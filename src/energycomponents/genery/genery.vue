@@ -90,6 +90,7 @@ import {
     searchValArr,
     generyRBData,
     searchMapData,
+    controlMapLabel,
     getSortMapArr
 }
     from '../dataUtil.js';
@@ -397,9 +398,11 @@ export default {
             if(this.mapMoudle === 'company'){
                 return;
             }
-            let map='';
+           const map = this.$echarts.init(document.getElementById('genery-right-top'));;
+           const boxWidth = map ? map.getWidth() : 0;
+           const boxHeight = map ? map.getHeight() : 0;
+           const baseRect = Math.min(boxWidth,boxHeight);
             if (this.mapMoudle === 'province') {
-                map = this.$echarts.init(document.getElementById('genery-right-top'));
                 map.clear();
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
                 let codes = jzMap.arrCode;
@@ -421,11 +424,12 @@ export default {
                 //mapconfig.roam=false;
                 map.setOption(mapconfig);
             } else if(this.mapMoudle === 'city'){
-                map = this.$echarts.init(document.getElementById('genery-right-top'));
                 map.clear();
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
                 let name = jzMap.mapName[code];
                 this.$echarts.registerMap(name, jzMap.mapJson[name]);
+                // const features = jzMap.mapJson[name].features;
+                // console.log(features);
                 let mapconfig = JSON.parse(JSON.stringify(cityMap));
 
                 let clickCode = jzMap.mapCode[name];
@@ -453,8 +457,6 @@ export default {
                 const datajzMap=jzMap;
                 const searchMapData2=searchMapData;
                 if(this.countryParentName && countryToUpdateCityMap){
-                   
-                map = this.$echarts.init(document.getElementById('genery-right-top'));
                 map.clear();
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
                 const cityName = this.countryParentName;
@@ -484,6 +486,8 @@ export default {
                 }
 
             }
+            //地图缩放显示label控制130-1000
+           controlMapLabel(map); 
            map && map.off('click');
            map && map.on('click', (param) => {
                 if( this.mapMoudle === 'country'){
@@ -561,8 +565,7 @@ function addCodes(code, count) {
 <style lang="scss" module>
     .content{
         position: relative;
-        height: 96%;
-        margin-top: 20px;
+        height: 100%;
         &>div{
             background-color: rgba(16,162,249,0.1);
             position: absolute;
@@ -570,9 +573,10 @@ function addCodes(code, count) {
             border-radius: 0.6rem;
         }
         .left-top{
+            top:3%;
             left: 3%;
             width:52%;
-            height: 40%;
+            height: 42%;
             .left-top-content{
                 width: 100%;
                 height:100%;
@@ -623,7 +627,7 @@ function addCodes(code, count) {
         }
         .left-bottom{
             left: 3%;
-            top:45%;
+            top:48%;
             width:52%;
             height: 50%;
             transition: all 0.5s ease 0.1s;
@@ -695,6 +699,7 @@ function addCodes(code, count) {
             height: 95%;
             right: 3%;
             width:40%;
+            top:3%;
             &>div{
                 position: absolute;
                 //background-color: #ffea00;

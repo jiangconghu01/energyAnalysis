@@ -123,11 +123,15 @@ export default {
             let y = ys.map((e) => {
                 return Number(e);
             });
-            let maxX = Math.max(...x);
-            let maxY = Math.max(...y);
+            const maxX = Math.max(...x);
+            const maxY = Math.max(...y);
+            const minX = Math.min(...x);
+            const minY = Math.min(...y);
 
             ConfigScatter.xAxis[0].max = maxX;
+            ConfigScatter.xAxis[0].min = minX;
             ConfigScatter.yAxis[0].max = maxY;
+            ConfigScatter.yAxis[0].min = minY;
             const datas = getDoubleArr(names, x, y);
             ConfigScatter.legend.data = scatterLegend;
             ConfigScatter.series = getScatterSeries(seriesCount, datas);
@@ -327,8 +331,7 @@ function getScatterSeries(names, datas) {
 <style lang="scss" module>
     .content{
         position: relative;
-        height: 96%;
-        margin-top: 20px;
+        height: 100%;
        // margin-bottom: 30px;
         &>div{
 
@@ -341,6 +344,7 @@ function getScatterSeries(names, datas) {
             left: 3%;
             width:57%;
             height: 95%;
+            top:3%;
             .left-all-chart{
                 width:100%;
                 height: 100%;
@@ -381,6 +385,7 @@ function getScatterSeries(names, datas) {
             height: 95%;
             right: 3%;
             width:35%;
+            top:3%;
             .right-all-chart{
                  width:100%;
                 height: 100%;               
