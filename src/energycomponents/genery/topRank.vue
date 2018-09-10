@@ -150,7 +150,16 @@ export default {
             ConfigBar.series[0].data = d.val;
             scatter.setOption(ConfigScatter);
             bar.setOption(ConfigBar);
+        },
+        async getData(param) {
+            const params = {
+                flag: param
+            };
+            const nameMap = await this.$http.get('/czxt/pages/wjhx/getTopNAmmeterName.do', params);
+            // const
+            console.log(param);
         }
+
     },
     created() {
         // console.log(this.$router.history.current.params.pageType);
@@ -170,6 +179,7 @@ export default {
     watch: {
         home() {
             this.setCharts();
+            this.getData('tymc');
         }
     }
 
@@ -203,10 +213,6 @@ function getSortArr(names, datas) {
     t = t.sort((a, b) => {
         return a.val - b.val;
     });
-    // for (let [key, value] of Object.entries(t)) {
-    //     target.name.push(key);
-    //     target.val.push(value);
-    // }
     t.forEach(ele => {
         target.name.push(ele.name);
         const v = ele.val;
@@ -223,7 +229,6 @@ function getSortArr(names, datas) {
                 value: Math.abs(v),
                 value2: v
             });
-        // target.val.push(ele.val);
     });
     return target;
 }

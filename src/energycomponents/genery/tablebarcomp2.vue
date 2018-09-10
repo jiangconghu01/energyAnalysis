@@ -129,22 +129,22 @@ export default {
 
     },
     methods: {
-    setBar(){
-     let t = this.$echarts.init(document.getElementById(this.itemid));
-        const configco = JSON.parse(JSON.stringify(config));
-        const isNor = this.type === 'normal';
-        // console.log(this.subList, this.subListLog);
-        const colors = ['#ffed8b', '#ffa848', '#70fed2', '#6668ff', '#3dd55a'];
-        const nums = ['1', '10', '100', '1000', '10000', '100000', '1000000'];
-        const persent = ['0%', '100%'];
-        let l = [];
+        setBar() {
+            let t = this.$echarts.init(document.getElementById(this.itemid));
+            const configco = JSON.parse(JSON.stringify(config));
+            const isNor = this.type === 'normal';
+            // console.log(this.subList, this.subListLog);
+            const colors = ['#ffed8b', '#ffa848', '#70fed2', '#6668ff', '#3dd55a'];
+            const nums = ['1', '10', '100', '1000', '10000', '100000', '1000000'];
+            const persent = ['0%', '100%'];
+            let l = [];
 
-        if (isNor) {
-            configco.xAxis[0].splitNumber = 1;
-            configco.xAxis[0].max = this.sumNor;
-            l = this.subList;
-            configco.xAxis[0].axisTick.show = false;
-        } else {
+            if (isNor) {
+                configco.xAxis[0].splitNumber = 1;
+                configco.xAxis[0].max = this.sumNor;
+                l = this.subList;
+                configco.xAxis[0].axisTick.show = false;
+            } else {
             // configco.xAxis[0].splitNumber = this.subListLog.length;
             // configco.xAxis[0].splitNumber = parseInt(this.sumNor).toString().length;
 
@@ -153,45 +153,45 @@ export default {
             // configco.xAxis[0].max = this.sumLog;
             // l = this.subListLog;
 
-            configco.xAxis[0].interval = 1;
-            configco.xAxis[0].max = this.maxLog;
-            l = this.subListLogMistake;
-        }
-        // configco.xAxis[0].max = this.sumLog;
-        // let l = this.subListLog;
-        for (let index = 0; index < l.length; index++) {
-            let ele = l[index];
-            let item = {
-                name: ele.name,
-                type: 'bar',
-                color: colors[index],
-                barWidth: '9',
-                stack: '量',
-                barCategoryGap: 0,
-                data: [{value: ele.val, value2: ele.val2}]
+                configco.xAxis[0].interval = 1;
+                configco.xAxis[0].max = this.maxLog;
+                l = this.subListLogMistake;
+            }
+            // configco.xAxis[0].max = this.sumLog;
+            // let l = this.subListLog;
+            for (let index = 0; index < l.length; index++) {
+                let ele = l[index];
+                let item = {
+                    name: ele.name,
+                    type: 'bar',
+                    color: colors[index],
+                    barWidth: '9',
+                    stack: '量',
+                    barCategoryGap: 0,
+                    data: [{value: ele.val, value2: ele.val2}]
+                };
+                configco.series.push(item);
+            }
+            configco.xAxis[0].axisLabel = {
+                show: !isNor,
+                margin: 0,
+                color: '#fff',
+                fontSize: 12,
+                fontWeight: 200,
+                align: 'right',
+                formatter: function(value, index) {
+                    return isNor ? persent[index] : nums[index];
+                }
             };
-            configco.series.push(item);
-        }
-        configco.xAxis[0].axisLabel = {
-            show: !isNor,
-            margin: 0,
-            color: '#fff',
-            fontSize: 12,
-            fontWeight: 200,
-            align: 'right',
-            formatter: function(value, index) {
-                return isNor ? persent[index] : nums[index];
-            }
-        };
-        configco.tooltip = {
-            trigger: 'item',
-            // show: false,
-            formatter: function(params) {
-                return `${params.seriesName}:${params.data.value2}`;
-            }
-        };
+            configco.tooltip = {
+                trigger: 'item',
+                // show: false,
+                formatter: function(params) {
+                    return `${params.seriesName}:${params.data.value2}`;
+                }
+            };
 
-        t.setOption(configco);
+            t.setOption(configco);
         }
     },
     created() {
@@ -204,9 +204,9 @@ export default {
     mounted() {
         this.setBar();
     },
-    watch:{
-        subList(){
-             this.setBar();
+    watch: {
+        subList() {
+            this.setBar();
         }
     }
 };
