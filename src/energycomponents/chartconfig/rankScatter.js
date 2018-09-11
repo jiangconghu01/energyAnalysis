@@ -1,19 +1,3 @@
-function random(type) {
-    return type === 1 ? parseFloat(150.00 + Math.random() * 50).toFixed(2) : parseFloat(30.00 + Math.random() * 40).toFixed(2);
-}
-
-function randomDataArray() {
-    let d = [];
-    let len = 20;
-    while (len--) {
-        d.push([
-            random(1),
-            random()
-        ]);
-    }
-    return d;
-}
-
 const option = {
     title: {
         text: 'TOP-50办公大楼',
@@ -25,7 +9,7 @@ const option = {
             fontWeight: 300
         }
     },
-    color: ['#94ef30', '#6bdaff', '#ffa900', '#fa655c'],
+    // color: ['#94ef30', '#6bdaff', '#ffa900', '#fa655c'],
     // tooltip: {
     //     trigger: 'axis',
     //     showDelay: 0,
@@ -93,7 +77,7 @@ const option = {
         }
     ],
     legend: {
-        data: ['优', '良', '中', '差'],
+        data: [],
         right: 10,
         y: 'center',
         orient: 'vertical',

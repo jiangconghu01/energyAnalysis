@@ -47,7 +47,7 @@
                     <Button-group>
                         <i-button type="ghost" 
                         @click="rightViewPointNum()" 
-                        :style="[rightCurrent==1?buttonStyle:{}]">局点数</i-button>
+                        :style="[rightCurrent==1?buttonStyle:{}]">局站数</i-button>
                         <i-button type="ghost" 
                         @click="rightViewNumber()" 
                         :style="[rightCurrent==2?buttonStyle:{}]">电量</i-button>

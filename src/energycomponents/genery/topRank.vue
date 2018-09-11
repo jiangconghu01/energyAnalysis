@@ -11,7 +11,7 @@
                     </Button-group>
 
                 </div>
-                <!-- <div :class="$style['exception-data']">
+                <div :class="$style['exception-data']">
                     <ul>
                         <li>杭州武林：154.567</li>
                         <li>杭州武林：154.567</li>
@@ -20,7 +20,7 @@
                         <li>杭州武林：154.567</li>
                         <li>杭州武林：154.567</li>
                     </ul>
-                </div> -->
+                </div>
             </div>
             <div :class="$style['right-all']">
                 <div id="rank-right-all" :class="$style['right-all-chart']"></div>
@@ -31,98 +31,105 @@
 <script>
 import ConfigScatter from '../chartconfig/rankScatter.js';
 import ConfigBar from '../chartconfig/rankBar.js';
-import {
-    topOffice,
-    officeBasicNum,
-    officeMap,
-    topTianyi,
-    tianyiBasicNum,
-    tianyiMap,
-    topCommunication,
-    communicationBasicNum,
-    communicationMap
-} from '../chartconfig/topBasicConfig.js';
-import {
-    offx,
-    offy,
-    offbar
-} from './toptest/office.js';
-import {
-    tianx,
-    tiany,
-    tianbar
-} from './toptest/tianyi.js';
-import {
-    comx,
-    comy,
-    combar
-} from './toptest/com.js';
+import {getTopParams} from './origindata.js';
+import { mapGetters } from 'vuex';
+import jzMap from '../chartconfig/zjMap.js';
+import {searchValsArr}from '../dataUtil.js';
+// import {
+//     topOffice,
+//     officeBasicNum,
+//     officeMap,
+//     topTianyi,
+//     tianyiBasicNum,
+//     tianyiMap,
+//     topCommunication,
+//     communicationBasicNum,
+//     communicationMap
+// } from '../chartconfig/topBasicConfig.js';
+// import {
+//     offx,
+//     offy,
+//     offbar
+// } from './toptest/office.js';
+// import {
+//     tianx,
+//     tiany,
+//     tianbar
+// } from './toptest/tianyi.js';
+// import {
+//     comx,
+//     comy,
+//     combar
+// } from './toptest/com.js';
 export default {
     data () {
         return {
             home: '',
+            nameMap: '',
+            surceData: '',
             czxtData: null
         };
     },
+    computed: {
+        ...mapGetters({
+            currentMonth:'month'
+        }),
+        ...mapGetters([
+            'module'
+        ])
+    },
     methods: {
-        setCharts() {
+        setCharts(namesdata, ydata, xdata, legendata, seriescount, bardata) {
+            debugger
             let scatter = this.$echarts.init(document.getElementById('rank-left-all'));
             let bar = this.$echarts.init(document.getElementById('rank-right-all'));
             this.$store.commit('setCharts', {name: 'chart1', val: scatter});
             this.$store.commit('setCharts', {name: 'chart2', val: bar});
             let scatterTitle = '';
             let scatterMarkline = [];
-            let names = [];
-            let xs = [];
-            let ys = [];
-            let scatterLegend = [];
-            let seriesCount = [];
+            let names = namesdata;
+            let xs = xdata[0];
+            let ys = ydata[0];
+            let scatterLegend = legendata;
+            let seriesCount = seriescount;
+
             let barTitle = '';
-            let barsd = [];
+            let barsd = bardata[0];
             if (this.home === 'office') {
                 scatterTitle = 'TOP-50办公大楼';
                 scatterMarkline = ['累计单位面积电耗\n(度)', '累计单位面积\n电耗同比增长\n(%)'];
-                names = topOffice;
-                xs = offx;
-                ys = offy;
-                scatterLegend = getKeys(officeMap);
-                seriesCount = officeMap;
                 barTitle = '累计人均电费同比(%)';
-                barsd = offbar;
+                //barsd = offbar;
             }
             if (this.home === 'tianyi') {
                 scatterTitle = 'TOP-50天翼卖场';
                 scatterMarkline = ['累计单位台席电耗\n(万度)', '累计单位台席\n电耗同比增长\n(%)'];
-                names = topTianyi;
-                xs = tianx;
-                ys = tiany;
-                scatterLegend = getKeys(tianyiMap);
-                seriesCount = tianyiMap;
+                // names = topTianyi;
+                // xs = tianx;
+                // ys = tiany;
+                // scatterLegend = getKeys(tianyiMap);
+                // seriesCount = tianyiMap;
                 barTitle = '累计单位台席电费同比(%)';
-                barsd = tianbar;
+                //barsd = tianbar;
             }
             if (this.home === 'communication') {
                 scatterTitle = 'TOP-80通信局站';
                 scatterMarkline = ['PUE值', 'PUE同比\n增幅(%)'];
                 // ConfigScatter.legend.x = 'center';
-                names = topCommunication;
-                xs = comx;
-                ys = comy;
-                scatterLegend = getKeys(communicationMap);
-                seriesCount = communicationMap;
+                // names = topCommunication;
+                // xs = comx;
+                // ys = comy;
+                // scatterLegend = getKeys(communicationMap);
+                // seriesCount = communicationMap;
                 barTitle = '累计单位资产电费同比(%)';
-                barsd = combar;
+                //barsd = combar;
             }
             // 清除之前数据
             scatter.clear();
             // 设置title和markline
             ConfigScatter.title.text = scatterTitle;
-            let x = xs.map((e) => {
-                return Number(e);
-            });
-            let y = ys.map((e) => {
-                return Number(e);
-            });
+            const x = xs.map(e => Number(e));
+            const y = ys.map(e => Number(e));
             const maxX = Math.max(...x);
             const maxY = Math.max(...y);
             const minX = Math.min(...x);
@@ -133,8 +140,8 @@ export default {
             ConfigScatter.yAxis[0].max = maxY;
             ConfigScatter.yAxis[0].min = minY;
             const datas = getDoubleArr(names, x, y);
-            ConfigScatter.legend.data = scatterLegend;
-            ConfigScatter.series = getScatterSeries(seriesCount, datas);
+            ConfigScatter.legend.data = scatterLegend.map(e => e.slice(0,2));
+            ConfigScatter.series = getScatterSeries(seriesCount, datas, scatterLegend);
             ConfigScatter.series[0].markLine.data[0].label.formatter = scatterMarkline[1];
             ConfigScatter.series[0].markLine.data[1].label.formatter = scatterMarkline[0];
             ConfigScatter.series[0].markLine.data[0].yAxis = (Math.min(...y) + maxY) / 2;
@@ -155,9 +162,22 @@ export default {
             const params = {
                 flag: param
             };
-            const nameMap = await this.$http.get('/czxt/pages/wjhx/getTopNAmmeterName.do', params);
-            // const
-            console.log(param);
+            try {
+                const nameMap = await this.$http.get('/czxt/pages/wjhx/getTopNAmmeterName.do', params);
+                this.nameMap = nameMap.data;
+                const codes = nameMap.data.map(ele => ele.code);
+                const postParam = {paramArrs: getTopParams(param, codes, this.currentMonth)};
+                const data = await this.$http.post('/czxt/pages/wjhx/getIdWjhxParm.do', postParam, this.module); 
+                this.surceData = data.data;
+                return Promise.resolve({
+                    sourcename:nameMap.data,
+                    sourcedata:data.data
+                    });
+                //return data.data;
+            } catch (error) {
+                console.info(error);
+                return Promise.reject(error);
+            }
         }
 
     },
@@ -166,7 +186,7 @@ export default {
         this.home = this.$router.history.current.params.pageType;
     },
     mounted() {
-        this.setCharts();
+        //this.setCharts();
     },
     beforeRouteEnter (to, from, next) {
         // this.home = to.params.pageType;
@@ -177,9 +197,63 @@ export default {
         next();
     },
     watch: {
-        home() {
-            this.setCharts();
-            this.getData('tymc');
+        home(val,oldval) {
+            let param = '';
+            let encodes = [];
+            if(val === 'office'){
+                param = 'bgdl';
+                encodes = ['NHTOPN0007', 'NHTOPN0008', 'NHTOPN0009'];
+            }
+            if(val === 'tianyi'){
+                param = 'tymc';
+                encodes = ['NHTOPN0014', 'NHTOPN0015', 'NHTOPN0016'];
+            }
+            if(val === 'communication'){
+                param = 'jz';
+                encodes = ['NHTOPN0001', 'NHTOPN0002', 'NHTOPN0003'];
+            }
+            //this.setCharts(namesdata, ydata, xdata, legendata, seriescount, bardata)
+            this.getData(param).then( d => {
+                const codes = [];
+                const names = [];
+                let ydata = [];
+                let xdata = [];
+                const seriescount = {};
+                const seriescountArr = [];
+                let bardata = [];
+                const arr = d.sourcename.sort((a, b) => {
+                    return parseInt(a.city.slice(1)) - parseInt(b.city.slice(1));
+                });
+                for(let i = 0, len = arr.length; i < len; i++){
+                    names.push(arr[i].name);
+                    codes.push(arr[i].code);
+                    const code = arr[i].city === 'A3300' ? 'A3301' : arr[i].city;
+                    const city = jzMap.mapName[code];
+                    if(seriescount[city]){
+                         seriescount[city] += 1;
+
+                    }else{
+                        seriescountArr.push(city);
+                        seriescount[city] = 1;
+                    }
+                }
+                console.log(seriescount,seriescountArr);
+                 ydata = searchValsArr(encodes.slice(0,1), codes, d.sourcedata);
+                 xdata = searchValsArr(encodes.slice(1,2), codes, d.sourcedata);
+                 bardata = searchValsArr(encodes.slice(2,3), codes, d.sourcedata);
+                // names = d.sourcename.map(ele => ele.name);
+                // codes = d.sourcename.map(ele => ele.code);
+                //ydata = 
+                this.setCharts(names, ydata, xdata, seriescountArr, seriescount, bardata);
+                //console.log(d);
+            }).catch(err => {
+                console.log(err);
+                this.$Message.info({
+                    content: '数据请求过程出错啦！',
+                    duration: 3,
+                    closable: true
+                });
+            });
         }
     }
 
@@ -233,15 +307,15 @@ function getSortArr(names, datas) {
     return target;
 }
 // 取出对象的keys,截掉一位
-function getKeys(obj) {
-    let tar = Object.keys(obj);
-    tar = tar.map(ele => ele.slice(0, 2));
-    return tar;
-}
+// function getKeys(obj) {
+//     let tar = Object.keys(obj);
+//     tar = tar.map(ele => ele.slice(0, 2));
+//     return tar;
+// }
 // 散点图系列拼接
-function getScatterSeries(names, datas) {
+function getScatterSeries(names, datas, legendata) {
     const target = [];
-    const nameArr = Object.keys(names);
+    const nameArr = legendata;
     // for(let [key, value] in Object.entries(names) ){
     //     const item = {
     //         name: key.slice(0,2),
@@ -358,7 +432,7 @@ function getScatterSeries(names, datas) {
                 width: 30%;
                 height: 30px;
                 position: absolute;
-                right: 10px;
+                right: 180px;
                 top:10px;
                 color:#fff;
             }

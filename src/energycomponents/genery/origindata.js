@@ -1,4 +1,5 @@
 import { provinceData } from '../cityMapCode.js';
+import { getCityParam } from '../dataUtil.js'
 // 总览-总体情况-省级数据&&市级数据
 const generyAllProvince = (() => {
     const arr = [
@@ -93,6 +94,22 @@ function getCountyCodeOne(cityDataArr, cityName) {
     }
     return a;
 }
+//top系列参数获取
+//[y,x,bar]
+function getTopParams(type, codes, date) {
+    let encodes = [];
+    if (type === 'bgdl') {
+        encodes = ['NHTOPN0007', 'NHTOPN0008', 'NHTOPN0009'];
+    }
+    if (type === 'tymc') {
+        encodes = ['NHTOPN0014', 'NHTOPN0015', 'NHTOPN0016'];
+    }
+    if (type === 'jz') {
+        encodes = ['NHTOPN0001', 'NHTOPN0002', 'NHTOPN0003'];
+    }
+    return getCityParam(date, codes, encodes);
+
+}
 export {
     generyAllProvince,
     cityEncodeArr,
@@ -101,5 +118,6 @@ export {
     countyEncodeArr,
     getCountyCode,
     getCountyName,
-    getCountyCodeOne
+    getCountyCodeOne,
+    getTopParams
 };

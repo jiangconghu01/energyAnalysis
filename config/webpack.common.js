@@ -9,7 +9,6 @@ const isDev = process.env.NODE_ENV === 'development';
 module.exports = {
     // context: path.resolve(__dirname, '../src'), // webpack查找相对路径文件时候会以该路径为基础路径
     entry: {
-        // jquery: 'jquery',
         echarts: 'echarts',
         axios: 'axios',
         vue: 'vue',
@@ -100,8 +99,7 @@ module.exports = {
         }),
     ],
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.html$/,
                 loader: 'html-loader'
             },
@@ -141,14 +139,14 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['env'],
-                        plugins: ['transform-runtime']
+                        plugins: ['transform-runtime', 'transform-object-rest-spread']
                     }
                 }
             },
 
             {
                 test: /\.scss$/,
-                use: [ isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+                use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
                         options: {

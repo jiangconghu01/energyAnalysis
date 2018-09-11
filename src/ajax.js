@@ -13,10 +13,11 @@ const http = {
                 });
         });
     },
-    post(url, params) {
+    post(url, params, dev) {
         params = params || {};
         return new Promise((resolve, reject) => {
-            axios.post(url, qs.stringify(params))
+            const param = dev === 'dev' ? params : qs.stringify(params);
+            axios.post(url, param)
                 .then((data) => {
                     resolve(data);
                 })
