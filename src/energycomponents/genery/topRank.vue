@@ -11,15 +11,11 @@
                     </Button-group>
 
                 </div>
-                <div :class="$style['exception-data']">
+                <div :class="$style['exception-data']" v-show="exceData.length > 0">
                     <ul>
-                        <li>杭州武林：154.567</li>
-                        <li>杭州武林：154.567</li>
-                        <li>杭州武林：154.567</li>
-                        <li>杭州武林：154.567</li>
-                        <li>杭州武林：154.567</li>
-                        <li>杭州武林：154.567</li>
+                        <li v-for="(item,index) in exceData" :key="index + 'e'">{{item.name+`:x=${item.value[0]},y=${item.value[1]}`}}</li>
                     </ul>
+                    <!-- <div class="updown"><Icon type="ios-arrow-down" color="#fff" size="20px"/></div> -->
                 </div>
             </div>
             <div :class="$style['right-all']">
@@ -67,7 +63,7 @@ export default {
             home: '',
             nameMap: '',
             surceData: '',
-            czxtData: null
+            exceData: []
         };
     },
     computed: {
@@ -80,7 +76,6 @@ export default {
     },
     methods: {
         setCharts(namesdata, ydata, xdata, legendata, seriescount, bardata) {
-            debugger
             let scatter = this.$echarts.init(document.getElementById('rank-left-all'));
             let bar = this.$echarts.init(document.getElementById('rank-right-all'));
             this.$store.commit('setCharts', {name: 'chart1', val: scatter});
@@ -99,30 +94,16 @@ export default {
                 scatterTitle = 'TOP-50办公大楼';
                 scatterMarkline = ['累计单位面积电耗\n(度)', '累计单位面积\n电耗同比增长\n(%)'];
                 barTitle = '累计人均电费同比(%)';
-                //barsd = offbar;
             }
             if (this.home === 'tianyi') {
                 scatterTitle = 'TOP-50天翼卖场';
                 scatterMarkline = ['累计单位台席电耗\n(万度)', '累计单位台席\n电耗同比增长\n(%)'];
-                // names = topTianyi;
-                // xs = tianx;
-                // ys = tiany;
-                // scatterLegend = getKeys(tianyiMap);
-                // seriesCount = tianyiMap;
                 barTitle = '累计单位台席电费同比(%)';
-                //barsd = tianbar;
             }
             if (this.home === 'communication') {
                 scatterTitle = 'TOP-80通信局站';
                 scatterMarkline = ['PUE值', 'PUE同比\n增幅(%)'];
-                // ConfigScatter.legend.x = 'center';
-                // names = topCommunication;
-                // xs = comx;
-                // ys = comy;
-                // scatterLegend = getKeys(communicationMap);
-                // seriesCount = communicationMap;
                 barTitle = '累计单位资产电费同比(%)';
-                //barsd = combar;
             }
             // 清除之前数据
             scatter.clear();
@@ -141,11 +122,15 @@ export default {
             ConfigScatter.yAxis[0].min = minY;
             const datas = getDoubleArr(names, x, y);
             ConfigScatter.legend.data = scatterLegend.map(e => e.slice(0,2));
-            ConfigScatter.series = getScatterSeries(seriesCount, datas, scatterLegend);
+            const scatterSeriesData = getScatterSeries(seriesCount, datas, scatterLegend);
+            //找出异常点
+            const exce = sliceExceptionPoint(scatterSeriesData, y);
+            this.exceData = exce;
+            ConfigScatter.series = scatterSeriesData;
             ConfigScatter.series[0].markLine.data[0].label.formatter = scatterMarkline[1];
             ConfigScatter.series[0].markLine.data[1].label.formatter = scatterMarkline[0];
-            ConfigScatter.series[0].markLine.data[0].yAxis = (Math.min(...y) + maxY) / 2;
-            ConfigScatter.series[0].markLine.data[1].xAxis = (Math.min(...x) + maxX) / 2;
+            ConfigScatter.series[0].markLine.data[0].yAxis = (minY + maxY) / 2;
+            ConfigScatter.series[0].markLine.data[1].xAxis = (minX + maxX) / 2;
 
             // let maxbar = Math.max(...barsd);
             // let minbar = Math.min(...barsd);
@@ -178,26 +163,8 @@ export default {
                 console.info(error);
                 return Promise.reject(error);
             }
-        }
-
-    },
-    created() {
-        // console.log(this.$router.history.current.params.pageType);
-        this.home = this.$router.history.current.params.pageType;
-    },
-    mounted() {
-        //this.setCharts();
-    },
-    beforeRouteEnter (to, from, next) {
-        // this.home = to.params.pageType;
-        next();
-    },
-    beforeRouteUpdate (to, from, next) {
-        this.home = to.params.pageType;
-        next();
-    },
-    watch: {
-        home(val,oldval) {
+        },
+        updateView(val){
             let param = '';
             let encodes = [];
             if(val === 'office'){
@@ -237,7 +204,6 @@ export default {
                         seriescount[city] = 1;
                     }
                 }
-                console.log(seriescount,seriescountArr);
                  ydata = searchValsArr(encodes.slice(0,1), codes, d.sourcedata);
                  xdata = searchValsArr(encodes.slice(1,2), codes, d.sourcedata);
                  bardata = searchValsArr(encodes.slice(2,3), codes, d.sourcedata);
@@ -255,9 +221,52 @@ export default {
                 });
             });
         }
+
+    },
+    created() {
+        // console.log(this.$router.history.current.params.pageType);
+        this.home = this.$router.history.current.params.pageType;
+    },
+    mounted() {
+        //this.setCharts();
+    },
+    beforeRouteEnter (to, from, next) {
+        // this.home = to.params.pageType;
+        next();
+    },
+    beforeRouteUpdate (to, from, next) {
+        this.home = to.params.pageType;
+        next();
+    },
+    watch: {
+        home(val,oldval) {
+            this.updateView(val);
+            console.log(this.exceData);
+        },
+        currentMonth(){
+            this.updateView(this.home);
+        }
     }
 
 };
+function sliceExceptionPoint(scatterSeriesData, ydata){
+    let average = 0;
+    const exceptionArr = [];
+    ydata.forEach(e => average += Number(e));
+    for (let index = 0; index < scatterSeriesData.length; index++) {
+        const element = scatterSeriesData[index].data;
+        for (let k = 0; k < element.length; k++) {
+            const point = element[k].value;
+            if(point[0] > 2 || point[0] < -2 || point[1] > 3*average || point[1] < -2*average){
+                exceptionArr.push(element[k]);
+                element.splice(k,1);
+            }
+            
+        }
+        
+    }
+    return exceptionArr;
+}
 // 合并两个数组对应位置的数据变成二维数组
 function getDoubleArr(names, arr1, arr2) {
     const d = [];
@@ -432,7 +441,8 @@ function getScatterSeries(names, datas, legendata) {
                 width: 30%;
                 height: 30px;
                 position: absolute;
-                right: 180px;
+                left: 50%;
+                transform: translateX(-50%);
                 top:10px;
                 color:#fff;
             }
@@ -442,12 +452,12 @@ function getScatterSeries(names, datas, legendata) {
                 right: 2%;
                // height: 17%;
                 height: 60px;
-                width: 150px;
-                background-color: rgba(16,162,249,0.8);
+                width: 170px;
                 padding: 5px 0;
-                color:#fff;
+                color:#e9ec0d;
                 overflow: hidden;
                 border-radius: 5px;
+                background-color: rgba(16,162,249,0.8);
                 ul{
                     width: calc(100% + 20px);
                     height: 100%;

@@ -21,7 +21,8 @@ export default {
             home: true,
             czxtData: null,
             currentTab: 1,
-            dev: this.$store.getters.module !== 'dev',
+           // dev: this.$store.getters.module !== 'dev',
+            dev: false,
             test: 'test'
         };
     },
@@ -31,8 +32,13 @@ export default {
             this.currentTab = 1;
         },
         toGeneryImpotent() {
-            this.$router.push({name: 'TopImp'});
-            this.currentTab = 2;
+            this.$Message.info({
+                content: '功能尚未开发，页面为模拟数据',
+                duration: 3,
+                closable: true
+            });
+            //this.$router.push({name: 'TopImp'});
+            //this.currentTab = 2;
         },
         toGeneryOffice() {
             this.currentTab = 3;
@@ -59,15 +65,7 @@ export default {
 
     },
     watch: {
-        currentTab(val, old) {
-            if (val === 2) {
-                this.$Message.info({
-                    content: '功能尚未开发，页面为模拟数据',
-                    duration: 3,
-                    closable: true
-                });
-            }
-        }
+
     },
     beforeRouteEnter (to, from, next) { // 刷新页面时候确定tab标签位置
         let current = getCurrent(to.path);

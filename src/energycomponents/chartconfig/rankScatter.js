@@ -45,7 +45,9 @@ const option = {
             type: 'cross'
         },
         formatter: function(params) {
-            return `${params.data.name}:${params.value}`;
+            return `${params.data.name}:</br>
+            x=${params.value[0]}
+            y=${params.value[1]}`;
         }
     },
     dataZoom: [

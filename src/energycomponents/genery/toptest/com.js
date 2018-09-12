@@ -81,7 +81,8 @@ let comy =
     0.88
     1.85`.split('\n').map((ele) => {
         const a = parseFloat(ele).toFixed(2);
-        return a < 5 ? a : 0;
+        //return a < 5 ? a : 0;
+        return a;
     });
 let comx =
     `-0.173469388
