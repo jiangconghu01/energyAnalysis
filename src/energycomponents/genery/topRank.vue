@@ -1,19 +1,23 @@
 <template>
         <div :class="$style.content">
             <div :class="$style['left-all']">
+                <div :class="$style['levex-text']" v-show="home !== 'communication'">差</div>
+                <div :class="$style['levey-text']" v-show="home !== 'communication'">差</div>
                 <div id="rank-left-all" :class="$style['left-all-chart']"></div>
-                <div :class="$style['name-size-button']" v-show="home==='communication'">
+                <!-- <div :class="$style['name-size-button']" v-show="home==='communication'">
                     单位名称显示
-                       <Button-group>
+                    <Button-group>
                         <i-button type="ghost" size="small">大</i-button>
                         <i-button type="ghost" size="small">中</i-button>
                         <i-button type="ghost" size="small">小</i-button>
                     </Button-group>
 
-                </div>
+                </div> -->
                 <div :class="$style['exception-data']" v-show="exceData.length > 0">
                     <ul>
-                        <li v-for="(item,index) in exceData" :key="index + 'e'">{{item.name+`:x=${item.value[0]},y=${item.value[1]}`}}</li>
+                        <li v-if="home === 'office'" v-for="(item,index) in exceData" :key="index + 'e'">{{item.name}}：累计单位面积电耗同比增长<b>{{`${parseInt(item.value[0]*100)}%`}}</b>，累计单位面积电耗<b>{{item.value[1]}}</b>度</li>
+                        <li v-if="home === 'tianyi'" v-for="(item,index) in exceData" :key="index + 'e'">{{item.name}}：累计单位台席电耗同步增长<b>{{`${parseInt(item.value[0]*100)}%`}}</b>，累计单位台席电耗<b>{{item.value[1]}}</b>度</li>
+                        <li v-if="home === 'communication'" v-for="(item,index) in exceData" :key="index + 'e'">{{item.name}}：PUE同比增幅<b>{{`${parseInt(item.value[0]*100)}%`}}</b>，PUE值<b>{{item.value[1]}}</b></li>
                     </ul>
                     <!-- <div class="updown"><Icon type="ios-arrow-down" color="#fff" size="20px"/></div> -->
                 </div>
@@ -75,7 +79,7 @@ export default {
         ])
     },
     methods: {
-        setCharts(namesdata, ydata, xdata, legendata, seriescount, bardata) {
+        setCharts(namesdata, ydata, xdata, legendata, seriescount, bardata, home) {
             let scatter = this.$echarts.init(document.getElementById('rank-left-all'));
             let bar = this.$echarts.init(document.getElementById('rank-right-all'));
             this.$store.commit('setCharts', {name: 'chart1', val: scatter});
@@ -92,17 +96,17 @@ export default {
             let barsd = bardata[0];
             if (this.home === 'office') {
                 scatterTitle = 'TOP-50办公大楼';
-                scatterMarkline = ['累计单位面积电耗\n(度)', '累计单位面积\n电耗同比增长\n(%)'];
+                scatterMarkline = ['累计单位面积电耗\n(度)', '累\n计\n单\n位\n面\n积\n电\n耗\n同\n比\n增\n长\n(%)'];
                 barTitle = '累计人均电费同比(%)';
             }
             if (this.home === 'tianyi') {
                 scatterTitle = 'TOP-50天翼卖场';
-                scatterMarkline = ['累计单位台席电耗\n(万度)', '累计单位台席\n电耗同比增长\n(%)'];
+                scatterMarkline = ['累计单位台席电耗\n(度)', '累\n计\n单\n位\n台\n席\n电\n耗\n同\n比\n增\n长\n(%)'];
                 barTitle = '累计单位台席电费同比(%)';
             }
             if (this.home === 'communication') {
                 scatterTitle = 'TOP-80通信局站';
-                scatterMarkline = ['PUE值', 'PUE同比\n增幅(%)'];
+                scatterMarkline = ['PUE值', 'PUE\n同\n比\n增\n幅\n(%)'];
                 barTitle = '累计单位资产电费同比(%)';
             }
             // 清除之前数据
@@ -111,26 +115,30 @@ export default {
             ConfigScatter.title.text = scatterTitle;
             const x = xs.map(e => Number(e));
             const y = ys.map(e => Number(e));
-            const maxX = Math.max(...x);
-            const maxY = Math.max(...y);
-            const minX = Math.min(...x);
-            const minY = Math.min(...y);
+
+            const datas = getDoubleArr(names, x, y);
+            ConfigScatter.legend.data = scatterLegend.map(e => e.slice(0,2));
+            const scatterSeriesData = getScatterSeries(seriesCount, datas, scatterLegend);
+            const copy = JSON.parse(JSON.stringify(scatterSeriesData));
+            //找出异常点
+            const exce = sliceExceptionPoint(copy, y, home);
+            this.exceData = exce[0];
+
+            const maxX = Math.max(...exce[1]);
+            const maxY = Math.max(...exce[2]);
+            const minX = Math.min(...exce[1]);
+            const minY = Math.min(...exce[2]);
 
             ConfigScatter.xAxis[0].max = maxX;
             ConfigScatter.xAxis[0].min = minX;
             ConfigScatter.yAxis[0].max = maxY;
             ConfigScatter.yAxis[0].min = minY;
-            const datas = getDoubleArr(names, x, y);
-            ConfigScatter.legend.data = scatterLegend.map(e => e.slice(0,2));
-            const scatterSeriesData = getScatterSeries(seriesCount, datas, scatterLegend);
-            //找出异常点
-            const exce = sliceExceptionPoint(scatterSeriesData, y);
-            this.exceData = exce;
-            ConfigScatter.series = scatterSeriesData;
-            ConfigScatter.series[0].markLine.data[0].label.formatter = scatterMarkline[1];
-            ConfigScatter.series[0].markLine.data[1].label.formatter = scatterMarkline[0];
-            ConfigScatter.series[0].markLine.data[0].yAxis = (minY + maxY) / 2;
-            ConfigScatter.series[0].markLine.data[1].xAxis = (minX + maxX) / 2;
+            ConfigScatter.series = copy;
+            const len = copy.length - 1;
+            ConfigScatter.series[len].markLine.data[0].label.formatter = scatterMarkline[1];
+            ConfigScatter.series[len].markLine.data[1].label.formatter = scatterMarkline[0];
+            ConfigScatter.series[len].markLine.data[0].yAxis = (minY + maxY) / 2;
+            ConfigScatter.series[len].markLine.data[1].xAxis = (minX + maxX) / 2;
 
             // let maxbar = Math.max(...barsd);
             // let minbar = Math.min(...barsd);
@@ -154,11 +162,10 @@ export default {
                 const postParam = {paramArrs: getTopParams(param, codes, this.currentMonth)};
                 const data = await this.$http.post('/czxt/pages/wjhx/getIdWjhxParm.do', postParam, this.module); 
                 this.surceData = data.data;
-                return Promise.resolve({
-                    sourcename:nameMap.data,
-                    sourcedata:data.data
-                    });
-                //return data.data;
+                return {
+                    sourcename: nameMap.data,
+                    sourcedata: data.data
+                    };
             } catch (error) {
                 console.info(error);
                 return Promise.reject(error);
@@ -210,8 +217,7 @@ export default {
                 // names = d.sourcename.map(ele => ele.name);
                 // codes = d.sourcename.map(ele => ele.code);
                 //ydata = 
-                this.setCharts(names, ydata, xdata, seriescountArr, seriescount, bardata);
-                //console.log(d);
+                this.setCharts(names, ydata, xdata, seriescountArr, seriescount, bardata, val);
             }).catch(err => {
                 console.log(err);
                 this.$Message.info({
@@ -241,7 +247,6 @@ export default {
     watch: {
         home(val,oldval) {
             this.updateView(val);
-            console.log(this.exceData);
         },
         currentMonth(){
             this.updateView(this.home);
@@ -249,23 +254,50 @@ export default {
     }
 
 };
-function sliceExceptionPoint(scatterSeriesData, ydata){
+function sliceExceptionPoint(scatterSeriesData, ydata, type){
     let average = 0;
-    const exceptionArr = [];
-    ydata.forEach(e => average += Number(e));
-    for (let index = 0; index < scatterSeriesData.length; index++) {
-        const element = scatterSeriesData[index].data;
-        for (let k = 0; k < element.length; k++) {
-            const point = element[k].value;
-            if(point[0] > 2 || point[0] < -2 || point[1] > 3*average || point[1] < -2*average){
-                exceptionArr.push(element[k]);
-                element.splice(k,1);
+    let exceptionArr = [];
+    let x = [];
+    let y = [];
+    if(type === 'communication'){
+        for (let index = 0; index < scatterSeriesData.length - 1; index++) {
+            const element = scatterSeriesData[index].data;
+            for (let k = 0; k < element.length; k++) {
+                const point = element[k].value;
+                if(point[0] > 2.5 || point[0] < -2 || point[1] > 3 || point[1] < 1){
+                    exceptionArr.push(element[k]);
+                    element.splice(k,1);
+                    k--;
+                }else{
+                    x.push(point[0]);
+                    y.push(point[1]);
+                }
+
             }
             
         }
-        
+    }else{
+        ydata.forEach(e => average += Number(e));
+        average = average/Number(ydata.length);
+        for (let index = 0; index < scatterSeriesData.length - 1; index++) {
+            const element = scatterSeriesData[index].data;
+            for (let k = 0; k < element.length; k++) {
+                const point = element[k].value;
+                if(point[0] > 2.5 || point[0] < -2 || point[1] > 3*average || point[1] < -2*average){
+                    exceptionArr.push(element[k]);
+                    element.splice(k,1);
+                    k--;
+                }else{
+                    x.push(point[0]);
+                    y.push(point[1]);
+                }
+
+            }
+            
+        }
     }
-    return exceptionArr;
+
+    return [exceptionArr, x, y];
 }
 // 合并两个数组对应位置的数据变成二维数组
 function getDoubleArr(names, arr1, arr2) {
@@ -344,11 +376,36 @@ function getScatterSeries(names, datas, legendata) {
         const ele = nameArr[index];
 
         let item = {};
-        if (index === 0) {
             item = {
                 name: ele.slice(0, 2),
                 type: 'scatter',
                 data: datas.slice(startNum, startNum + names[ele]),
+                label: {
+                    show: false,
+                    color: '#fff',
+                    // formatter: function(params) {
+                    //     console.log(params);
+                    //     return `${params.name}`;
+                    // },
+                    formatter: '{b}',
+                    emphasis: {
+                        show: true,
+                        // formatter: function(params) {
+                        //     return params.name + '';
+                        //     console.log(params);
+                        // },
+                        formatter: '{b}',
+                        position: 'top'
+                    }
+                }
+            };
+        target.push(item);
+        startNum += names[ele];
+    }
+    target.push({
+                name: 'line',
+                type: 'scatter',
+                data: [],
                 label: {
                     show: false,
                     color: '#fff',
@@ -357,8 +414,8 @@ function getScatterSeries(names, datas, legendata) {
                     },
                     emphasis: {
                         show: true,
-                        formatter: function(param) {
-                            return param.name;
+                        formatter: function(params) {
+                            return params.name + '';
                         },
                         position: 'top'
                     }
@@ -370,7 +427,8 @@ function getScatterSeries(names, datas, legendata) {
                         yAxis: 52,
                         lineStyle: {
                             type: 'solid',
-                            color: '#ffcc00'
+                           // color: '#ffcc00'
+                            color:'#fff'
                         },
                         label: {
                             formatter: 'PUE同比增幅'
@@ -380,38 +438,15 @@ function getScatterSeries(names, datas, legendata) {
                         xAxis: 175,
                         lineStyle: {
                             type: 'solid',
-                            color: '#ffcc00'
+                            //color: '#ffcc00'
+                            color:'#fff'
                         },
                         label: {
                             formatter: 'PUE'
                         }
                     }]
                 }
-            };
-        } else {
-            item = {
-                name: ele.slice(0, 2),
-                type: 'scatter',
-                data: datas.slice(startNum, startNum + names[ele]),
-                label: {
-                    show: false,
-                    color: '#fff',
-                    formatter: function(params) {
-                        return `${params.name}`;
-                    },
-                    emphasis: {
-                        show: true,
-                        formatter: function(param) {
-                            return param.name;
-                        },
-                        position: 'top'
-                    }
-                }
-            };
-        }
-        target.push(item);
-        startNum += names[ele];
-    }
+            });      
     return target;
 }
 </script>
@@ -433,6 +468,20 @@ function getScatterSeries(names, datas, legendata) {
             width:57%;
             height: 95%;
             top:3%;
+            .levex-text{
+                position: absolute;
+                width: 22px;
+                right: 17%;
+                top: 46%;
+                color: #fa7b78;
+            }
+            .levey-text{
+                position: absolute;
+                width:22px;
+                right: 46%;
+                top: 12%;
+                 color: #fa7b78;
+            }
             .left-all-chart{
                 width:100%;
                 height: 100%;
@@ -447,24 +496,43 @@ function getScatterSeries(names, datas, legendata) {
                 color:#fff;
             }
             .exception-data{
+                &:hover{
+                    background-color: rgba(0, 0, 0, 0.7);
+                    height: 200px;
+                    z-index: 1000;
+                    // ul{
+                    //     width: 100%;
+                    // }
+                }
+                transition: all 0.5s ease 0.1s;
+                font-size: 13px;
                 position: absolute;
-                top:10px;
-                right: 2%;
+                bottom:3%;
+                left:50%;
+                transform: translateX(-50%);
                // height: 17%;
-                height: 60px;
-                width: 170px;
+                height: 35px;
+                width: 70%;
                 padding: 5px 0;
-                color:#e9ec0d;
+               // color:#e9ec0d;
+               color:#B7D1EE;
                 overflow: hidden;
                 border-radius: 5px;
-                background-color: rgba(16,162,249,0.8);
+                //box-shadow: 1px 1px rgba(255, 255, 255, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.6);
+                background-color: rgba(255, 255, 255, 0.1);
                 ul{
                     width: calc(100% + 20px);
                     height: 100%;
                     overflow: auto;
                     li{
                         padding-left:15px;
+                        padding-right: 10px;
                         list-style:none;
+                        b{
+                            color:#F6CD08;
+                            font-size: 16px;
+                        }
                     }
                 }
             }

@@ -90,7 +90,7 @@ function getCZXTData(reqStr) {
             return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${(Math.random() * 5000) + 10}","indexCode":"${ele[2]}"}`;
         } else if (topm.includes(ele[2])) {
             // return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${-(Math.random() * 5000) + 10}","indexCode":"${ele[2]}"}`;
-            return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${(Math.random() * 4) -1.6}","indexCode":"${ele[2]}"}`;
+            return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${(Math.random() * 4) -1.2}","indexCode":"${ele[2]}"}`;
         } else if (topl.includes(ele[2])) {
             switch (ele[2]) {
                 case 'NHTOPN0001':

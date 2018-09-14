@@ -34,10 +34,10 @@ const option = {
     //     }
     // },
     grid: {
-        x: '10%',
-        y: '20%',
+        x: '15%',
+        y: '10%',
         x2: '15%',
-        y2: '12%'
+        y2: '18%'
     },
     tooltip: {
         trigger: 'item',
@@ -67,16 +67,17 @@ const option = {
         //     yAxisIndex: 0,
         //     filterMode: 'empty'
         // },
-        {
-            type: 'inside',
-            yAxisIndex: 0,
-            filterMode: 'empty'
-        },
-        {
-            type: 'inside',
-            xAxisIndex: 0,
-            filterMode: 'empty'
-        }
+
+        // {
+        //     type: 'inside',
+        //     yAxisIndex: 0,
+        //     filterMode: 'empty'
+        // },
+        // {
+        //     type: 'inside',
+        //     xAxisIndex: 0,
+        //     filterMode: 'empty'
+        // }
     ],
     legend: {
         data: [],
@@ -174,79 +175,7 @@ const option = {
         '#ffffff' // 白
     ],
     series: [
-        // {
-        //     name: '优',
-        //     type: 'scatter',
-        //     data: [],
-        //     // markPoint: {
-        //     //     data: [
-        //     //         {type: 'max', name: '最大值'},
-        //     //         {type: 'min', name: '最小值'}
-        //     //     ]
-        //     // },
-        //     // symbolSize: function(data) {
-        //     //     // console.log(data, data[1]);
-        //     //     return 10;
-        //     // },
-        //     label: {
-        //         show: true,
-        //         color: '#fff',
-        //         // formatter: function(params) {
-        //         //     return `${params.name}`;
-        //         // },
-        //         emphasis: {
-        //             show: true,
-        //             formatter: function(param) {
-        //                 return param.name;
-        //             },
-        //             position: 'top'
-        //         }
-        //     },
-        //     markLine: {
-        //         symbol: ['none', 'arrow'],
-        //         silent: true,
-        //         data: [{
-        //             yAxis: 52,
-        //             lineStyle: {
-        //                 type: 'solid',
-        //                 color: '#ffcc00'
-        //             },
-        //             label: {
-        //                 formatter: 'PUE同比增幅'
-        //             }
-        //         },
-        //         {
-        //             xAxis: 175,
-        //             lineStyle: {
-        //                 type: 'solid',
-        //                 color: '#ffcc00'
-        //             },
-        //             label: {
-        //                 formatter: 'PUE'
-        //             }
-        //         }
-        //         ]
-        //     }
-        // },
-        //     // {
-        //     //     name: '良',
-        //     //     type: 'scatter',
-        //     //     data: randomDataArray(),
-        //     // },
-        //     // {
-        //     //     name: '中',
-        //     //     type: 'scatter',
-        //     //     data: randomDataArray(),
-        //     //     symbolSize: function (data) {
-        //     //         // console.log(data, data[1]);
-        //     //         return 18;
-        //     //     },
-        //     // },
-        //     // {
-        //     //     name: '差',
-        //     //     type: 'scatter',
-        //     //     data: randomDataArray(),
-        //     // }
+
     ]
 };
 export default option;

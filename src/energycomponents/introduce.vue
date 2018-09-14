@@ -6,7 +6,7 @@
             <div :style="dev && {display:'none'}" :class="[$style['tab-item'],this.currentTab==2?$style.current:'']" @click="toGeneryImpotent()"><span>重点价值TOP</span></div>
             <div :class="[$style['tab-item'],this.currentTab==3?$style.current:'']" @click="toGeneryOffice()"><span>TOP-50办公大楼</span></div>
             <div :class="[$style['tab-item'],this.currentTab==4?$style.current:'']" @click="toGeneryTyi()"><span>TOP-50天翼卖场</span></div>
-            <div :class="[$style['tab-item'],$style.last,this.currentTab==5?$style.current:'']" @click="toGeneryCommunication()"><span>TOP-80通信局</span></div>
+            <div :class="[$style['tab-item'],$style.last,this.currentTab==5?$style.current:'']" @click="toGeneryCommunication()"><span>TOP-80通信局站</span></div>
             </div>
         </div>
          <router-view></router-view>
@@ -22,7 +22,7 @@ export default {
             czxtData: null,
             currentTab: 1,
            // dev: this.$store.getters.module !== 'dev',
-            dev: false,
+            dev: true,
             test: 'test'
         };
     },

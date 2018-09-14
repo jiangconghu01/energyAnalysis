@@ -41,7 +41,6 @@
                     <li :class="$style.icon"><img src="./static/tb_rq.png" alt=""></li>
                     <li :class="$style.date"><Date-picker type="month" 
                     placeholder="选择月" 
-                    :disabled = "true"
                     format="yyyy年MM月" 
                     size="small" 
                     style="width: 145px"
