@@ -110,10 +110,15 @@ export default {
         setTable(source, codes) {
             // 设置异常当前表格数据
             const monthData = searchMonthValsArr(exceEncodeArr, codes, this.currentMonth, source);
+            
             const datas = monthData.map((ele, index) => {
+                const sum =eval(ele.dataArr.join('+'));
+                const a33 = ele.dataArr[0];
+                ele.dataArr[0] = ~~sum - ~~a33;
                 return tableTd[index].concat(ele.dataArr);
             });
             this.currentMonthData = datas;
+            console.log(datas);
             // 设置异常累计表格数据
             const totalArr = [];
             const months = getCurentMonthArr(this.currentMonth);
@@ -128,6 +133,9 @@ export default {
                 for (let index = 0; index < ele.length; index++) {
                     const element = ele[index];
                     type = element.type;
+                    const sum =eval(element.dataArr.join('+'));
+                    const a33 = element.dataArr[0];
+                    element.dataArr[0] = ~~sum - ~~a33;
                     all.push(element.dataArr);
                     element.dataArr = tableTd[i].concat([parseInt(element.month.substr(4, 2)) + '月', '']).concat(element.dataArr);
                 }
@@ -139,6 +147,7 @@ export default {
             const aa = [].concat(...totalArr);
             // console.log(aa);
             this.currentYearData = aa;
+            console.log(aa);
             // this.currentYearData = totalArr;
         },
         goback() {
@@ -185,7 +194,6 @@ function getCurentMonthArr(date) {
         position: absolute;
         top: 9%;
         &>div{
-
             //background-color: rgba(16,162,249,0.5);
             position: absolute;
             //border: 0.08rem solid rgba(16,162,249,0.5);

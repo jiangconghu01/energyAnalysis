@@ -1,5 +1,5 @@
 const option = {
-    title: {// 标题组件
+    title: { // 标题组件
         text: '当前累计总能耗状况',
         left: '10px', // 标题的位置 默认是left，其余还有center、right属性
         textStyle: {
@@ -29,8 +29,7 @@ const option = {
     },
     calculable: true,
 
-    series: [
-        {
+    series: [{
             name: '能耗情况',
             type: 'pie',
             radius: ['56%', '71%'],
@@ -76,8 +75,8 @@ const option = {
                 }
             },
             data: [
-                {value: 0, name: '电', label: {show: false}, labelLine: {show: false}},
-                {value: 0, name: '油', label: {show: true}, labelLine: {show: true}},
+                { value: 0, name: '电', label: { show: false }, labelLine: { show: false } },
+                { value: 0, name: '油', label: { show: true }, labelLine: { show: true } },
             ],
             color: ['#ffa354', '#ffefb4', '#24c6ff'],
             startAngle: 120,
@@ -136,8 +135,8 @@ const option = {
                 }
             },
             data: [
-                {value: 135, name: '电', label: {show: true}, labelLine: {show: true}},
-                {value: 1348, name: '油', label: {show: true}, labelLine: {show: true}}
+                { value: 135, name: '电', label: { show: true }, labelLine: { show: true } },
+                { value: 1348, name: '油', label: { show: true }, labelLine: { show: true } }
             ],
             // color: ['#ffefb4', '#ff66ec', '#24c6ff', '#ffa354'],
             color: ['#ffa354', '#ffefb4', '#24c6ff'],

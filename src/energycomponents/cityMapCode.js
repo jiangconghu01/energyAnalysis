@@ -52,7 +52,7 @@ const provinceData = {
         mapCode: '',
         cityCode: 'A3312',
     }, {
-        cityName: '股份研发',
+        cityName: '信产公司',
         mapCode: '',
         cityCode: 'A3314',
     }]

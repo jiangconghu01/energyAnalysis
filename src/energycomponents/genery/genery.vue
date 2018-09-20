@@ -20,8 +20,8 @@
                 <div :class="$style['left-bottom-tip']">
                     <div :class="$style['table-title']">
                         <ul>
-                            <li> 大网综合能耗（吨标煤）</li>
-                            <li>IDC电耗（吨标煤）</li>
+                            <li> 大网综合能耗(吨标煤)</li>
+                            <li>IDC电耗(万度)</li>
                         </ul>
                     </div>
                     <table>
