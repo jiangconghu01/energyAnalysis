@@ -52,6 +52,10 @@ const detailEncodeArr2 = (() => {
 const exceEncodeArr = (() => {
     let arr = [];
     for (let index = 113; index < 119; index++) {
+        //先屏蔽'合同电价异常'和单表电量异常
+        if (index === 113 || index === 116) {
+            continue;
+        }
         arr.push(`NHDP0${index}`);
     }
     return arr;

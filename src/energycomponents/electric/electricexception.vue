@@ -140,7 +140,7 @@ export default {
                     element.dataArr = tableTd[i].concat([parseInt(element.month.substr(4, 2)) + '月', '']).concat(element.dataArr);
                 }
                 // result = addDoubleArr(all);
-                result = tableTd[i].concat(['', '各月异常总数量相加之和']).concat(addDoubleArr(all));
+                result = tableTd[i].concat(['', '各月异常总数量之和']).concat(addDoubleArr(all));
                 // console.log(result);
                 ele.unshift({type: `${type}-${i}`, month: `all${i}`, dataArr: result});
             });

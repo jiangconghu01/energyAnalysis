@@ -40,7 +40,7 @@
                 <div v-show="mapMoudle==='province' || mapMoudle==='company'" :class="[$style['right-top-company']]">
                     <ul>
                         <li :class="$style['company-name']"  @click="goCompany('省传输局')">省传输局</li>
-                        <li :class="$style['company-name']" @click="goCompany('股份研发')">股份研发</li>
+                        <li :class="$style['company-name']" @click="goCompany('信产公司')">信产公司</li>
                     </ul>
                 </div>                
                 <div  :class="$style['right-mid']">

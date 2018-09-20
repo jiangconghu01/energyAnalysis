@@ -25,7 +25,7 @@ const xArr = ['定额线', '大工业用电', '居民生活用电', '一般商�
 // }
 const option = {
     title: {
-        text: '地区分析',
+        text: '地区分析（当年累计值）',
         subtext: '单位（万度）',
         left: '10px',
         textStyle: {

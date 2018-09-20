@@ -42,7 +42,7 @@
                 <div v-show="mapMoudle==='province' || mapMoudle==='company'" :class="[$style['right-top-company']]">
                     <ul>
                         <li :class="$style['company-name']"  @click="goCompany('省传输局')">省传输局</li>
-                        <li :class="$style['company-name']" @click="goCompany('股份研发')">股份研发</li>
+                        <li :class="$style['company-name']" @click="goCompany('信产公司')">信产公司</li>
                     </ul>
                 </div>                    
             </div>
@@ -296,8 +296,8 @@ export default {
             configOption.dataZoom = [];
             let barLine = this.$echarts.init(document.getElementById('electric-detail-left-bottom'));
             this.$store.commit('setCharts', {name: 'chart2', val: barLine});
-            const encodes1 = ['NHDP0040', 'NHDP0041', 'NHDP0042', 'NHDP0043', 'NHDP0044'];
-            const encodes2 = ['NHDP0045', 'NHDP0046', 'NHDP0047', 'NHDP0048', 'NHDP0049'];
+            const encodes1 = ['NHDP0040', 'NHDP0041', 'NHDP0042','NHDP0044'];
+            const encodes2 = ['NHDP0045', 'NHDP0046', 'NHDP0047','NHDP0049'];
             let dataEcount = [];
             let dataEcost = [];
             let dataLineCount = [];

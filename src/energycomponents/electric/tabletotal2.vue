@@ -118,10 +118,10 @@ export default {
             //     width: 59 / len + '%'
             // };
             if (['异常指标', '异常说明', '累计规则'].includes(ele)) {
-                return {width: '150px'};
+                return {width: '130px'};
             }
             if (ele === '异常统计规则') {
-                return {width: '230px'};
+                return this.type === 'total' ? {width: '150px'} : {width: '230px'};
             }
             return '';
         },
