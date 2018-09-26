@@ -13,7 +13,7 @@
                     <span v-else>异常</span>
                 </div>
             </i-col>
-            <i-col span="8" :class="$style.line"><span :class="$style.num">{{number?number:0}}</span></i-col>
+            <i-col span="8" :class="$style.line"><span :class="$style.num">{{formatterNum?formatterNum:0}}</span></i-col>
         </Row>
         <Row style="height:30%;">
             <div v-if="type==='dl'">
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { formatNumberRgx } from '../dataUtil.js';
 export default {
     props: {
         type: {
@@ -69,6 +70,11 @@ export default {
         return {
 
         };
+    },
+    computed: {
+        formatterNum() {
+            return formatNumberRgx(this.number);
+        }
     },
     methods: {
         toDetail() {

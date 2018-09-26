@@ -8,7 +8,7 @@ const electricBasicPage = (() => {
         'NHDP0039'
     ];
     for (let index = 52; index < 119; index++) {
-        //防止和countyEncodeArr 这个重复
+        // 防止和countyEncodeArr 这个重复
         if (index === 62 || index === 63) {
             continue;
         }
@@ -28,7 +28,7 @@ const cityEncodeArr = (() => {
 
 // 电力-主页-各区县级请求数据
 const countyEncodeArr = (() => {
-    let arr = ['NHDP0036', 'NHDP0037'];
+    let arr = ['NHDP0036', 'NHDP0037', 'NHDP0043', 'NHDP0048'];
     for (let index = 52; index < 64; index++) {
         arr.push(`NHDP00${index}`);
     }
@@ -53,7 +53,7 @@ const detailEncodeArr2 = (() => {
 const exceEncodeArr = (() => {
     let arr = [];
     for (let index = 113; index < 119; index++) {
-        //先屏蔽'合同电价异常'和单表电量异常
+        // 先屏蔽'合同电价异常'和单表电量异常
         if (index === 113 || index === 116) {
             continue;
         }

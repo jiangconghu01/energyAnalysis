@@ -91,7 +91,8 @@ import {
     generyRBData,
     searchMapData,
     controlMapLabel,
-    getSortMapArr
+    getSortMapArr,
+    formatNumberRgx
 }
     from '../dataUtil.js';
 import {
@@ -126,8 +127,8 @@ export default {
             mapMoudle: 'province',
             hoverLine: '',
             tipHtCon: 280,
-            countryNameOne:'',
-            countryParentName:''
+            countryNameOne: '',
+            countryParentName: ''
 
         };
     },
@@ -170,13 +171,13 @@ export default {
         goBack() {
             this.mapMoudle = 'province';
             this.currentCity = 'A33';
-            this.currentCityArr = cityNameArr; 
-            //this.$router.push({name: 'All'});
+            this.currentCityArr = cityNameArr;
+            // this.$router.push({name: 'All'});
         },
-        goCompany(name){
+        goCompany(name) {
             this.mapMoudle = 'company';
             this.currentCity = jzMap.mapCode[name];
-            this.currentCityArr = [name]; 
+            this.currentCityArr = [name];
         },
         houverBox() {
             setTimeout(() => {
@@ -186,16 +187,16 @@ export default {
         getAxiosData(date) {
             let param1 = getProvinceParam(date, this.currentCity, generyAllProvince);
             let param2;
-            if (this.mapMoudle=== 'province') { // 省级总览
+            if (this.mapMoudle === 'province') { // 省级总览
                 param2 = getCityParam(date, cityCodeArr, cityEncodeArr);
-            } else if(this.mapMoudle=== 'city') {
+            } else if (this.mapMoudle === 'city') {
                 let countryCodeArr = getCountyCode(cityDataArr, this.currentCity);
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
-            }else if(this.mapMoudle=== 'company'){
-                let countryCodeArr =[this.currentCity];
+            } else if (this.mapMoudle === 'company') {
+                let countryCodeArr = [this.currentCity];
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
-            }else{
-                let countryCodeArr =[this.currentCity];
+            } else {
+                let countryCodeArr = [this.currentCity];
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
             }
 
@@ -207,9 +208,9 @@ export default {
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
-                if(this.mapMoudle === 'country'){
+                if (this.mapMoudle === 'country') {
                     this.sourceCountryData = response.data;
-                     this.setLeftTop(this.sourceCountryData, this.currentCity);
+                    this.setLeftTop(this.sourceCountryData, this.currentCity);
                     this.setLeftBottom(this.sourceCountryData, this.currentCity);
                     this.setRightBottom(this.sourceCountryData, this.currentCity);
                     this.setMap(this.sourceCountryData, this.currentCity);
@@ -224,9 +225,9 @@ export default {
                 console.warn(error);
             });
         },
-        getAxiosDataToCountryMap(date,cityName) {
-            const code=jzMap.mapCode[cityName];
-            let param1 = getProvinceParam(date, code , generyAllProvince);
+        getAxiosDataToCountryMap(date, cityName) {
+            const code = jzMap.mapCode[cityName];
+            let param1 = getProvinceParam(date, code, generyAllProvince);
             let countryCodeArr = getCountyCode(cityDataArr, code);
             let param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
             let data = param1 + ',' + param2;
@@ -237,17 +238,17 @@ export default {
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
-                const countryToUpdateCityMap=true;
+                const countryToUpdateCityMap = true;
                 this.sourceData = response.data;
-                this.setMap(this.sourceData, code,countryToUpdateCityMap);
+                this.setMap(this.sourceData, code, countryToUpdateCityMap);
             }).catch((error) => {
                 console.warn(error);
             });
         },
         setLeftTop(arr, code) {
             this.leftTop = {
-                allCount: searchVal(code, 'NHDP0006', arr),
-                allCost: searchVal(code, 'NHDP0005', arr),
+                allCount: formatNumberRgx(searchVal(code, 'NHDP0006', arr)),
+                allCost: formatNumberRgx(searchVal(code, 'NHDP0005', arr)),
                 eleCost: searchVal(code, 'NHDP0001', arr),
                 eleCount: searchVal(code, 'NHDP0002', arr),
                 oilCost: searchVal(code, 'NHDP0004', arr),
@@ -309,7 +310,7 @@ export default {
             pie.setOption(ConfigPie);
         },
         setLeftBottom(arr, code) {
-            const sortArr=getSortMapArr('drop',
+            const sortArr = getSortMapArr('drop',
                 searchValArr('NHDP0015', arr),
                 this.currentCityArr,
                 searchValArr('NHDP0016', arr),
@@ -317,10 +318,10 @@ export default {
                 searchValArr('NHDP0010', arr));
             this.leftBottom = {
                 listNetCost: sortArr[3],
-                listIDCCost:  sortArr[4],
-                listCity:  sortArr[1],
-                listPersentNet:  sortArr[0],
-                listPersentIDC:  sortArr[2],
+                listIDCCost: sortArr[4],
+                listCity: sortArr[1],
+                listPersentNet: sortArr[0],
+                listPersentIDC: sortArr[2],
                 guideVal: searchVal(code, 'NHDP0011', arr),
                 warnVal: searchVal(code, 'NHDP0012', arr)
             };
@@ -333,29 +334,28 @@ export default {
             // option.yAxis[0].splitNumber = 6;
             option.label.formatter = function(params) {
                 return Number(params.value) === 0 ? '0' : params.value;
-            }
-            option.series[0].label.formatter = function(params){
+            };
+            option.series[0].label.formatter = function(params) {
                 return Number(params.value) === 0 ? '0' : params.value;
-            }
+            };
             option.yAxis[0].axisLabel = {
                 color: '#F1F7FC',
                 fontSize: 12,
                 fontWeight: 200,
-                //rotate:30,
+                // rotate:30,
                 formatter: (val) => {
-                    return parseInt(val * 100)+ '%';
+                    return parseInt(val * 100) + '%';
                 }
             };
-            if(this.mapMoudle === 'province' || this.mapMoudle === 'city'){
+            if (this.mapMoudle === 'province' || this.mapMoudle === 'city') {
                 option.xAxis[0].axisLabel.rotate = 35;
             }
-            
- 
-            if (this.mapMoudle === 'country'){
-                option.xAxis[0].data=[this.countryNameOne];
-            }else{
+
+            if (this.mapMoudle === 'country') {
+                option.xAxis[0].data = [this.countryNameOne];
+            } else {
                 // option.xAxis[0].data = this.currentCityArr;
-                 option.xAxis[0].data = sortArr[1];
+                option.xAxis[0].data = sortArr[1];
             }
             // option.series[0].data = this.leftBottom.listPersentNet;
             // option.series[1].data = this.leftBottom.listPersentIDC;
@@ -366,7 +366,7 @@ export default {
             let guid = this.leftBottom.guideVal;
             let warn = this.leftBottom.warnVal;
             let len = this.currentCityArr.length - 1;
-            option.yAxis[0].min=this.mapMoudle === 'country' || this.mapMoudle === 'company'? 0:min;
+            option.yAxis[0].min = this.mapMoudle === 'country' || this.mapMoudle === 'company' ? 0 : min;
             option.yAxis[0].max = max > warn ? max : warn;
             option.series[2].markLine = {
                 symbol: ['none'],
@@ -377,31 +377,31 @@ export default {
                         color: '#7bfcfd'
                     },
                 }
-               ]
+                ]
             };
             option.series[3].markLine = {
                 symbol: ['none'],
                 data: [
-                {
-                    yAxis: warn,
-                    lineStyle: {
-                        color: '#ffa354'
-                    },
-                }]
+                    {
+                        yAxis: warn,
+                        lineStyle: {
+                            color: '#ffa354'
+                        },
+                    }]
             };
             line.setOption(option);
         },
         setRightBottom(arr, code) {
             this.rightBottom = generyRBData(arr, code);
         },
-        setMap(arr, code,countryToUpdateCityMap) {
-            if(this.mapMoudle === 'company'){
+        setMap(arr, code, countryToUpdateCityMap) {
+            if (this.mapMoudle === 'company') {
                 return;
             }
-           const map = this.$echarts.init(document.getElementById('genery-right-top'));;
-           const boxWidth = map ? map.getWidth() : 0;
-           const boxHeight = map ? map.getHeight() : 0;
-           const baseRect = Math.min(boxWidth,boxHeight);
+            const map = this.$echarts.init(document.getElementById('genery-right-top'));
+            const boxWidth = map ? map.getWidth() : 0;
+            const boxHeight = map ? map.getHeight() : 0;
+            const baseRect = Math.min(boxWidth, boxHeight);
             if (this.mapMoudle === 'province') {
                 map.clear();
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
@@ -412,18 +412,18 @@ export default {
                 mapconfig.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}(吨标煤)</div> <div>总能耗费：${params.data.value1}(万元)</div>`;
                 };
-                //console.log(data);
-                let max=0;
-                data.forEach(ele=>{
-                    if(parseFloat(ele.value)>max){
-                        max=Math.ceil(parseFloat(ele.value));
+                // console.log(data);
+                let max = 0;
+                data.forEach(ele => {
+                    if (parseFloat(ele.value) > max) {
+                        max = Math.ceil(parseFloat(ele.value));
                     }
                 });
-                mapconfig.dataRange.max=max;
+                mapconfig.dataRange.max = max;
                 mapconfig.series[0].data = data;
-                //mapconfig.roam=false;
+                // mapconfig.roam=false;
                 map.setOption(mapconfig);
-            } else if(this.mapMoudle === 'city'){
+            } else if (this.mapMoudle === 'city') {
                 map.clear();
                 this.$store.commit('setCharts', {name: 'chart3', val: map});
                 let name = jzMap.mapName[code];
@@ -440,74 +440,72 @@ export default {
                 mapconfig.tooltip.formatter = function(params) {
                     return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}(吨标煤)</div> <div>总能耗费：${params.data.value1}(万元)</div>`;
                 };
-                let max=0;
-                data2.forEach(ele=>{
-                    if(parseFloat(ele.value)>max){
-                        max=Math.ceil(parseFloat(ele.value));
+                let max = 0;
+                data2.forEach(ele => {
+                    if (parseFloat(ele.value) > max) {
+                        max = Math.ceil(parseFloat(ele.value));
                     }
                 });
-                mapconfig.dataRange.max=max;
+                mapconfig.dataRange.max = max;
                 mapconfig.series[0].map = name;
                 mapconfig.series[0].data = data2;
 
-               // mapconfig.roam=true;
+                // mapconfig.roam=true;
                 map.setOption(mapconfig);
-            }else{
-                const initmap=cityMap;
-                const datajzMap=jzMap;
-                const searchMapData2=searchMapData;
-                if(this.countryParentName && countryToUpdateCityMap){
-                map.clear();
-                this.$store.commit('setCharts', {name: 'chart3', val: map});
-                const cityName = this.countryParentName;
-                this.$echarts.registerMap(cityName, datajzMap.mapJson[cityName]);
-                //console.log(datajzMap.mapJson[cityName]);
-                const mapconfig2 = JSON.parse(JSON.stringify(initmap));
+            } else {
+                const initmap = cityMap;
+                const datajzMap = jzMap;
+                const searchMapData2 = searchMapData;
+                if (this.countryParentName && countryToUpdateCityMap) {
+                    map.clear();
+                    this.$store.commit('setCharts', {name: 'chart3', val: map});
+                    const cityName = this.countryParentName;
+                    this.$echarts.registerMap(cityName, datajzMap.mapJson[cityName]);
+                    // console.log(datajzMap.mapJson[cityName]);
+                    const mapconfig2 = JSON.parse(JSON.stringify(initmap));
 
-                
-                const clickCode2 = datajzMap.mapCode[cityName];
-                const subCodeCount2 = datajzMap.countryCodeCount[clickCode2];
-                const subCodes2 = addCodes(clickCode2, subCodeCount2);
-                const data2 = searchMapData2(subCodes2, ['NHDP0006', 'NHDP0005'], arr, 'country');
-                mapconfig2.tooltip.formatter = function(params) {
-                    return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}(吨标煤)</div> <div>总能耗费：${params.data.value1}(万元)</div>`;
-                };
-                let max=0;
-                data2.forEach(ele=>{
-                    if(parseFloat(ele.value)>max){
-                        max=Math.ceil(parseFloat(ele.value));
-                    }
-                });
-                mapconfig2.dataRange.max=max;
-                mapconfig2.series[0].map = name;
-                mapconfig2.series[0].data = data2;
+                    const clickCode2 = datajzMap.mapCode[cityName];
+                    const subCodeCount2 = datajzMap.countryCodeCount[clickCode2];
+                    const subCodes2 = addCodes(clickCode2, subCodeCount2);
+                    const data2 = searchMapData2(subCodes2, ['NHDP0006', 'NHDP0005'], arr, 'country');
+                    mapconfig2.tooltip.formatter = function(params) {
+                        return `<div>${params.data.name}</div><div>总能耗量：${params.data.value}(吨标煤)</div> <div>总能耗费：${params.data.value1}(万元)</div>`;
+                    };
+                    let max = 0;
+                    data2.forEach(ele => {
+                        if (parseFloat(ele.value) > max) {
+                            max = Math.ceil(parseFloat(ele.value));
+                        }
+                    });
+                    mapconfig2.dataRange.max = max;
+                    mapconfig2.series[0].map = name;
+                    mapconfig2.series[0].data = data2;
 
-                map.setOption(mapconfig2);
+                    map.setOption(mapconfig2);
                 }
-
             }
-            //地图缩放显示label控制130-1000
-           controlMapLabel(map); 
-           map && map.off('click');
-           map && map.on('click', (param) => {
-                if( this.mapMoudle === 'country'){
-                     this.currentCity = getCountyCodeOne(cityDataArr,param.name);
-                     this.currentCityArr=[param.name];
-                     this.countryNameOne=param.name;
-                     return;
+            // 地图缩放显示label控制130-1000
+            controlMapLabel(map);
+            map && map.off('click');
+            map && map.on('click', (param) => {
+                if (this.mapMoudle === 'country') {
+                    this.currentCity = getCountyCodeOne(cityDataArr, param.name);
+                    this.currentCityArr = [param.name];
+                    this.countryNameOne = param.name;
+                    return;
                 }
                 if (this.mapMoudle === 'city') {
                     this.mapMoudle = 'country';
-                     this.countryNameOne=param.name; 
-                    //console.log(param.name);
-                   this.currentCity = getCountyCodeOne(cityDataArr,param.name);
+                    this.countryNameOne = param.name;
+                    // console.log(param.name);
+                    this.currentCity = getCountyCodeOne(cityDataArr, param.name);
                     return;
                 }
                 this.mapMoudle = 'city';
                 this.currentCityArr = getCountyName(cityDataArr, jzMap.mapCode[param.name]);
 
                 let clickCode = jzMap.mapCode[param.name];
-                this.countryParentName=param.name;
+                this.countryParentName = param.name;
                 this.currentCity = clickCode;
             });
         }
@@ -532,8 +530,7 @@ export default {
     },
     watch: {
         currentMonth: function(val, oldVal) {
-            
-            this.mapMoudle === 'country' && this.getAxiosDataToCountryMap(val,this.countryParentName);
+            this.mapMoudle === 'country' && this.getAxiosDataToCountryMap(val, this.countryParentName);
             this.getAxiosData(val);
         },
         currentCity: function(val, oldVal) {
@@ -702,8 +699,8 @@ function addCodes(code, count) {
                     }
                 }
                 table tr td { 
-                    border:1px solid #0094ff;
-                 //background-color: rgba(26, 89, 162, 0.2); 
+                   // border:1px solid #0094ff;
+                  background-color: rgba(134, 167, 204, 0.2); 
                  }
             }
         }

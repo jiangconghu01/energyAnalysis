@@ -30,119 +30,119 @@ const option = {
     calculable: true,
 
     series: [{
-            name: '能耗情况',
-            type: 'pie',
-            radius: ['56%', '71%'],
-            center: ['45%', '55%'],
-            itemStyle: {
-                normal: {
-                    label: {
-                        show: true,
-                        position: 'outer',
-                        formatter: '总{b}费(万元)\n{c}',
-                        // color: '#ffa354',
-                        align: 'left',
-                        fontWeight: 200,
-                        fontSize: 14,
+        name: '能耗情况',
+        type: 'pie',
+        radius: ['56%', '71%'],
+        center: ['45%', '55%'],
+        itemStyle: {
+            normal: {
+                label: {
+                    show: true,
+                    position: 'outer',
+                    formatter: '总{b}费(万元)\n{c}',
+                    // color: '#ffa354',
+                    align: 'left',
+                    fontWeight: 200,
+                    fontSize: 14,
 
-                    },
-                    labelLine: {
-                        show: true,
-                        length: 10,
-                        lineStyle: {
-                            color: '#F1F7FC',
-                            width: 1
-                        }
-                    }
                 },
-                emphasis: {
-                    label: {
-                        show: true,
-                        position: 'center',
-                        textStyle: {
-                            fontSize: '16',
-                            fontWeight: 'bold'
-                        }
-                    },
-                    labelLine: {
-                        show: true,
-                        length: 10,
-                        lineStyle: {
-                            color: '#F1F7FC',
-                            width: 1
-                        }
+                labelLine: {
+                    show: true,
+                    length: 10,
+                    lineStyle: {
+                        color: '#F1F7FC',
+                        width: 1
                     }
                 }
             },
-            data: [
-                { value: 0, name: '电', label: { show: false }, labelLine: { show: false } },
-                { value: 0, name: '油', label: { show: true }, labelLine: { show: true } },
-            ],
-            color: ['#ffa354', '#ffefb4', '#24c6ff'],
-            startAngle: 120,
-            hoverAnimation: false,
+            emphasis: {
+                label: {
+                    show: true,
+                    position: 'center',
+                    textStyle: {
+                        fontSize: '16',
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: true,
+                    length: 10,
+                    lineStyle: {
+                        color: '#F1F7FC',
+                        width: 1
+                    }
+                }
+            }
         },
-        {
-            name: '能耗情况',
-            type: 'pie',
-            radius: ['39%', '54%'],
-            center: ['45%', '55%'],
-            itemStyle: {
-                normal: {
-                    labelLine: {
-                        show: true,
-                        length: 20,
-                        lineStyle: {
+        data: [
+            { value: 0, name: '电', label: { show: false }, labelLine: { show: false } },
+            { value: 0, name: '油', label: { show: true }, labelLine: { show: true } },
+        ],
+        color: ['#ffa354', '#ffefb4', '#248bff'],
+        startAngle: 120,
+        hoverAnimation: false,
+    },
+    {
+        name: '能耗情况',
+        type: 'pie',
+        radius: ['39%', '54%'],
+        center: ['45%', '55%'],
+        itemStyle: {
+            normal: {
+                labelLine: {
+                    show: true,
+                    length: 20,
+                    lineStyle: {
 
-                            width: 1
-                        }
-                    },
-                    label: {
-                        show: true,
-                        position: 'outer',
-                        formatter: '总{b}量(吨标煤)\n{c}',
-                        // formatter: function(param) {
-                        //     if (param.value == 0) {
-                        //         return '';
-                        //     } else {
-                        //         return `总${param.name}(万元)\n${param.value}`;
-                        //     }
-                        // },
-                        // color: '#ffa354',
-                        align: 'left',
-                        fontWeight: 200,
-                        fontSize: 14
+                        width: 1
                     }
-
                 },
-                emphasis: {
-                    label: {
-                        show: true,
-                        position: 'center',
-                        textStyle: {
-                            fontSize: '16',
-                            fontWeight: 'bold'
-                        }
-                    },
-                    labelLine: {
-                        show: true,
-                        length: 20,
-                        lineStyle: {
+                label: {
+                    show: true,
+                    position: 'outer',
+                    formatter: '总{b}量(吨标煤)\n{c}',
+                    // formatter: function(param) {
+                    //     if (param.value == 0) {
+                    //         return '';
+                    //     } else {
+                    //         return `总${param.name}(万元)\n${param.value}`;
+                    //     }
+                    // },
+                    // color: '#ffa354',
+                    align: 'left',
+                    fontWeight: 200,
+                    fontSize: 14
+                }
 
-                            width: 1
-                        }
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    position: 'center',
+                    textStyle: {
+                        fontSize: '16',
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: true,
+                    length: 20,
+                    lineStyle: {
+
+                        width: 1
                     }
                 }
-            },
-            data: [
-                { value: 135, name: '电', label: { show: true }, labelLine: { show: true } },
-                { value: 1348, name: '油', label: { show: true }, labelLine: { show: true } }
-            ],
-            // color: ['#ffefb4', '#ff66ec', '#24c6ff', '#ffa354'],
-            color: ['#ffa354', '#ffefb4', '#24c6ff'],
-            startAngle: 190,
-            hoverAnimation: false,
-        }
+            }
+        },
+        data: [
+            { value: 135, name: '电', label: { show: true }, labelLine: { show: true } },
+            { value: 1348, name: '油', label: { show: true }, labelLine: { show: true } }
+        ],
+        // color: ['#ffefb4', '#ff66ec', '#24c6ff', '#ffa354'],
+        color: ['#ffa354', '#ffefb4', '#24c6ff'],
+        startAngle: 190,
+        hoverAnimation: false,
+    }
     ]
 };
 export default option;

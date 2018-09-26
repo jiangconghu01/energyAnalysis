@@ -15,6 +15,7 @@
                 </div> -->
                 <div :class="$style['exception-data']" v-show="exceData.length > 0">
                     <ul>
+                        <li>离散点位（偏差较大，图中未能显示，鼠标移动到此处查看）</li>
                         <li v-if="home === 'office'" v-for="(item,index) in exceData" :key="index + 'e'">{{item.name}}：累计单位面积电耗同比增长<b>{{`${parseInt(item.value[0]*100)}%`}}</b>，累计单位面积电耗<b>{{item.value[1]}}</b>度</li>
                         <li v-if="home === 'tianyi'" v-for="(item,index) in exceData" :key="index + 'e'">{{item.name}}：累计单位台席电耗同步增长<b>{{`${parseInt(item.value[0]*100)}%`}}</b>，累计单位台席电耗<b>{{item.value[1]}}</b>度</li>
                         <li v-if="home === 'communication'" v-for="(item,index) in exceData" :key="index + 'e'">{{item.name}}：PUE同比增幅<b>{{`${parseInt(item.value[0]*100)}%`}}</b>，PUE值<b>{{item.value[1]}}</b></li>
@@ -34,7 +35,7 @@ import ConfigBar from '../chartconfig/rankBar.js';
 import {getTopParams} from './origindata.js';
 import { mapGetters } from 'vuex';
 import jzMap from '../chartconfig/zjMap.js';
-import {searchValsArr}from '../dataUtil.js';
+import {searchValsArr} from '../dataUtil.js';
 // import {
 //     topOffice,
 //     officeBasicNum,
@@ -72,7 +73,7 @@ export default {
     },
     computed: {
         ...mapGetters({
-            currentMonth:'month'
+            currentMonth: 'month'
         }),
         ...mapGetters([
             'module'
@@ -117,10 +118,10 @@ export default {
             const y = ys.map(e => Number(e));
 
             const datas = getDoubleArr(names, x, y);
-            ConfigScatter.legend.data = scatterLegend.map(e => e.slice(0,2));
+            ConfigScatter.legend.data = scatterLegend.map(e => e.slice(0, 2));
             const scatterSeriesData = getScatterSeries(seriesCount, datas, scatterLegend);
             const copy = JSON.parse(JSON.stringify(scatterSeriesData));
-            //找出异常点
+            // 找出异常点
             const exce = sliceExceptionPoint(copy, y, home);
             this.exceData = exce[0];
 
@@ -160,34 +161,34 @@ export default {
                 this.nameMap = nameMap.data;
                 const codes = nameMap.data.map(ele => ele.code);
                 const postParam = {paramArrs: getTopParams(param, codes, this.currentMonth)};
-                const data = await this.$http.post('/czxt/pages/wjhx/getIdWjhxParm.do', postParam, this.module); 
+                const data = await this.$http.post('/czxt/pages/wjhx/getIdWjhxParm.do', postParam, this.module);
                 this.surceData = data.data;
                 return {
                     sourcename: nameMap.data,
                     sourcedata: data.data
-                    };
+                };
             } catch (error) {
                 console.info(error);
                 return Promise.reject(error);
             }
         },
-        updateView(val){
+        updateView(val) {
             let param = '';
             let encodes = [];
-            if(val === 'office'){
+            if (val === 'office') {
                 param = 'bgdl';
                 encodes = ['NHTOPN0007', 'NHTOPN0008', 'NHTOPN0009'];
             }
-            if(val === 'tianyi'){
+            if (val === 'tianyi') {
                 param = 'tymc';
                 encodes = ['NHTOPN0014', 'NHTOPN0015', 'NHTOPN0016'];
             }
-            if(val === 'communication'){
+            if (val === 'communication') {
                 param = 'jz';
                 encodes = ['NHTOPN0001', 'NHTOPN0002', 'NHTOPN0003'];
             }
-            //this.setCharts(namesdata, ydata, xdata, legendata, seriescount, bardata)
-            this.getData(param).then( d => {
+            // this.setCharts(namesdata, ydata, xdata, legendata, seriescount, bardata)
+            this.getData(param).then(d => {
                 const codes = [];
                 const names = [];
                 let ydata = [];
@@ -198,25 +199,24 @@ export default {
                 const arr = d.sourcename.sort((a, b) => {
                     return parseInt(a.city.slice(1)) - parseInt(b.city.slice(1));
                 });
-                for(let i = 0, len = arr.length; i < len; i++){
+                for (let i = 0, len = arr.length; i < len; i++) {
                     names.push(arr[i].name);
                     codes.push(arr[i].code);
                     const code = arr[i].city === 'A3300' ? 'A3301' : arr[i].city;
                     const city = jzMap.mapName[code];
-                    if(seriescount[city]){
-                         seriescount[city] += 1;
-
-                    }else{
+                    if (seriescount[city]) {
+                        seriescount[city] += 1;
+                    } else {
                         seriescountArr.push(city);
                         seriescount[city] = 1;
                     }
                 }
-                 ydata = searchValsArr(encodes.slice(0,1), codes, d.sourcedata);
-                 xdata = searchValsArr(encodes.slice(1,2), codes, d.sourcedata);
-                 bardata = searchValsArr(encodes.slice(2,3), codes, d.sourcedata);
+                ydata = searchValsArr(encodes.slice(0, 1), codes, d.sourcedata);
+                xdata = searchValsArr(encodes.slice(1, 2), codes, d.sourcedata);
+                bardata = searchValsArr(encodes.slice(2, 3), codes, d.sourcedata);
                 // names = d.sourcename.map(ele => ele.name);
                 // codes = d.sourcename.map(ele => ele.code);
-                //ydata = 
+                // ydata =
                 this.setCharts(names, ydata, xdata, seriescountArr, seriescount, bardata, val);
             }).catch(err => {
                 console.log(err);
@@ -234,7 +234,7 @@ export default {
         this.home = this.$router.history.current.params.pageType;
     },
     mounted() {
-        //this.setCharts();
+        // this.setCharts();
     },
     beforeRouteEnter (to, from, next) {
         // this.home = to.params.pageType;
@@ -245,55 +245,51 @@ export default {
         next();
     },
     watch: {
-        home(val,oldval) {
+        home(val, oldval) {
             this.updateView(val);
         },
-        currentMonth(){
+        currentMonth() {
             this.updateView(this.home);
         }
     }
 
 };
-function sliceExceptionPoint(scatterSeriesData, ydata, type){
+function sliceExceptionPoint(scatterSeriesData, ydata, type) {
     let average = 0;
     let exceptionArr = [];
     let x = [];
     let y = [];
-    if(type === 'communication'){
+    if (type === 'communication') {
         for (let index = 0; index < scatterSeriesData.length - 1; index++) {
             const element = scatterSeriesData[index].data;
             for (let k = 0; k < element.length; k++) {
                 const point = element[k].value;
-                if(point[0] > 2.5 || point[0] < -2 || point[1] > 3 || point[1] < 1){
+                if (point[0] > 2.5 || point[0] < -2 || point[1] > 3 || point[1] < 1) {
                     exceptionArr.push(element[k]);
-                    element.splice(k,1);
+                    element.splice(k, 1);
                     k--;
-                }else{
+                } else {
                     x.push(point[0]);
                     y.push(point[1]);
                 }
-
             }
-            
         }
-    }else{
+    } else {
         ydata.forEach(e => average += Number(e));
-        average = average/Number(ydata.length);
+        average = average / Number(ydata.length);
         for (let index = 0; index < scatterSeriesData.length - 1; index++) {
             const element = scatterSeriesData[index].data;
             for (let k = 0; k < element.length; k++) {
                 const point = element[k].value;
-                if(point[0] > 2.5 || point[0] < -2 || point[1] > 3*average || point[1] < -2*average){
+                if (point[0] > 2.5 || point[0] < -2 || point[1] > 3 * average || point[1] < -2 * average) {
                     exceptionArr.push(element[k]);
-                    element.splice(k,1);
+                    element.splice(k, 1);
                     k--;
-                }else{
+                } else {
                     x.push(point[0]);
                     y.push(point[1]);
                 }
-
             }
-            
         }
     }
 
@@ -376,77 +372,77 @@ function getScatterSeries(names, datas, legendata) {
         const ele = nameArr[index];
 
         let item = {};
-            item = {
-                name: ele.slice(0, 2),
-                type: 'scatter',
-                data: datas.slice(startNum, startNum + names[ele]),
-                label: {
-                    show: false,
-                    color: '#fff',
+        item = {
+            name: ele.slice(0, 2),
+            type: 'scatter',
+            data: datas.slice(startNum, startNum + names[ele]),
+            label: {
+                show: false,
+                color: '#fff',
+                // formatter: function(params) {
+                //     console.log(params);
+                //     return `${params.name}`;
+                // },
+                formatter: '{b}',
+                emphasis: {
+                    show: true,
                     // formatter: function(params) {
+                    //     return params.name + '';
                     //     console.log(params);
-                    //     return `${params.name}`;
                     // },
                     formatter: '{b}',
-                    emphasis: {
-                        show: true,
-                        // formatter: function(params) {
-                        //     return params.name + '';
-                        //     console.log(params);
-                        // },
-                        formatter: '{b}',
-                        position: 'top'
-                    }
+                    position: 'top'
                 }
-            };
+            }
+        };
         target.push(item);
         startNum += names[ele];
     }
     target.push({
-                name: 'line',
-                type: 'scatter',
-                data: [],
-                label: {
-                    show: false,
-                    color: '#fff',
-                    formatter: function(params) {
-                        return `${params.name}`;
-                    },
-                    emphasis: {
-                        show: true,
-                        formatter: function(params) {
-                            return params.name + '';
-                        },
-                        position: 'top'
-                    }
+        name: 'line',
+        type: 'scatter',
+        data: [],
+        label: {
+            show: false,
+            color: '#fff',
+            formatter: function(params) {
+                return `${params.name}`;
+            },
+            emphasis: {
+                show: true,
+                formatter: function(params) {
+                    return params.name + '';
                 },
-                markLine: {
-                    symbol: ['none', 'arrow'],
-                    silent: true,
-                    data: [{
-                        yAxis: 52,
-                        lineStyle: {
-                            type: 'solid',
-                           // color: '#ffcc00'
-                            color:'#fff'
-                        },
-                        label: {
-                            formatter: 'PUE同比增幅'
-                        }
-                    },
-                    {
-                        xAxis: 175,
-                        lineStyle: {
-                            type: 'solid',
-                            //color: '#ffcc00'
-                            color:'#fff'
-                        },
-                        label: {
-                            formatter: 'PUE'
-                        }
-                    }]
+                position: 'top'
+            }
+        },
+        markLine: {
+            symbol: ['none', 'arrow'],
+            silent: true,
+            data: [{
+                yAxis: 52,
+                lineStyle: {
+                    type: 'solid',
+                    // color: '#ffcc00'
+                    color: '#fff'
+                },
+                label: {
+                    formatter: 'PUE同比增幅'
                 }
-            });      
+            },
+            {
+                xAxis: 175,
+                lineStyle: {
+                    type: 'solid',
+                    // color: '#ffcc00'
+                    color: '#fff'
+                },
+                label: {
+                    formatter: 'PUE'
+                }
+            }]
+        }
+    });
     return target;
 }
 </script>
@@ -458,7 +454,7 @@ function getScatterSeries(names, datas, legendata) {
        // margin-bottom: 30px;
         &>div{
 
-            background-color: rgba(16,162,249,0.1);
+            background-color: rgba(16,162,249,0);
             position: absolute;
              border: 0.08rem solid rgba(16,162,249,0.5);
              border-radius: 0.6rem;

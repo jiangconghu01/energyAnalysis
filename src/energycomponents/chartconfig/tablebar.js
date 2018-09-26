@@ -42,7 +42,7 @@ const option = {
                     color: '#fff',
                     width: 1,
                     type: 'solid',
-                    opacity: 0.1
+                    opacity: 0.2
                 },
             },
             axisTick: {
@@ -52,7 +52,7 @@ const option = {
                     color: '#fff',
                     width: 1,
                     type: 'solid',
-                    opacity: 0.3
+                    opacity: 0.6
                 },
             }
         }

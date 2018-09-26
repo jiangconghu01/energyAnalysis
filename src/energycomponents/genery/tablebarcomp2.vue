@@ -272,7 +272,7 @@ export default {
                             white-space: nowrap;
                             text-overflow: ellipsis;
                         }
-                        background-color: rgba(103, 179, 238, 0.5);
+                        background-color:  rgba(134, 167, 204, 0.2); 
                         &>div{
                             float: left;
                             height: 100%;
