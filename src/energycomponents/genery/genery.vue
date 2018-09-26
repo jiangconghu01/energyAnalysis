@@ -20,19 +20,19 @@
                 <div :class="$style['left-bottom-tip']">
                     <div :class="$style['table-title']">
                         <ul>
-                            <li> 大网综合能耗(吨标煤)</li>
-                            <li>IDC电耗(万度)</li>
+                            <li> <span>大网综合能耗</span></li>
+                            <li><span>IDC电耗</span></li>
                         </ul>
                     </div>
                     <table>
                         <tbody>
                             <tr>        
                                 <td v-for="(ele,index) in leftBottom.listNetCost" :key="index">{{parseInt(ele)}}</td>
-                                <td :class="$style.last"></td>
+                                <td :class="$style.last">吨标煤</td>
                             </tr>
                             <tr>
                                 <td v-for="(ele,index ) in leftBottom.listIDCCost" :key="index">{{parseInt(ele)}}</td>
-                                <td :class="$style.last"></td>
+                                <td :class="$style.last">万度</td>
                             </tr>
                         </tbody>
                     </table>
@@ -338,12 +338,12 @@ export default {
                 return Number(params.value) === 0 ? '0' : params.value;
             }
             option.yAxis[0].axisLabel = {
-                color: '#fff',
+                color: '#F1F7FC',
                 fontSize: 12,
                 fontWeight: 200,
                 //rotate:30,
                 formatter: (val) => {
-                    return parseFloat(val * 100).toFixed(2) + '%';
+                    return parseInt(val * 100)+ '%';
                 }
             };
             if(this.mapMoudle === 'province' || this.mapMoudle === 'city'){
@@ -563,11 +563,12 @@ function addCodes(code, count) {
 </script>
 
 <style lang="scss" module>
+//@import '../../css/energyanalysis.scss';
     .content{
         position: relative;
         height: 100%;
         &>div{
-            background-color: rgba(16,162,249,0.1);
+            background-color: rgba(16,162,249,0);
             position: absolute;
             border: 0.08rem solid rgba(16,162,249,0.5);
             border-radius: 0.6rem;
@@ -589,7 +590,7 @@ function addCodes(code, count) {
                 width: 100px;
                 height: 120px;
                 padding-top: 40px;
-                color: #fff;
+                color: #F1F7FC;
                 span{
                     width: 100px;
                     display: inline-block;
@@ -612,7 +613,7 @@ function addCodes(code, count) {
                // height: 80px;
                 background-color: rgba(16,162,249,0.8);
                 border-radius: 0.3em;
-                color:#fff;
+                color:#F1F7FC;
                 padding: 5px 0;
                 ul{
                     li{
@@ -646,7 +647,7 @@ function addCodes(code, count) {
                 position: absolute;
             }
             .left-bottom-tip{
-                color:#fff;
+                color:#F1F7FC;
                 width: 100%;
                 height:20%;
                 font-weight: bold;
@@ -659,12 +660,23 @@ function addCodes(code, count) {
                     
                     ul{
                         list-style: none;
+                        height: 100%;
+                        li{
+                            position: relative;
+                            padding-left: 15%;
+                            height: 50%;
+                            span{
+                                display: inline-block;
+                                position: absolute;
+                                top:50%;
+                                transform: translateY(-50%);
+                            }
+                        }
                     }
                     
                 }
                 table{
                     float: left;
-                    margin-top:5px;
                     width: calc(100% - 100px);
                     height: 100%;
                     text-align: center; 
@@ -718,7 +730,7 @@ function addCodes(code, count) {
                 bottom: 55%;
                 ul li{
                     list-style: none;
-                    color:#fff;
+                    color:#F1F7FC;
                     width:60px;
                     height: 30px;
                     line-height: 30px;

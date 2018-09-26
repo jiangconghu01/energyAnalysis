@@ -5,9 +5,10 @@ const electricBasicPage = (() => {
         'NHDP0036',
         'NHDP0037',
         'NHDP0038',
-        'NHDP0039',
+        'NHDP0039'
     ];
     for (let index = 52; index < 119; index++) {
+        //防止和countyEncodeArr 这个重复
         if (index === 62 || index === 63) {
             continue;
         }
@@ -18,7 +19,7 @@ const electricBasicPage = (() => {
 
 // 电力-主页-各地市级数据（左中和下）&&点击地图进入各区县级数据
 const cityEncodeArr = (() => {
-    let arr = ['NHDP0036', 'NHDP0037'];
+    let arr = ['NHDP0036', 'NHDP0037', 'NHDP0043', 'NHDP0048'];
     for (let index = 52; index < 64; index++) {
         arr.push(`NHDP00${index}`);
     }

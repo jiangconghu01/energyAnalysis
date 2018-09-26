@@ -4,7 +4,7 @@ const option = {
         left: 10,
         top: 10,
         textStyle: {
-            color: '#FFF',
+            color: '#F1F7FC',
             fontSize: 16,
             fontWeight: 300
         }
@@ -59,7 +59,7 @@ const option = {
         //     start: 0,
         //     end: 100,
         //     textStyle: {
-        //         color: '#fff'
+        //         color: '#F1F7FC'
         //     }
         // },
         // {
@@ -68,24 +68,27 @@ const option = {
         //     filterMode: 'empty'
         // },
 
-        // {
-        //     type: 'inside',
-        //     yAxisIndex: 0,
-        //     filterMode: 'empty'
-        // },
-        // {
-        //     type: 'inside',
-        //     xAxisIndex: 0,
-        //     filterMode: 'empty'
-        // }
+        {
+            type: 'inside',
+            yAxisIndex: 0,
+            filterMode: 'empty'
+        },
+        {
+            type: 'inside',
+            xAxisIndex: 0,
+            filterMode: 'empty'
+        }
     ],
+    geo: {
+        roam: true
+    },
     legend: {
         data: [],
         right: 10,
         y: 'center',
         orient: 'vertical',
         textStyle: {
-            color: '#FFF',
+            color: '#F1F7FC',
             fontSize: 12,
             fontWeight: 200
         }
@@ -99,11 +102,11 @@ const option = {
                 inside: false, // ---是否朝内
                 rotate: 0, // ---旋转角度
                 margin: 8, // ---刻度标签与轴线之间的距离
-                color: '#fff', // ---默认取轴线的颜色
+                color: '#F1F7FC', // ---默认取轴线的颜色
                 fontSize: 12,
                 fontWeight: 200,
                 formatter: (val) => {
-                    return parseFloat(val * 100).toFixed(2) + '%';
+                    return parseInt(val * 100) + '%';
                 }
             },
             axisTick: { // ---坐标轴 刻度
@@ -140,7 +143,7 @@ const option = {
         max: 75,
         axisLabel: {
             margin: 8, // ---刻度标签与轴线之间的距离
-            color: '#fff', // ---默认取轴线的颜色
+            color: '#F1F7FC', // ---默认取轴线的颜色
             fontSize: 12,
             fontWeight: 200,
             formatter: '{value}'
@@ -148,7 +151,7 @@ const option = {
         splitLine: {
             show: true,
             lineStyle: {
-                color: '#fff',
+                color: '#F1F7FC',
                 width: 1,
                 type: 'solid',
                 opacity: 0.1 // ---类型

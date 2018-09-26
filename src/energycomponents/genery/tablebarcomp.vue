@@ -102,7 +102,7 @@ export default {
     .component{
         height: 100%;
         width:100%;
-         color:#fff;
+         color:#F1F7FC;
         &>div{
             display: inline-block;
         }

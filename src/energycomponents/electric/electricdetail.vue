@@ -296,8 +296,8 @@ export default {
             configOption.dataZoom = [];
             let barLine = this.$echarts.init(document.getElementById('electric-detail-left-bottom'));
             this.$store.commit('setCharts', {name: 'chart2', val: barLine});
-            const encodes1 = ['NHDP0040', 'NHDP0041', 'NHDP0042','NHDP0044'];
-            const encodes2 = ['NHDP0045', 'NHDP0046', 'NHDP0047','NHDP0049'];
+            const encodes1 = ['NHDP0040', 'NHDP0042', 'NHDP0041', 'NHDP0044'];
+            const encodes2 = ['NHDP0045', 'NHDP0047', 'NHDP0046', 'NHDP0049'];
             let dataEcount = [];
             let dataEcost = [];
             let dataLineCount = [];
@@ -369,8 +369,8 @@ export default {
             this.$store.commit('setCharts', {name: 'chart3', val: barLine});
             configOption.title.text = '月度分析';
             configOption.xAxis[0].data = monthsxArr;
-            const encodes1 = ['NHDP0126', 'NHDP0127', 'NHDP0128', 'NHDP0130'];
-            const encodes2 = ['NHDP0131', 'NHDP0132', 'NHDP0133', 'NHDP0135'];
+            const encodes1 = ['NHDP0126', 'NHDP0128', 'NHDP0127', 'NHDP0130'];
+            const encodes2 = ['NHDP0131', 'NHDP0133', 'NHDP0132', 'NHDP0135'];
             let dataEcount = [];
             let dataEcost = [];
             let dataLineCount = [];

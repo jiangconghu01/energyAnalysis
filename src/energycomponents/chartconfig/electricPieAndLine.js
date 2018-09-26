@@ -42,7 +42,7 @@ const option = {
         itemWidth: 14,
         itemGap: 5,
         textStyle: {
-            color: '#FFF',
+            color: '#F1F7FC',
             fontSize: 12,
             fontWeight: 200
         }
@@ -56,7 +56,7 @@ const option = {
             inside: false, // ---是否朝内
             rotate: 0, // ---旋转角度
             margin: 8, // ---刻度标签与轴线之间的距离
-            color: '#fff', // ---默认取轴线的颜色
+            color: '#F1F7FC', // ---默认取轴线的颜色
             fontSize: 12,
             fontWeight: 200
         },
@@ -94,14 +94,13 @@ const option = {
             show: false
         },
         axisLabel: { // ---坐标轴 标签
-            color: '#fff', // ---默认取轴线的颜色
-            fontSize: 12,
-            fontWeight: 200
+            color: '#F1F7FC', // ---默认取轴线的颜色
+            fontSize: 10
         },
         splitLine: { // ---grid 区域中的分隔线
             show: true, // ---是否显示，'category'类目轴不显示，此时我的y轴为类目轴，splitLine属性是有意义的
             lineStyle: {
-                color: '#fff',
+                color: '#F1F7FC',
                 width: 1,
                 type: 'solid',
                 opacity: 0.1 // ---类型
@@ -116,8 +115,8 @@ const option = {
             trigger: 'item',
             formatter: '{a} {b} :<br/> {c} ({d}%)'
         },
-        center: ['65%', '25%'],
-        radius: ['15%', '35%'],
+        center: ['62%', '30%'],
+        radius: ['23%', '53%'],
         hoverAnimation: false,
         color: ['#79ddff', '#ffdd48', '#ffa848', '#ff66ec', '#6668ff'],
         itemStyle: {

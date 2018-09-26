@@ -18,8 +18,7 @@ module.exports = merge(common, {
                 // target: 'http://134.96.245.118:7001/',
                 target: 'http://localhost:3000/',
                 changeOrigin: true,
-                secure: false,
-                // auth: 'admin_jch': '1q2w3e4r'
+                secure: false
             }
         }
     },

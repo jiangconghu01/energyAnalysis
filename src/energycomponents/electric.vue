@@ -115,7 +115,7 @@ import {
     countyEncodeArr,
     getCountyCode,
     getCountyName,
-
+    exceEncodeArr,
     getCountyCodeOne
 }
     from './electric/origindata.js';
@@ -127,6 +127,7 @@ export default {
             rightCurrent: 1,
             sourceData: {},
             sourceCountryData: {},
+            ecxeptionData: [],
             rightBottom: {
                 eleOfficePoint: [],
                 elecountList: [],
@@ -177,9 +178,21 @@ export default {
             return val || 0;
         },
         allException() {
-            const encodes = [];
-            for (let index = 113; index < 119; index++) {
-                encodes.push(`NHDP0${index}`);
+            const encodes = exceEncodeArr;
+            // for (let index = 113; index < 119; index++) {
+            //     //先屏蔽'合同电价异常'和单表电量异常
+            //     if (index === 113 || index === 116) {
+            //         continue;
+            //     }
+            //     encodes.push(`NHDP0${index}`);
+            // }
+            if(this.mapMoudle === 'province'){
+                const source = this.ecxeptionData;
+                if(source.length === 0){
+                    return 0;
+                }
+                const numArr = source.map(ele => ~~ele['indexVlue']);
+                return ~~eval(numArr.join('+'));
             }
             const arr = this.mapMoudle === 'country'?
             searchEncsArr(encodes, this.currentCity, this.sourceCountryData):
@@ -297,54 +310,53 @@ export default {
                 console.warn(error);
             });
         },
+        getAxiosDataToException(date){
+            const cityCodes = jzMap.arrCode;
+            const encodes = exceEncodeArr;
+            const param = getCityParam(date, cityCodes, encodes);
+            const postData = this.$store.getters.module === 'dev' ? {paramArrs: param } : this.$qs.stringify({
+                paramArrs: param 
+            });
+            this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then(res => {
+                this.ecxeptionData = res.data;
+                console.log(res.data);
+            }).catch(err => {
+                console.warn(err);
+            });
+        },
         setPUEData(arr) {
             let line = this.$echarts.init(document.getElementById('electric-all-lt'));
             this.$store.commit('setCharts', {name: 'chart1', val: line});
             const lineOption = JSON.parse(JSON.stringify(ConfigLine));
-            const encodes = ['NHDP0062', 'NHDP0063'];
+            const encodes = ['NHDP0062', 'NHDP0063', 'NHDP0043', 'NHDP0048'];
             let data = [];
             let pueType = {};
+            let codeArr  = [];
+            let cityArr = [];
             if (this.mapMoudle === 'country') {
-                let codeArr = [this.currentCity];
-                let cityArr = [this.countryNameOne];
-
-                data = searchValsArr(encodes, codeArr,arr);
-                pueType = {
-                    xAxisData: cityArr,
-                    pueAdata: data[0],
-                    pueBdata: data[1]
-                };
+                codeArr = [this.currentCity];
+                cityArr = [this.countryNameOne];
             }
             if (this.mapMoudle === 'city') {
-                let codeArr = this.currentCityCodeArr;
-                let cityArr = this.currentCityArr;
-
-                data = searchValsArr(encodes, codeArr,arr);
-                pueType = {
-                    xAxisData: cityArr,
-                    pueAdata: data[0],
-                    pueBdata: data[1]
-                };
+                codeArr = this.currentCityCodeArr;
+                cityArr = this.currentCityArr;
             }
             if (this.mapMoudle === 'company') {
-                let codeArr = [this.currentCity];
-                let cityArr = [jzMap.mapName[this.currentCity]];
-
-                data = searchValsArr(encodes, codeArr,arr);
-                pueType = {
-                    xAxisData: cityArr,
-                    pueAdata: data[0],
-                    pueBdata: data[1]
-                };
+                codeArr = [this.currentCity];
+                cityArr = [jzMap.mapName[this.currentCity]];
             }
             if (this.mapMoudle === 'province') {
-                data = searchValsArr(encodes, jzMap.arrCode, arr);
-                pueType = {
-                    xAxisData: jzMap.arrName,
-                    pueAdata: data[0],
-                    pueBdata: data[1]
-                };
+                codeArr = jzMap.arrCode;
+                cityArr = jzMap.arrName;
             }
+            data = searchValsArr(encodes, codeArr,arr);
+            pueType = {
+                xAxisData: cityArr,
+                pueAdata: data[0],
+                pueBdata: data[1],
+                pueCdata: data[2],
+                pueDdata: data[3]
+            };            
             lineOption.yAxis[0].max = 3;
             lineOption.yAxis[0].min = 1;
             lineOption.yAxis[0].splitNumber = 5;
@@ -372,6 +384,30 @@ export default {
                 }
                 return obj;
             });
+            let c = pueType.pueCdata.map((ele) => {
+                let obj = {};
+                obj.name = parseFloat(ele).toFixed(2) + '';
+                if (ele < 1) {
+                    obj.value = 1;
+                } else if (ele <= 3) {
+                    obj.value = parseFloat(ele).toFixed(2);
+                } else {
+                    obj.value = 3;
+                }
+                return obj;
+            });
+            let d = pueType.pueDdata.map((ele) => {
+                let obj = {};
+                obj.name = parseFloat(ele).toFixed(2) + '';
+                if (ele < 1) {
+                    obj.value = 1;
+                } else if (ele <= 3) {
+                    obj.value = parseFloat(ele).toFixed(2);
+                } else {
+                    obj.value = 3;
+                }
+                return obj;
+            });
             lineOption.label.formatter = (params) => {
                 if (params.value === 1 || params.value === 3) {
                     if (Number(params.name) === 0) {
@@ -382,12 +418,21 @@ export default {
                     return params.value;
                 }
             };
+            // lineOption.tooltip.formatter = params => {
+            //     console.log(params);
+            // }
             if(this.mapMoudle === 'province' || this.mapMoudle === 'city'){
                 lineOption.xAxis[0].axisLabel.rotate = 35;
+            }
+            lineOption.yAxis[0].axisLabel.formatter = function(value, index) {
+                console.log(value);
+                return parseFloat(value).toFixed(1);
             }
             lineOption.xAxis[0].data = pueType.xAxisData && pueType.xAxisData;
             lineOption.series[0].data = a && a;
             lineOption.series[1].data = b && b;
+            lineOption.series[2].data = c && c;
+            lineOption.series[3].data = d && d;
             line.setOption(lineOption);
         },
         setLeftBottom(arr) {
@@ -451,7 +496,6 @@ export default {
             if(this.mapMoudle === 'province' || this.mapMoudle === 'city'){
                 configOption.xAxis[0].axisLabel.rotate = 35;
             }
-            console.log(configOption);
             pieLine.setOption(configOption);
         },
         setMap(arr, code,countryToUpdateCityMap) {
@@ -563,9 +607,10 @@ export default {
             let encodes1 = [];
             let encodes2 = [];
             if (this.rightCurrent === 4) {
-                encodes1 = ['NHDP0103', 'NHDP0104', 'NHDP0105', 'NHDP0106', 'NHDP0107'];
-                encodes2 = ['NHDP0108', 'NHDP0109', 'NHDP0110', 'NHDP0111', 'NHDP0112'];
-                const Xdata2 = ['转供电', '铁塔转供', '铁塔直供', '协议栈转供', '其他'];
+                encodes1 = ['NHDP0103', 'NHDP0104', 'NHDP0106', 'NHDP0105', 'NHDP0107'];
+                encodes2 = ['NHDP0108', 'NHDP0110', 'NHDP0109',  'NHDP0111', 'NHDP0112'];
+                const Xdata1 = ['直供电', '大工业', '一般工商', '居民生活', '不明'];
+                const Xdata2 = ['转供电','铁塔直供', '铁塔转供', '其他转供', '不明'];
                 this.$nextTick(() => {
                     let line1 = this.$echarts.init(document.getElementById('electric-right-bottom-line1'));
                     let line2 = this.$echarts.init(document.getElementById('electric-right-bottom-line2'));
@@ -592,6 +637,7 @@ export default {
                     //     }
                     // };
                     lineOption1.series[0].data = data1;
+                    lineOption1.xAxis[0].data = Xdata1;
                     lineOption1.series[0].color = (params) => {
                         const colorList = ['#ffa848', '#fad04e', '#fad04e', '#fad04e', '#fad04e'];
                         return colorList[params.dataIndex];
@@ -661,6 +707,7 @@ export default {
     },
     created() {
         this.getAxiosData(this.currentMonth);
+        this.getAxiosDataToException(this.currentMonth);
     },
     beforeDestroy() {
 
@@ -852,7 +899,7 @@ function getLabel(type, data, width) {
         overflow-y: hidden;
         &>div{
 
-            background-color: rgba(16,162,249,0.1);
+            background-color: rgba(16,162,249,0);
             border: 0.08rem solid rgba(16,162,249,0.5);
             position: absolute;
             border-radius: 0.6rem;

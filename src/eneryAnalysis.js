@@ -13,6 +13,7 @@ import './css/style.css';
 import http from './ajax.js';
 // Vue.use(VueBus);
 // axios.defaults.headers.post['Content-type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.withCredentials = true;
 Vue.use(iView);
 Vue.prototype.$qs = qs;
 Vue.prototype.$echarts = echarts;

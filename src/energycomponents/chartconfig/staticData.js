@@ -34,7 +34,7 @@ const topImpData = [
     { title: 'IDC客户电费与收入比Top10', subtitle: '(当前累计)', leg1: 'IDC客户电费', leg2: '收入' },
     { title: '实际能耗费波动Top10', leg1: '本月', leg2: '上月' }
 ];
-const detailXarr = ['定额线', '大工业用电', '居民生活用电', '一般商业', '其他'];
+const detailXarr = ['定额线', '大工业用电', '一般工商', '居民生活用电', '不明'];
 const tableTh = [
     '序号',
     '异常指标', '异常说明', '异常统计规则', '异常月份', '累计规则', '异常数量',

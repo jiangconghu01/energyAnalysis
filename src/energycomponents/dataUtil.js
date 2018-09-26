@@ -273,6 +273,8 @@ function getMonthsArr(date) {
             index > 9 ? monthArr.xMonths.unshift(`${year}/${index}`) : monthArr.xMonths.unshift(`${year}/0${index}`);
         }
     }
+    monthArr.xMonths = monthArr.xMonths.reverse();
+    monthArr.sMonths = monthArr.sMonths.reverse();
     return monthArr;
 }
 // 根据月份数组，编号数组和城市编号生成查询参数
@@ -372,7 +374,7 @@ function generyRBData(arr, code) {
                 rb.electric.push({ name: '电表回路数', val: parseInt(arr[index].indexVlue) });
                 break;
             case 'NHDP0034':
-                rb.electric.push({ name: '接口接入', val: parseInt(arr[index].indexVlue) });
+                rb.electric.push({ name: '接口接入数量', val: parseInt(arr[index].indexVlue) });
                 break;
             case 'NHDP0035':
                 rb.electric.push({ name: '报账纳管数量', val: parseInt(arr[index].indexVlue) });

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
+axios.defaults.withCredentials = true;
 const http = {
     get(url, params) {
         params = params || {};

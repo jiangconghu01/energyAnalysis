@@ -22,7 +22,7 @@ const option = {
         // data: ['电费', '电量', '油费', '油耗', '水费', '水量', '燃气费', '燃气耗量'],
         data: [],
         textStyle: {
-            color: '#FFF',
+            color: '#F1F7FC',
             fontSize: 12,
             fontWeight: 200
         }
@@ -50,7 +50,7 @@ const option = {
                         show: true,
                         length: 10,
                         lineStyle: {
-                            color: '#fff',
+                            color: '#F1F7FC',
                             width: 1
                         }
                     }
@@ -68,7 +68,7 @@ const option = {
                         show: true,
                         length: 10,
                         lineStyle: {
-                            color: '#fff',
+                            color: '#F1F7FC',
                             width: 1
                         }
                     }
