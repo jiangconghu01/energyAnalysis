@@ -1,4 +1,3 @@
-
 const option = {
     tooltip: {
         trigger: 'axis',
@@ -14,77 +13,73 @@ const option = {
         x2: 0,
         y2: -3
     },
-    xAxis: [
-        {
-            type: 'value',
-            position: 'top',
-            // data: ['10', '100', ''],
-            // boundaryGap: [0, 0.01],
-            max: 1,
-            splitNumber: 5,
-            // min: 0,
-            axisLabel: {
-                margin: 0, // ---刻度标签与轴线之间的距离
-                color: '#fff', // ---默认取轴线的颜色
-                fontSize: 12,
-                fontWeight: 200,
-                align: 'left',
-                formatter: function(value, index) {
-                    return value + '33';
-                }
-            },
-            splitLine: {
-                show: false,
-            },
-            axisLine: {
-                show: true,
-                lineStyle: {
-                    color: '#fff',
-                    width: 1,
-                    type: 'solid',
-                    opacity: 0.2
-                },
-            },
-            axisTick: {
-                show: true,
-                inside: true,
-                lineStyle: {
-                    color: '#fff',
-                    width: 1,
-                    type: 'solid',
-                    opacity: 0.6
-                },
+    xAxis: [{
+        type: 'value',
+        position: 'top',
+        // data: ['10', '100', ''],
+        // boundaryGap: [0, 0.01],
+        max: 1,
+        splitNumber: 5,
+        // min: 0,
+        axisLabel: {
+            margin: 0, // ---刻度标签与轴线之间的距离
+            color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
+            fontSize: 12,
+            fontWeight: 200,
+            align: 'left',
+            formatter: function(value, index) {
+                return value + '33';
             }
+        },
+        splitLine: {
+            show: false,
+        },
+        axisLine: {
+            show: true,
+            lineStyle: {
+                color: 'rgba(255, 255, 255, 0.8)',
+                width: 1,
+                type: 'solid',
+                opacity: 0.2
+            },
+        },
+        axisTick: {
+            show: true,
+            inside: true,
+            lineStyle: {
+                color: 'rgba(255, 255, 255, 0.8)',
+                width: 1,
+                type: 'solid',
+                opacity: 0.6
+            },
         }
-    ],
-    yAxis: [
-        {
-            type: 'category',
-            // data: ['巴西', '印尼', '美国', '印度', '中国', '世界'],
-            data: ['test'],
-            axisLabel: {
-                margin: 0, // ---刻度标签与轴线之间的距离
-                color: '#fff', // ---默认取轴线的颜色
-                fontSize: 12,
-                fontWeight: 200,
+    }],
+    yAxis: [{
+        type: 'category',
+        // data: ['巴西', '印尼', '美国', '印度', '中国', '世界'],
+        data: ['test'],
+        axisLabel: {
+            margin: 0, // ---刻度标签与轴线之间的距离
+            color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
+            fontSize: 12,
+            fontWeight: 200,
+        },
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            show: false,
+            lineStyle: {
+                color: 'rgba(255, 255, 255, 0.8)',
+                width: 1,
+                type: 'solid',
+                opacity: 0.1
             },
-            splitLine: {
-                show: false
-            },
-            axisLine: {
-                show: false,
-                lineStyle: {
-                    color: '#fff',
-                    width: 1,
-                    type: 'solid',
-                    opacity: 0.1
-                },
-            },
-            axisTick: {
-                show: false
-            }
+        },
+        axisTick: {
+            show: false
         }
-    ],
+    }],
     series: [
         // {
         //     name: '同1',

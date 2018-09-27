@@ -143,7 +143,7 @@ function getCurrent(path) {
 </script>
 
 <style lang="scss" module>
-@import './css/energyanalysis.scss';
+//@import './css/energyanalysis.scss';
 .index{
     width: 100%;
     height: 100%;
@@ -180,7 +180,7 @@ function getCurrent(path) {
             .logo-img{
                 height: 100%;
                 font-size: 20px;
-                color: #F1F7FC;
+                color:rgba(255, 255, 255, 0.8);
                 vertical-align: bottom;
                 padding-top:8px;
                 padding-left:15px;
@@ -188,7 +188,7 @@ function getCurrent(path) {
             .logo-text{
                 height: 100%;
                 vertical-align: bottom;
-                color: #F1F7FC;
+                color:rgba(255, 255, 255, 0.8);
                 font-size: 16px;
                 padding-top:12px;
             }
@@ -276,7 +276,7 @@ function getCurrent(path) {
     background-color: rgba(255,255,255,0);
     opacity: 1;
     cursor: pointer;
-    color: #F1F7FC;
+    color:rgba(255, 255, 255, 0.8);
 }
 .ivu-picker-panel-body{
     background-color: rgba(16, 162, 249, 1);

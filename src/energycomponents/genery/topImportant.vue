@@ -24,7 +24,7 @@
                 <div :class="$style['right-top-map']" id="right-top-map">
                 </div>
                 <div v-show="mapMoudle==='city'" :class="$style['right-top-back']">
-                    <i-button type="primary" @click="goBack()" :style="{borderColor: '#fff'}">
+                    <i-button type="primary" @click="goBack()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
                         <Icon type="chevron-left"></Icon>
                         返回
                     </i-button>

@@ -42,7 +42,7 @@
                 <div id="genery-right-top" :class="$style['right-top']"></div>
                 <!-- <div id="genery-right-top2" :class="$style['right-top']" style="z-index:1000;width:50%;"></div> -->
                 <div v-show="mapMoudle==='city' || mapMoudle==='country'" id="genery-right-topcity" :class="[$style['right-top-back']]">
-                        <i-button type="primary" @click="goBack()" :style="{borderColor: '#fff'}">
+                        <i-button type="primary" @click="goBack()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
                             <Icon type="chevron-left"></Icon>
                             返回
                         </i-button>
@@ -301,6 +301,12 @@ export default {
                     ele.labelLine.show = true;
                 }
             });
+            ConfigPie.series[0].itemStyle.normal.label.formatter = params =>{
+                return `总${params.data.name}费(万元)\n${formatNumberRgx(params.data.value)}`;
+            }
+            ConfigPie.series[1].itemStyle.normal.label.formatter = params =>{
+                return `总${params.data.name}量(吨标煤)\n${formatNumberRgx(params.data.value)}`;
+            }
             // const legendList = ['电费', '油费', '其他费用', '电量', '油耗', '其他耗量'];
             const legendList = ['电', '油', '其他'];
             this.negativeList = getNagetiveList(legendList, listVal);
@@ -368,9 +374,22 @@ export default {
             let len = this.currentCityArr.length - 1;
             option.yAxis[0].min = this.mapMoudle === 'country' || this.mapMoudle === 'company' ? 0 : min;
             option.yAxis[0].max = max > warn ? max : warn;
+            option.series[0].label.formatter=params => {
+                return `${parseInt(params.value*100)}%`;
+            }
+            option.series[1].label.formatter=params => {
+                return `${parseInt(params.value*100)}%`;
+            }
             option.series[2].markLine = {
                 symbol: ['none'],
                 // silent: true,
+                label:{
+                    color:'#7bfcfd',
+                    //position:'middle',
+                    formatter:params => {
+                        return `\n${parseInt(params.value*100)}%`;
+                    }
+                },                
                 data: [{
                     yAxis: guid,
                     lineStyle: {
@@ -381,6 +400,12 @@ export default {
             };
             option.series[3].markLine = {
                 symbol: ['none'],
+                label:{
+                    color:'#ffa354',
+                    formatter:params => {
+                        return `${parseInt(params.value*100)}%\n`;
+                    }
+                },
                 data: [
                     {
                         yAxis: warn,
@@ -587,7 +612,7 @@ function addCodes(code, count) {
                 width: 100px;
                 height: 120px;
                 padding-top: 40px;
-                color: #F1F7FC;
+                color:rgba(255, 255, 255, 0.8);
                 span{
                     width: 100px;
                     display: inline-block;

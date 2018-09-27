@@ -19,7 +19,7 @@ const option = {
         left: '10',
         top: '10',
         textStyle: {
-            color: '#FFF',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 16,
             fontWeight: 300
         }
@@ -30,7 +30,7 @@ const option = {
         right: 10,
         top: '10',
         textStyle: {
-            color: '#FFF'
+            color: 'rgba(255, 255, 255, 0.8)'
         }
     },
     tooltip: {
@@ -54,7 +54,7 @@ const option = {
         //min: -2,
         axisLabel: {
             margin: 8, // ---刻度标签与轴线之间的距离
-            color: '#fff', // ---默认取轴线的颜色
+            color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
             fontSize: 12,
             fontWeight: 200,
             formatter: (val) => {
@@ -64,7 +64,7 @@ const option = {
         splitLine: {
             show: true,
             lineStyle: {
-                color: '#fff',
+                color: 'rgba(255, 255, 255, 0.8)',
                 width: 1,
                 type: 'solid',
                 opacity: 0.1 // ---类型
@@ -82,7 +82,7 @@ const option = {
         data: data.x,
         axisLabel: {
             margin: 8, // ---刻度标签与轴线之间的距离
-            color: '#fff', // ---默认取轴线的颜色
+            color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
             fontSize: 12,
             fontWeight: 200,
         },
@@ -92,7 +92,7 @@ const option = {
         axisLine: {
             show: true,
             lineStyle: {
-                color: '#fff',
+                color: 'rgba(255, 255, 255, 0.8)',
                 width: 1,
                 type: 'solid',
                 opacity: 0.1
@@ -110,7 +110,7 @@ const option = {
             start: 80,
             end: 100,
             textStyle: {
-                color: '#fff'
+                color: 'rgba(255, 255, 255, 0.8)'
             }
         },
         // {

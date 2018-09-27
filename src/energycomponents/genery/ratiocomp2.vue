@@ -59,7 +59,7 @@ export default {
             height: 10%;
             width: 100%;
             top:1%;
-            color:#fff;
+            color:#F1F7FC;
             .title-text{
                 display: inline-block;
                 height: 100%;

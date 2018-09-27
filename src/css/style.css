@@ -1,13 +1,15 @@
-
 /* 集中修改iview组件库的默认样式 */
-.ivu-btn.ivu-btn-ghost{
-    color:white;
+
+.ivu-btn.ivu-btn-ghost {
+    color: rgba(255, 255, 255, 0.8);
     font-weight: bold;
-    border-color:rgba(16, 162, 249, 1);
+    border-color: rgba(16, 162, 249, 1);
 }
-.ivu-btn.ivu-btn-ghost:hover{
-    color:white;
+
+.ivu-btn.ivu-btn-ghost:hover {
+    color: rgba(255, 255, 255, 0.8);
 }
-.ivu-btn-ghost.ivu-btn-small{
-    padding:2px 14px;
+
+.ivu-btn-ghost.ivu-btn-small {
+    padding: 2px 14px;
 }

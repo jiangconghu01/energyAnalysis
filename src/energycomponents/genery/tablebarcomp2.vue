@@ -175,7 +175,7 @@ export default {
             configco.xAxis[0].axisLabel = {
                 show: !isNor,
                 margin: 0,
-                color: '#fff',
+                color: 'rgba(255, 255, 255, 0.8)',
                 fontSize: 12,
                 fontWeight: 200,
                 align: 'right',
@@ -215,7 +215,7 @@ export default {
     .component{
         height: 100%;
         width:100%;
-         color:#fff;
+         color:rgba(255, 255, 255, 0.8);
         &>div{
             display: inline-block;
         }

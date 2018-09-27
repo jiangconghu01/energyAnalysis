@@ -237,7 +237,7 @@ export default {
             background-color: rgba(16,162,249,1);
           
             border: 0.08rem solid rgba(16,162,249,1); 
-            color:#fff; 
+            color:rgba(255, 255, 255, 0.8); 
             tr th{
                 border: 1px solid rgba(0,0,0,0.2);
                 border-top: none;
@@ -247,7 +247,7 @@ export default {
         .table-body{
                 padding-bottom: 40px;
             //background-color: rgba(16,162,249,0.5);
-              background-color:#fff;
+              background-color:rgba(255, 255, 255, 0.8);
            border: 0.08rem solid rgba(16,162,249,0.5);
            
           

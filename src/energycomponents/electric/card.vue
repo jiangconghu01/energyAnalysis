@@ -93,7 +93,7 @@ export default {
 .component{
     width: 100%;
     height: 100%;
-    color: white;
+    color: rgba(255, 255, 255, 0.8);
     font-size: 16px;
     @media screen and (max-width: 1100px){
         font-size: 14px;

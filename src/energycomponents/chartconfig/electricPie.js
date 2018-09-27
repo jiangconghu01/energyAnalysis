@@ -4,7 +4,7 @@ const ConfigElePie1 = {
         left: '5px', // 标题的位置 默认是left，其余还有center、right属性
         // bottom: '20%',
         textStyle: {
-            color: '#FFF',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 16,
             fontWeight: 300
         }
@@ -19,7 +19,7 @@ const ConfigElePie1 = {
         y: 0,
         data: ['直供电', '转供电'],
         textStyle: {
-            color: '#FFF',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 12,
             fontWeight: 200
         }
@@ -62,7 +62,7 @@ const ConfigElePie2 = {
         center: ['20%', '50%'],
         data: [],
         // color: ['rgba(255,255,255,0)'],
-        color: ['#fff'],
+        color: ['rgba(255, 255, 255, 0.8)'],
         startAngle: 0,
         hoverAnimation: false,
         itemStyle: {

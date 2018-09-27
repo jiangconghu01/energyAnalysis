@@ -11,6 +11,7 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 import './css/style.css';
 import http from './ajax.js';
+import './css/energyanalysis.scss';
 // Vue.use(VueBus);
 // axios.defaults.headers.post['Content-type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.withCredentials = true;

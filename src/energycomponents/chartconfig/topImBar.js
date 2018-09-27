@@ -21,7 +21,7 @@ const option = {
         left: '10',
         top: '0',
         textStyle: {
-            color: '#FFF',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 14,
             fontWeight: 300
         }
@@ -33,7 +33,7 @@ const option = {
         top: 0,
         data: [],
         textStyle: {
-            color: '#FFF',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 12,
             fontWeight: 200
         }
@@ -73,7 +73,7 @@ const option = {
         axisLabel: {
             // align: 'right',
             margin: 6, // ---刻度标签与轴线之间的距离
-            color: '#fff', // ---默认取轴线的颜色
+            color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
             fontSize: 12,
             fontWeight: 200,
             formatter: (data) => {
@@ -105,23 +105,23 @@ const option = {
         }
     }],
     series: [{
-        name: '能源费',
-        type: 'bar',
-        color: '#ffcc00',
-        barWidth: '4', // ---柱形宽度
-        // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
-        data: data.d
-    },
-    {
-        name: '收入',
-        type: 'bar',
-        color: '#2bfcff',
-        barWidth: '4', // ---柱形宽度
-        barGap: '100%',
-        barCategoryGap: '5%', // ---柱形间距
-        // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
-        data: data.d
-    }
+            name: '能源费',
+            type: 'bar',
+            color: '#ffcc00',
+            barWidth: '4', // ---柱形宽度
+            // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
+            data: data.d
+        },
+        {
+            name: '收入',
+            type: 'bar',
+            color: '#2bfcff',
+            barWidth: '4', // ---柱形宽度
+            barGap: '100%',
+            barCategoryGap: '5%', // ---柱形间距
+            // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
+            data: data.d
+        }
     ]
 };
 

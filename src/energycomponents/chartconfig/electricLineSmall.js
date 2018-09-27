@@ -22,7 +22,7 @@ const option = {
         x: 'right', // 图例显示在右边
         y: 'top', // 图例在垂直方向上面显示居中
         textStyle: {
-            color: '#FFF',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 12,
             fontWeight: 200
         }
@@ -39,7 +39,7 @@ const option = {
             inside: false, // ---是否朝内
             rotate: 0, // ---旋转角度
             margin: 8, // ---刻度标签与轴线之间的距离
-            color: '#fff', // ---默认取轴线的颜色
+            color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
             fontSize: 12,
             fontWeight: 200
         },
@@ -74,7 +74,7 @@ const option = {
             show: false
         },
         axisLabel: { // ---坐标轴 标签
-            color: '#fff', // ---默认取轴线的颜色
+            color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
             fontSize: 12,
             fontWeight: 200
         },
@@ -82,7 +82,7 @@ const option = {
             show: true, // ---是否显示，'category'类目轴不显示，此时我的y轴为类目轴，splitLine属性是有意义的
             lineStyle: {
                 // color: '#79ddff',
-                color: '#fff',
+                color: 'rgba(255, 255, 255, 0.8)',
                 width: 1,
                 type: 'solid',
                 opacity: 0.1 // ---类型

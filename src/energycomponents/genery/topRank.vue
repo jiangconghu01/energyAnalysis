@@ -1,8 +1,10 @@
 <template>
         <div :class="$style.content">
             <div :class="$style['left-all']">
-                <div :class="$style['levex-text']" v-show="home !== 'communication'">差</div>
-                <div :class="$style['levey-text']" v-show="home !== 'communication'">差</div>
+                <div :class="$style['levex-text-y']" v-show="home !== 'communication'">优</div>
+                <div :class="$style['levey-text-y']" v-show="home !== 'communication'">优</div>
+                <div :class="$style['levex-text-c']" v-show="home !== 'communication'">差</div>
+                <div :class="$style['levey-text-c']" v-show="home !== 'communication'">差</div>
                 <div id="rank-left-all" :class="$style['left-all-chart']"></div>
                 <!-- <div :class="$style['name-size-button']" v-show="home==='communication'">
                     单位名称显示
@@ -360,7 +362,7 @@ function getScatterSeries(names, datas, legendata) {
     //         data: [],
     //         label: {
     //             show: true,
-    //             color: '#fff',
+    //             color: 'rgba(255, 255, 255, 0.8)',
     //             formatter: function(params) {
     //                 return `${params.name}`;
     //             }
@@ -378,7 +380,7 @@ function getScatterSeries(names, datas, legendata) {
             data: datas.slice(startNum, startNum + names[ele]),
             label: {
                 show: false,
-                color: '#fff',
+                color: 'rgba(255, 255, 255, 0.8)',
                 // formatter: function(params) {
                 //     console.log(params);
                 //     return `${params.name}`;
@@ -404,7 +406,7 @@ function getScatterSeries(names, datas, legendata) {
         data: [],
         label: {
             show: false,
-            color: '#fff',
+            color: 'rgba(255, 255, 255, 0.8)',
             formatter: function(params) {
                 return `${params.name}`;
             },
@@ -424,7 +426,7 @@ function getScatterSeries(names, datas, legendata) {
                 lineStyle: {
                     type: 'solid',
                     // color: '#ffcc00'
-                    color: '#fff'
+                    color: 'rgba(255, 255, 255, 0.8)'
                 },
                 label: {
                     formatter: 'PUE同比增幅'
@@ -435,7 +437,7 @@ function getScatterSeries(names, datas, legendata) {
                 lineStyle: {
                     type: 'solid',
                     // color: '#ffcc00'
-                    color: '#fff'
+                    color: 'rgba(255, 255, 255, 0.8)'
                 },
                 label: {
                     formatter: 'PUE'
@@ -464,14 +466,28 @@ function getScatterSeries(names, datas, legendata) {
             width:57%;
             height: 95%;
             top:3%;
-            .levex-text{
+            .levex-text-y{
+                position: absolute;
+                width: 22px;
+                left: 17%;
+                top: 46%;
+                color: #94ef30
+            }
+            .levey-text-y{
+                position: absolute;
+                width:22px;
+                right: 46%;
+                bottom: 19%;
+                color: #94ef30;
+            }
+            .levex-text-c{
                 position: absolute;
                 width: 22px;
                 right: 17%;
                 top: 46%;
                 color: #fa7b78;
             }
-            .levey-text{
+            .levey-text-c{
                 position: absolute;
                 width:22px;
                 right: 46%;
@@ -489,7 +505,7 @@ function getScatterSeries(names, datas, legendata) {
                 left: 50%;
                 transform: translateX(-50%);
                 top:10px;
-                color:#fff;
+                color:rgba(255, 255, 255, 0.8);
             }
             .exception-data{
                 &:hover{

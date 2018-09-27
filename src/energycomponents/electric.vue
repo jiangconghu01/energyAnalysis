@@ -32,7 +32,7 @@
             <div id="electric-right-all" :class="$style['right-all']">
                 <div id="electric-right-top" :class="$style['right-top']"></div>
                 <div v-show="mapMoudle==='city' || mapMoudle==='country'" id="electric-right-topcity" :class="[$style['right-top-back']]">
-                        <i-button type="primary" @click="goBack()" :style="{borderColor: '#fff'}">
+                        <i-button type="primary" @click="goBack()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
                             <Icon type="chevron-left"></Icon>
                             返回
                         </i-button>
@@ -417,12 +417,17 @@ export default {
                     }
                     return params.name;
                 } else {
-                    return params.value;
+                    //return params.value;
+                    return '';
                 }
             };
-            // lineOption.tooltip.formatter = params => {
-            //     console.log(params);
-            // }
+            lineOption.tooltip.formatter = params => {
+                let str = params[0].axisValue+'<br>';
+                params.forEach(ele => {
+                    str += `${ele.marker}${ele.seriesName}:${ele.name}<br>`;
+                })
+                return str;
+            }
             if (this.mapMoudle === 'province' || this.mapMoudle === 'city') {
                 lineOption.xAxis[0].axisLabel.rotate = 35;
             }
@@ -633,7 +638,7 @@ export default {
                     //     value: val,
                     //     itemStyle: {
                     //         // color: '#ffa848',
-                    //         borderColor: '#fff',
+                    //         borderColor: 'rgba(255, 255, 255, 0.8)',
                     //         borderWidth: 5
                     //     }
                     // };
@@ -725,6 +730,9 @@ export default {
         currentMonth: function(val, oldVal) {
             this.mapMoudle === 'country' && this.getAxiosDataToCountryMap(val, this.countryParentName);
             this.getAxiosData(val);
+            if(this.mapMoudle === 'province'){
+                this.getAxiosDataToException(this.currentMonth);
+            }
         },
         currentCity: function(val, oldVal) {
             this.getAxiosData(this.currentMonth);
@@ -872,7 +880,7 @@ function getLabel(type, data, width) {
                 valueHead: {
                     width: 70,
                     height: 20,
-                    color: '#fff',
+                    color: 'rgba(255, 255, 255, 0.8)',
                     // padding: [0, 10, 0, 5],
                     align: 'left',
                     // backgroundColor: 'rgba(103, 179, 238, 0.5)',
@@ -973,7 +981,7 @@ function getLabel(type, data, width) {
                 bottom: 55%;
                 ul li{
                     list-style: none;
-                    color:#fff;
+                    color:rgba(255, 255, 255, 0.8);
                     width:60px;
                     height: 30px;
                     line-height: 30px;

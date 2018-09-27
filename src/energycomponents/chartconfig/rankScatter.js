@@ -4,7 +4,7 @@ const option = {
         left: 10,
         top: 10,
         textStyle: {
-            color: '#F1F7FC',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 16,
             fontWeight: 300
         }
@@ -59,7 +59,7 @@ const option = {
         //     start: 0,
         //     end: 100,
         //     textStyle: {
-        //         color: '#F1F7FC'
+        //         color: 'rgba(255, 255, 255, 0.8)'
         //     }
         // },
         // {
@@ -88,7 +88,7 @@ const option = {
         y: 'center',
         orient: 'vertical',
         textStyle: {
-            color: '#F1F7FC',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 12,
             fontWeight: 200
         }
@@ -102,7 +102,7 @@ const option = {
                 inside: false, // ---是否朝内
                 rotate: 0, // ---旋转角度
                 margin: 8, // ---刻度标签与轴线之间的距离
-                color: '#F1F7FC', // ---默认取轴线的颜色
+                color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
                 fontSize: 12,
                 fontWeight: 200,
                 formatter: (val) => {
@@ -143,7 +143,7 @@ const option = {
         max: 75,
         axisLabel: {
             margin: 8, // ---刻度标签与轴线之间的距离
-            color: '#F1F7FC', // ---默认取轴线的颜色
+            color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
             fontSize: 12,
             fontWeight: 200,
             formatter: '{value}'
@@ -151,7 +151,7 @@ const option = {
         splitLine: {
             show: true,
             lineStyle: {
-                color: '#F1F7FC',
+                color: 'rgba(255, 255, 255, 0.8)',
                 width: 1,
                 type: 'solid',
                 opacity: 0.1 // ---类型

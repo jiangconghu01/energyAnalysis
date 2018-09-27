@@ -34,7 +34,7 @@
             <div id="electric-detail-right-all" :class="$style['right-all']">
                 <div id="electric-detail-right" :class="$style['right-map']"></div>
                 <div v-show="mapMoudle==='city' || mapMoudle==='country' "  :class="[$style['right-top-back']]">
-                        <i-button type="primary" @click="backProvince()" :style="{borderColor: '#fff'}">
+                        <i-button type="primary" @click="backProvince()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
                             <Icon type="chevron-left"></Icon>
                             返回
                         </i-button>
@@ -567,7 +567,7 @@ function addCodes(code, count) {
                 bottom: 15%;
                 ul li{
                     list-style: none;
-                    color:#fff;
+                    color:rgba(255, 255, 255, 0.8);
                     width:80px;
                     height: 40px;
                     line-height: 40px;
@@ -586,12 +586,12 @@ function addCodes(code, count) {
 </style>
 <style>
 .ivu-btn.ivu-btn-ghost{
-    color:white;
+    color:rgba(255, 255, 255, 0.8);
     font-weight: bold;
     border-color:rgba(16, 162, 249, 1);
 }
 .ivu-btn.ivu-btn-ghost:hover{
-    color:white;
+    color:rgba(255, 255, 255, 0.8);
 }
 
 </style>

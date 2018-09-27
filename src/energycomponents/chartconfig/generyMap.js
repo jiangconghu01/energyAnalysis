@@ -3,7 +3,7 @@ const provinceMap = {
         text: '当年累计能耗发生量',
         left: '10px',
         textStyle: {
-            color: '#F1F7FC',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 16,
             fontWeight: 300
         }
@@ -29,7 +29,7 @@ const provinceMap = {
         max: 10000,
         text: ['高', '低'], // 文本，默认为数值文本
         textStyle: {
-            color: '#F1F7FC',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 12,
             fontWeight: 300
         },
@@ -61,9 +61,9 @@ const provinceMap = {
             normal: {
                 label: {
                     show: true,
-                    color: '#F1F7FC',
+                    color: 'rgba(255, 255, 255, 0.8)',
                 },
-                borderColor: '#fff',
+                borderColor: 'rgba(255, 255, 255, 0.8)',
             },
             emphasis: {
                 label: {
@@ -80,7 +80,7 @@ const cityMap = {
         text: '当年累计能耗发生量',
         left: '10px',
         textStyle: {
-            color: '#F1F7FC',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 16,
             fontWeight: 300
         }
@@ -99,7 +99,7 @@ const cityMap = {
         max: 10000,
         text: ['高', '低'], // 文本，默认为数值文本
         textStyle: {
-            color: '#F1F7FC',
+            color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 12,
             fontWeight: 300
         },
@@ -119,10 +119,10 @@ const cityMap = {
             normal: {
                 label: {
                     show: true,
-                    color: '#F1F7FC',
+                    color: 'rgba(255, 255, 255, 0.8)',
                     // formatter: '{a}'
                 },
-                borderColor: '#fff',
+                borderColor: 'rgba(255, 255, 255, 0.8)',
             },
             emphasis: { label: { show: true } },
         }
