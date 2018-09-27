@@ -417,17 +417,17 @@ export default {
                     }
                     return params.name;
                 } else {
-                    //return params.value;
+                    // return params.value;
                     return '';
                 }
             };
             lineOption.tooltip.formatter = params => {
-                let str = params[0].axisValue+'<br>';
+                let str = params[0].axisValue + '<br>';
                 params.forEach(ele => {
                     str += `${ele.marker}${ele.seriesName}:${ele.name}<br>`;
-                })
+                });
                 return str;
-            }
+            };
             if (this.mapMoudle === 'province' || this.mapMoudle === 'city') {
                 lineOption.xAxis[0].axisLabel.rotate = 35;
             }
@@ -730,7 +730,7 @@ export default {
         currentMonth: function(val, oldVal) {
             this.mapMoudle === 'country' && this.getAxiosDataToCountryMap(val, this.countryParentName);
             this.getAxiosData(val);
-            if(this.mapMoudle === 'province'){
+            if (this.mapMoudle === 'province') {
                 this.getAxiosDataToException(this.currentMonth);
             }
         },

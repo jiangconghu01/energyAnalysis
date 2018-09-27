@@ -100,92 +100,101 @@ module.exports = {
     ],
     module: {
         rules: [{
-                test: /\.html$/,
-                loader: 'html-loader'
-            },
-            {
-                test: /\.vue$/,
-                // use: {
-                loader: 'vue-loader',
-                options: {
-                    // cssModules: {
-                    //     // localIdentName: '[path][name]---[local]---[hash:base64:5]',
-                    //     localIdentName: '[name]--33[hash:base64:5]',
-                    //     camelCase: true
-                    // },
-                    // extractCSS: true,
-                    // loaders: isDev ? {
-                    //     css: ['vue-style-loader', 'css-loader', 'postcss-loader'],
-                    //     scss: ['vue-style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-                    // } : {
-                    //     css: ExtractTextPlugin.extract({use: ['css-loader'],
-                    //         fallback: 'vue-style-loader'}),
-                    //     scss: ExtractTextPlugin.extract({use: ['css-loader', 'sass-loader'],
-                    //         fallback: 'vue-style-loader'})
-                    // },
-                    // postcss: [
-                    //     require('autoprefixer')({
-                    //         // browsers: ['last 2 versions']
-                    //         browsers: ['last 10 Chrome versions', 'last 5 Firefox versions', 'Safari >= 6', 'ie > 8']
-                    //     })
-                    // ]
-                }
-                // }
-            },
-            {
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['env'],
-                        plugins: ['transform-runtime', 'transform-object-rest-spread']
-                    }
-                }
-            },
-
-            {
-                test: /\.scss$/,
-                use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            // localIdentName: '[path][name]-[local]-[hash:base64:5]'
-                            localIdentName: '[name]-[local]-[hash:base64:8]'
-                        }
-                    },
-                    'postcss-loader',
-                    'sass-loader'
-                ]
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            // modules: true,
-                            // // localIdentName: '[local]_[hash:base64:5]'
-                            // localIdentName: '[local]--test'
-                        }
-                    },
-                    'postcss-loader',
-                ]
-            },
-            {
-                test: /\.(png|svg|jpg|gif)$/,
-                use: [
-                    'file-loader'
-                ]
-            },
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/,
-                use: [
-                    'file-loader'
-                ]
+            test: /\.html$/,
+            loader: 'html-loader'
+        },
+        {
+            test: /\.vue$/,
+            // use: {
+            loader: 'vue-loader',
+            options: {
+                // cssModules: {
+                //     // localIdentName: '[path][name]---[local]---[hash:base64:5]',
+                //     localIdentName: '[name]--33[hash:base64:5]',
+                //     camelCase: true
+                // },
+                // extractCSS: true,
+                // loaders: isDev ? {
+                //     css: ['vue-style-loader', 'css-loader', 'postcss-loader'],
+                //     scss: ['vue-style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+                // } : {
+                //     css: ExtractTextPlugin.extract({use: ['css-loader'],
+                //         fallback: 'vue-style-loader'}),
+                //     scss: ExtractTextPlugin.extract({use: ['css-loader', 'sass-loader'],
+                //         fallback: 'vue-style-loader'})
+                // },
+                // postcss: [
+                //     require('autoprefixer')({
+                //         // browsers: ['last 2 versions']
+                //         browsers: ['last 10 Chrome versions', 'last 5 Firefox versions', 'Safari >= 6', 'ie > 8']
+                //     })
+                // ]
             }
+            // }
+        },
+        {
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+                loader: 'babel-loader',
+                options: {
+                    presets: ['env'],
+                    plugins: ['transform-runtime', 'transform-object-rest-spread']
+                }
+            }
+        },
+
+        {
+            test: /\.scss$/,
+            use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+                {
+                    loader: 'css-loader',
+                    options: {
+                        modules: true,
+                        // localIdentName: '[path][name]-[local]-[hash:base64:5]'
+                        localIdentName: '[name]-[local]-[hash:base64:8]'
+                    }
+                },
+                'postcss-loader',
+                'sass-loader',
+                {
+                    loader: 'sass-resources-loader',
+                    options: {
+                        resources: [
+                            path.resolve(__dirname, '../src/css/energyanalysis.scss')
+                        ]
+                    }
+
+                }
+            ]
+        },
+        {
+            test: /\.css$/,
+            use: [
+                isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+                {
+                    loader: 'css-loader',
+                    options: {
+                        // modules: true,
+                        // // localIdentName: '[local]_[hash:base64:5]'
+                        // localIdentName: '[local]--test'
+                    }
+                },
+                'postcss-loader',
+            ]
+        },
+        {
+            test: /\.(png|svg|jpg|gif)$/,
+            use: [
+                'file-loader'
+            ]
+        },
+        {
+            test: /\.(woff|woff2|eot|ttf|otf)$/,
+            use: [
+                'file-loader'
+            ]
+        }
         ]
     }
 };

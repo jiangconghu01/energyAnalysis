@@ -188,7 +188,7 @@ function getCurrent(path) {
             .logo-text{
                 height: 100%;
                 vertical-align: bottom;
-                color:rgba(255, 255, 255, 0.8);
+                color:$text-color;
                 font-size: 16px;
                 padding-top:12px;
             }
