@@ -348,8 +348,8 @@ export default {
                 cityArr = [jzMap.mapName[this.currentCity]];
             }
             if (this.mapMoudle === 'province') {
-                codeArr = jzMap.arrCode;
-                cityArr = jzMap.arrName;
+                codeArr = jzMap.arrCode.slice(0,-2);
+                cityArr = jzMap.arrName.slice(0,-2);
             }
             data = searchValsArr(encodes, codeArr, arr);
             pueType = {
