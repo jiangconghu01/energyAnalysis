@@ -247,7 +247,7 @@ export default {
         .table-body{
                 padding-bottom: 40px;
             //background-color: rgba(16,162,249,0.5);
-              background-color:rgba(255, 255, 255, 0.8);
+              background-color:rgba(255, 255, 255, 1);
            border: 0.08rem solid rgba(16,162,249,0.5);
            
           

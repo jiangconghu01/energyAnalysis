@@ -97,25 +97,36 @@ export default {
 
             let barTitle = '';
             let barsd = bardata[0];
+            let tooltips = [];
             if (this.home === 'office') {
                 scatterTitle = 'TOP-50办公大楼';
                 scatterMarkline = ['累计单位面积电耗\n(度)', '累\n计\n单\n位\n面\n积\n电\n耗\n同\n比\n增\n长\n(%)'];
+                tooltips = ['累计单位面积电耗{#}度', '累计单位面积电耗同比增长{#}%'];
                 barTitle = '累计人均电费同比(%)';
             }
             if (this.home === 'tianyi') {
                 scatterTitle = 'TOP-50天翼卖场';
                 scatterMarkline = ['累计单位台席电耗\n(度)', '累\n计\n单\n位\n台\n席\n电\n耗\n同\n比\n增\n长\n(%)'];
+                tooltips = ['累计单位台席电耗{#}度', '累计单位台席电耗同比增长{#}%'];
                 barTitle = '累计单位台席电费同比(%)';
             }
             if (this.home === 'communication') {
                 scatterTitle = 'TOP-80通信局站';
                 scatterMarkline = ['PUE值', 'PUE\n同\n比\n增\n幅\n(%)'];
+                tooltips = ['PUE值{#}', 'PUE同比增幅{#}%'];
                 barTitle = '累计单位资产电费同比(%)';
             }
             // 清除之前数据
             scatter.clear();
             // 设置title和markline
             ConfigScatter.title.text = scatterTitle;
+            ConfigScatter.tooltip.formatter = params => {
+                const x = tooltips[0].replace(/{#}/,params.value[0]);
+                const y = tooltips[1].replace(/{#}/,params.value[1]);
+                return `${params.data.name}:</br>
+                ${params.marker}${x}</br>
+                ${params.marker}${y}`;
+            }
             const x = xs.map(e => Number(e));
             const y = ys.map(e => Number(e));
 
@@ -152,6 +163,9 @@ export default {
             ConfigBar.yAxis[0].data = d.name;
             ConfigBar.series[0].data = d.val;
             scatter.setOption(ConfigScatter);
+            // scatter.on('datazoom', (data) => {
+            //     console.log(data);
+            // });
             bar.setOption(ConfigBar);
         },
         async getData(param) {
