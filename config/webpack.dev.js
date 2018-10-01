@@ -9,7 +9,7 @@ module.exports = merge(common, {
         compress: true,
         hot: true,
         host: '0.0.0.0',
-        //host: 'localhost',
+        // host: 'localhost',
         port: 9000,
         proxy: {
 

@@ -90,28 +90,28 @@ function getCZXTData(reqStr) {
             return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${(Math.random() * 5000) + 10}","indexCode":"${ele[2]}"}`;
         } else if (topm.includes(ele[2])) {
             // return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${-(Math.random() * 5000) + 10}","indexCode":"${ele[2]}"}`;
-            return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${(Math.random() * 4) -1.2}","indexCode":"${ele[2]}"}`;
+            return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${(Math.random() * 4) - 1.2}","indexCode":"${ele[2]}"}`;
         } else if (topl.includes(ele[2])) {
             switch (ele[2]) {
-                case 'NHTOPN0001':
-                    return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${(Math.random() * 4)}","indexCode":"${ele[2]}"}`;
-                case 'NHTOPN0007':
-                    return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${Math.random() * 700}","indexCode":"${ele[2]}"}`;
-                case 'NHTOPN0014':
-                    return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${Math.random() * 16}","indexCode":"${ele[2]}"}`;
+            case 'NHTOPN0001':
+                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${(Math.random() * 4)}","indexCode":"${ele[2]}"}`;
+            case 'NHTOPN0007':
+                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${Math.random() * 700}","indexCode":"${ele[2]}"}`;
+            case 'NHTOPN0014':
+                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${Math.random() * 16}","indexCode":"${ele[2]}"}`;
             }
         } else if (juzhanshu.includes(ele[2])) {
             switch (ele[2]) {
-                case 'NHDP0018':
-                    return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"0","indexCode":"${ele[2]}"}`;
-                case 'NHDP0019':
-                    return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"140","indexCode":"${ele[2]}"}`;
-                case 'NHDP0020':
-                    return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"0","indexCode":"${ele[2]}"}`;
-                case 'NHDP0021':
-                    return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"0","indexCode":"${ele[2]}"}`;
-                case 'NHDP0022':
-                    return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"13212","indexCode":"${ele[2]}"}`;
+            case 'NHDP0018':
+                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"0","indexCode":"${ele[2]}"}`;
+            case 'NHDP0019':
+                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"140","indexCode":"${ele[2]}"}`;
+            case 'NHDP0020':
+                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"0","indexCode":"${ele[2]}"}`;
+            case 'NHDP0021':
+                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"0","indexCode":"${ele[2]}"}`;
+            case 'NHDP0022':
+                return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"13212","indexCode":"${ele[2]}"}`;
             }
         } else {
             return `{"accountCode":"${ele[1]}","bilMonth":"${ele[0]}","indexVlue":"${Math.random() * 5000 + 100}","indexCode":"${ele[2]}"}`;
