@@ -307,7 +307,7 @@ export default {
                 dataEcount = searchValsArr(encodes1, codeArr, arr);
                 dataEcost = searchValsArr(encodes2, codeArr, arr);
                 dataLineCount = searchValsArr(['NHDP0050'], codeArr, arr);
-                dataLineCost = searchValsArr(['NHDP0051'], codeArr, arr);
+                // dataLineCost = searchValsArr(['NHDP0051'], codeArr, arr);
                 configOption.xAxis[0].data = cityArr;
             }
             if (this.mapMoudle === 'city') {
@@ -316,7 +316,7 @@ export default {
                 dataEcount = searchValsArr(encodes1, codeArr, arr);
                 dataEcost = searchValsArr(encodes2, codeArr, arr);
                 dataLineCount = searchValsArr(['NHDP0050'], codeArr, arr);
-                dataLineCost = searchValsArr(['NHDP0051'], codeArr, arr);
+                // dataLineCost = searchValsArr(['NHDP0051'], codeArr, arr);
                 configOption.xAxis[0].data = cityArr;
             }
             if (this.mapMoudle === 'company') {
@@ -325,14 +325,14 @@ export default {
                 dataEcount = searchValsArr(encodes1, codeArr, arr);
                 dataEcost = searchValsArr(encodes2, codeArr, arr);
                 dataLineCount = searchValsArr(['NHDP0050'], codeArr, arr);
-                dataLineCost = searchValsArr(['NHDP0051'], codeArr, arr);
+                // dataLineCost = searchValsArr(['NHDP0051'], codeArr, arr);
                 configOption.xAxis[0].data = cityArr;
             }
             if (this.mapMoudle === 'province') {
                 dataEcount = searchValsArr(encodes1, jzMap.arrCode, arr);
                 dataEcost = searchValsArr(encodes2, jzMap.arrCode, arr);
                 dataLineCount = searchValsArr(['NHDP0050'], jzMap.arrCode, arr);
-                dataLineCost = searchValsArr(['NHDP0051'], jzMap.arrCode, arr);// 返回数组里边多个数组
+                // dataLineCost = searchValsArr(['NHDP0051'], jzMap.arrCode, arr);// 返回数组里边多个数组
             }
             if (this.current === 1) {
                 configOption.legend.data = detailXarr;
@@ -378,7 +378,7 @@ export default {
                 configOption.title.subtext = '单位（万元）';
                 configOption.legend.data = detailXarr.slice(1);
                 dataEcost = searchMonthsDataArr(monthsArr, encodes2, city, this.sourceMonthData);
-                dataLineCost = searchMonthsDataArr(monthsArr, ['NHDP0137'], city, this.sourceMonthData);
+                // dataLineCost = searchMonthsDataArr(monthsArr, ['NHDP0137'], city, this.sourceMonthData);
                 // configOption.series[0].data = dataLineCost[0];
                 configOption.series[0].data = [];
                 configOption.series.push.apply(configOption.series, getDataLineBar(detailXarr, dataEcost));

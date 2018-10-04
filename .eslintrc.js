@@ -24,10 +24,15 @@ module.exports = {
         'no-multi-spaces': ['warn', { ignoreEOLComments: false }],
         "no-extend-native": 0, //允许对内置对象的原型进行扩展,
         'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-        'no-undef':0
+        'no-undef':2
     },
     globals: { // 声明在代码中自定义的全局变量
-        'CONFIG': true
+        'CONFIG': true,
+        'Vue': true,
+        'VueRouter': true,
+        'Vuex': true,
+        'echarts': true,
+        'axios': true
     },
     env: { // 定义预定义的全局变量,比如browser: true，这样你在代码中可以放心使用宿主环境给你提供的全局变量。
         browser: true, // browser global variables.
