@@ -6,5 +6,6 @@ git clone 项目地址
 git checkout energy_optimize
 #启动项目
 npm start
+node config/mockserver.js
 #如果需要打包项目
 npm run build
