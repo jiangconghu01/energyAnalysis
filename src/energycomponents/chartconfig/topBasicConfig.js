@@ -1,4 +1,4 @@
-//top50办公大楼
+// top50办公大楼
 const topOffice =
     `浙江元华
     杭州电信
@@ -52,19 +52,19 @@ const topOffice =
     岱山综合`.split('\n');
 const officeBasicNum = 1001;
 const officeMap = {
-        '杭州市': 6,
-        '宁波市': 6,
-        '温州市': 7,
-        '嘉兴市': 5,
-        '湖州市': 3,
-        '绍兴市': 4,
-        '金华市': 5,
-        '衢州市': 2,
-        '丽水市': 3,
-        '台州市': 6,
-        '舟山市': 3
-    }
-    //top50天翼卖场
+    '杭州市': 6,
+    '宁波市': 6,
+    '温州市': 7,
+    '嘉兴市': 5,
+    '湖州市': 3,
+    '绍兴市': 4,
+    '金华市': 5,
+    '衢州市': 2,
+    '丽水市': 3,
+    '台州市': 6,
+    '舟山市': 3
+};
+// top50天翼卖场
 const topTianyi =
     `杭州武林
     杭州庆春
@@ -129,9 +129,9 @@ const tianyiMap = {
     '丽水市': 4,
     '台州市': 5,
     '舟山市': 2
-}
+};
 
-//top80通信局站
+// top80通信局站
 const topCommunication =
     `杭州武林
     杭州二枢
@@ -226,7 +226,7 @@ const communicationMap = {
     '丽水市': 5,
     '台州市': 7,
     '舟山市': 5
-}
+};
 export {
     topOffice,
     officeBasicNum,
@@ -237,7 +237,7 @@ export {
     topCommunication,
     communicationBasicNum,
     communicationMap
-}
+};
 // const topOffice = [{
 //         cityName: '省公司',
 //         sub: [{

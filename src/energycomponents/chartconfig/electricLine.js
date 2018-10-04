@@ -107,72 +107,72 @@ const option = {
         color: 'rgba(255, 255, 255, 0.8)'
     },
     series: [{
-            name: 'A类局站',
-            type: 'bar',
-            data: data,
-            color: ['#fad04e'],
-            barWidth: '6', // ---柱形宽度
-            barCategoryGap: '100%', // ---柱形间距
+        name: 'A类局站',
+        type: 'bar',
+        data: data,
+        color: ['#fad04e'],
+        barWidth: '6', // ---柱形宽度
+        barCategoryGap: '100%', // ---柱形间距
 
+    },
+    {
+        name: 'B类局站',
+        type: 'bar',
+        label: {
+            show: true,
+            position: 'top',
+            color: 'rgba(255, 255, 255, 0.8)'
         },
-        {
-            name: 'B类局站',
-            type: 'bar',
-            label: {
-                show: true,
-                position: 'top',
-                color: 'rgba(255, 255, 255, 0.8)'
-            },
-            data: data,
-            // markLine: {
-            //     data: [
-            //         {type: 'average', name: '平均值'}
-            //     ]
-            // },
-            color: ['#7bfcfd'],
-            barWidth: '6', // ---柱形宽度
-            barGap: '30%',
-            barCategoryGap: '100%', // ---柱形间距
+        data: data,
+        // markLine: {
+        //     data: [
+        //         {type: 'average', name: '平均值'}
+        //     ]
+        // },
+        color: ['#7bfcfd'],
+        barWidth: '6', // ---柱形宽度
+        barGap: '30%',
+        barCategoryGap: '100%', // ---柱形间距
+    },
+    {
+        name: 'C类局站',
+        type: 'bar',
+        label: {
+            show: true,
+            position: 'top',
+            color: 'rgba(255, 255, 255, 0.8)'
         },
-        {
-            name: 'C类局站',
-            type: 'bar',
-            label: {
-                show: true,
-                position: 'top',
-                color: 'rgba(255, 255, 255, 0.8)'
-            },
-            data: data,
-            // markLine: {
-            //     data: [
-            //         {type: 'average', name: '平均值'}
-            //     ]
-            // },
-            color: ['#ffa848'],
-            barWidth: '6', // ---柱形宽度
-            barGap: '30%',
-            barCategoryGap: '100%', // ---柱形间距
+        data: data,
+        // markLine: {
+        //     data: [
+        //         {type: 'average', name: '平均值'}
+        //     ]
+        // },
+        color: ['#ffa848'],
+        barWidth: '6', // ---柱形宽度
+        barGap: '30%',
+        barCategoryGap: '100%', // ---柱形间距
+    },
+    {
+        name: 'D类局站',
+        type: 'bar',
+        label: {
+            show: true,
+            position: 'top',
+            color: 'rgba(255, 255, 255, 0.8)'
         },
-        {
-            name: 'D类局站',
-            type: 'bar',
-            label: {
-                show: true,
-                position: 'top',
-                color: 'rgba(255, 255, 255, 0.8)'
-            },
-            data: data,
-            // markLine: {
-            //     data: [
-            //         {type: 'average', name: '平均值'}
-            //     ]
-            // },
-            color: ['#ff66ec'],
-            barWidth: '6', // ---柱形宽度
-            barGap: '30%',
-            barCategoryGap: '100%', // ---柱形间距
-        }
+        data: data,
+        // markLine: {
+        //     data: [
+        //         {type: 'average', name: '平均值'}
+        //     ]
+        // },
+        color: ['#ff66ec'],
+        barWidth: '6', // ---柱形宽度
+        barGap: '30%',
+        barCategoryGap: '100%', // ---柱形间距
+    }
     ]
 };
 export default option;
-//'#ffa848', '#ff66ec',
+// '#ffa848', '#ff66ec',

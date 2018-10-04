@@ -77,7 +77,7 @@
 <script>
 import ConfigPie from '../chartconfig/generyPie.js';
 import ConfigLine from '../chartconfig/generyLine.js';
-import {provinceMap, cityMap} from '../chartconfig/generyMap.js';
+import { provinceMap, cityMap } from '../chartconfig/generyMap.js';
 import jzMap from '../chartconfig/zjMap.js';
 import tableBar from './tablebarcomp.vue';
 import tableBar2 from './tablebarcomp2.vue';
@@ -88,7 +88,6 @@ import {
     getCityParam,
     searchVal,
     searchValArr,
-    generyRBData,
     searchMapData,
     controlMapLabel,
     getSortMapArr,
@@ -145,12 +144,10 @@ export default {
                 };
             } else if (280 > ht > 240) {
                 tran = {
-                    //    transform: translateY(-57%) translateX(-50%) scale(.9);
                     transform: 'translateY(-57%) translateX(-50%) scale(.9)'
                 };
             } else {
                 tran = {
-                    //    transform: translateY(-57%) translateX(-50%) scale(.9);
                     transform: 'translateY(-57%) translateX(-50%) scale(.8)'
                 };
             }
@@ -204,7 +201,7 @@ export default {
             // let postData = this.$qs.stringify({
             //     paramArrs: data
             // });
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
@@ -234,7 +231,7 @@ export default {
             // let postData = this.$qs.stringify({
             //     paramArrs: data
             // });
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
@@ -253,36 +250,22 @@ export default {
                 eleCount: searchVal(code, 'NHDP0002', arr),
                 oilCost: searchVal(code, 'NHDP0004', arr),
                 oilCount: searchVal(code, 'NHDP0003', arr),
-                // waterCount: searchVal(code, 'NHDP0124', arr),
-                // waterCost: searchVal(code, 'NHDP0125', arr),
-                // gasCost: searchVal(code, 'NHDP0007', arr),
-                // gasCount: searchVal(code, 'NHDP0008', arr),
                 otherCost: searchVal(code, 'NHDP0007', arr),
                 otherCount: searchVal(code, 'NHDP0008', arr),
             };
-            let eleCu = this.leftTop.eleCount;
-            let eleCo = this.leftTop.eleCost;
-            let oilCu = this.leftTop.oilCount;
-            let oilCo = this.leftTop.oilCost;
-            // let waterCu = this.leftTop.waterCount;
-            // let waterCo = this.leftTop.waterCost;
-            // let gasCu = this.leftTop.gasCount;
-            // let gasCo = this.leftTop.gasCost;
-            let otherCo = this.leftTop.otherCost;
-            let otherCu = this.leftTop.otherCount;
+            const eleCu = this.leftTop.eleCount;
+            const eleCo = this.leftTop.eleCost;
+            const oilCu = this.leftTop.oilCount;
+            const oilCo = this.leftTop.oilCost;
+            const otherCo = this.leftTop.otherCost;
+            const otherCu = this.leftTop.otherCount;
             const listVal = [eleCo, oilCo, otherCo, eleCu, oilCu, otherCu];
             ConfigPie.series[0].data[0].value = eleCo > 0 ? eleCo : 0;
             ConfigPie.series[0].data[1].value = oilCo > 0 ? oilCo : 0;
-            ConfigPie.series[0].data[2] = {value: (otherCo > 0 ? otherCo : 0), name: '其他', label: {show: true}, labelLine: {show: true}};
-            // ConfigPie.series[0].data[2] = {value: (waterCo > 0 ? waterCo : 0), name: '水费'};
-            // ConfigPie.series[0].data[3] = {value: (gasCo > 0 ? gasCo : 0), name: '燃气费'};
-
+            ConfigPie.series[0].data[2] = { value: (otherCo > 0 ? otherCo : 0), name: '其他', label: { show: true }, labelLine: { show: true } };
             ConfigPie.series[1].data[0].value = eleCu > 0 ? eleCu : 0;
             ConfigPie.series[1].data[1].value = oilCu > 0 ? oilCu : 0;
-            ConfigPie.series[1].data[2] = {value: (otherCu > 0 ? otherCu : 0), name: '其他', label: {show: true}, labelLine: {show: true}};
-            // ConfigPie.series[1].data[2] = {value: (waterCu > 0 ? waterCu : 0), name: '水量'};
-            // ConfigPie.series[1].data[3] = {value: (gasCu > 0 ? gasCo : 0), name: '燃气耗量'};
-            // const legendList = ['电费', '油费', '水费', '燃气费', '电量', '油耗', '水量', '燃气耗量'];
+            ConfigPie.series[1].data[2] = { value: (otherCu > 0 ? otherCu : 0), name: '其他', label: { show: true }, labelLine: { show: true } };
             ConfigPie.series[0].data.forEach((ele, index) => {
                 if (ele.value <= 0) {
                     ele.label.show = false;
@@ -312,7 +295,7 @@ export default {
             this.negativeList = getNagetiveList(legendList, listVal);
             ConfigPie.legend.data = legendList;
             let pie = this.$echarts.init(document.getElementById('genery-left-top'));
-            this.$store.commit('setCharts', {name: 'chart1', val: pie});
+            this.$store.commit('setCharts', { name: 'chart1', val: pie });
             pie.setOption(ConfigPie);
         },
         setLeftBottom(arr, code) {
@@ -322,10 +305,10 @@ export default {
                 searchValArr('NHDP0016', arr),
                 searchValArr('NHDP0009', arr),
                 searchValArr('NHDP0010', arr));
-                //去掉开头的市字
-               sortArr[1] = sortArr[1].map(ele => {
-                    return ele.replace(/市/,'');
-                });
+                // 去掉开头的市字
+            sortArr[1] = sortArr[1].map(ele => {
+                return ele.replace(/市/, '');
+            });
             this.leftBottom = {
                 listNetCost: sortArr[3],
                 listIDCCost: sortArr[4],
@@ -336,7 +319,7 @@ export default {
                 warnVal: searchVal(code, 'NHDP0012', arr)
             };
             let line = this.$echarts.init(document.getElementById('genery-left-bottom'));
-            this.$store.commit('setCharts', {name: 'chart2', val: line});
+            this.$store.commit('setCharts', { name: 'chart2', val: line });
             this.hoverLine = line;
             const option = JSON.parse(JSON.stringify(ConfigLine));
             // option.yAxis[0].min = 0;
@@ -375,7 +358,6 @@ export default {
             const min = Math.min(Math.min.apply(null, this.leftBottom.listPersentNet), Math.min.apply(null, this.leftBottom.listPersentIDC));
             let guid = this.leftBottom.guideVal;
             let warn = this.leftBottom.warnVal;
-            let len = this.currentCityArr.length - 1;
             option.yAxis[0].min = this.mapMoudle === 'country' || this.mapMoudle === 'company' ? 0 : min;
             option.yAxis[0].max = max > warn ? max : warn;
             option.series[0].label.formatter = params => {
@@ -421,19 +403,19 @@ export default {
             line.setOption(option);
         },
         setRightBottom(arr, code) {
-            this.rightBottom = generyRBData(arr, code);
+            this.rightBottom = generyRBData1(arr, code);
         },
         setMap(arr, code, countryToUpdateCityMap) {
             if (this.mapMoudle === 'company') {
                 return;
             }
             const map = this.$echarts.init(document.getElementById('genery-right-top'));
-            const boxWidth = map ? map.getWidth() : 0;
-            const boxHeight = map ? map.getHeight() : 0;
-            const baseRect = Math.min(boxWidth, boxHeight);
+            // const boxWidth = map ? map.getWidth() : 0;
+            // const boxHeight = map ? map.getHeight() : 0;
+            // const baseRect = Math.min(boxWidth, boxHeight);
             if (this.mapMoudle === 'province') {
                 map.clear();
-                this.$store.commit('setCharts', {name: 'chart3', val: map});
+                this.$store.commit('setCharts', { name: 'chart3', val: map });
                 let codes = jzMap.arrCode;
                 const encodes = ['NHDP0006', 'NHDP0005'];
                 let data = searchMapData(codes, encodes, arr, 'city');
@@ -454,7 +436,7 @@ export default {
                 map.setOption(mapconfig);
             } else if (this.mapMoudle === 'city') {
                 map.clear();
-                this.$store.commit('setCharts', {name: 'chart3', val: map});
+                this.$store.commit('setCharts', { name: 'chart3', val: map });
                 let name = jzMap.mapName[code];
                 this.$echarts.registerMap(name, jzMap.mapJson[name]);
                 // const features = jzMap.mapJson[name].features;
@@ -487,7 +469,7 @@ export default {
                 const searchMapData2 = searchMapData;
                 if (this.countryParentName && countryToUpdateCityMap) {
                     map.clear();
-                    this.$store.commit('setCharts', {name: 'chart3', val: map});
+                    this.$store.commit('setCharts', { name: 'chart3', val: map });
                     const cityName = this.countryParentName;
                     this.$echarts.registerMap(cityName, datajzMap.mapJson[cityName]);
                     // console.log(datajzMap.mapJson[cityName]);
@@ -573,7 +555,7 @@ function getNagetiveList(names, vals) {
     for (let index = 0, len = vals.length; index < len; index++) {
         const element = vals[index];
         if (element < 0) {
-            let item = index < len / 2 ? {name: names[index], val: element + '万元'} : {name: names[index], val: element + '吨标煤'};
+            let item = index < len / 2 ? { name: names[index], val: element + '万元' } : { name: names[index], val: element + '吨标煤' };
             list.push(item);
         }
     }
@@ -585,6 +567,76 @@ function addCodes(code, count) {
         index > 9 ? arr.push(`${code}${index}`) : arr.push(`${code}0${index}`);
     }
     return arr;
+}
+function generyRBData1(arr, code) {
+    let rb = {
+        station: [],
+        vehicle: [],
+        energy: [],
+        electric: []
+    };
+    for (let index = 0; index < arr.length; index++) {
+        switch (arr[index].indexCode) {
+        case 'NHDP0017':
+            rb.station.push({ name: '局站数', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0018':
+            rb.station.push({ name: 'A类', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0019':
+            rb.station.push({ name: 'B类', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0020':
+            rb.station.push({ name: 'C类', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0021':
+            rb.station.push({ name: 'D类有机房', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0022':
+            rb.station.push({ name: 'D类无机房', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0023':
+            rb.vehicle.push({ name: '车辆数', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0024':
+            rb.vehicle.push({ name: '管理', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0025':
+            rb.vehicle.push({ name: '生产', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0026':
+            rb.vehicle.push({ name: '应急', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0027':
+            rb.energy.push({ name: '能耗对象数', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0028':
+            rb.energy.push({ name: '通信机房', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0029':
+            rb.energy.push({ name: 'IDC机房', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0030':
+            rb.energy.push({ name: '无线基站', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0031':
+            rb.energy.push({ name: '接入点', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0032':
+            rb.energy.push({ name: '办公营销及其他', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0033':
+            rb.electric.push({ name: '电表回路数', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0034':
+            rb.electric.push({ name: '接口接入数量', val: parseInt(arr[index].indexVlue) });
+            break;
+        case 'NHDP0035':
+            rb.electric.push({ name: '报账纳管数量', val: parseInt(arr[index].indexVlue) });
+            break;
+        }
+    }
+    return rb;
 }
 </script>
 

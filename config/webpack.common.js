@@ -7,55 +7,67 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
+    target: 'web',
     // context: path.resolve(__dirname, '../src'), // webpack查找相对路径文件时候会以该路径为基础路径
     entry: {
-        echarts: 'echarts',
-        axios: 'axios',
-        vue: 'vue',
-        // index: './src/index.js',
-        // filetree: './src/filetree.js',
+
         energyAnalysis: ['babel-polyfill', './src/eneryAnalysis.js'],
     },
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, '../dist'),
-        // publicPath: '/'  //生产环境对应的路径前缀
     },
     resolve: {
         extensions: [
             '.js', '.vue', '.json'
         ],
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js'
-        }
+        // alias: {
+        //     'vue$': 'vue/dist/vue.esm.js'
+        // }
+    },
+    externals: {
+        'vue': 'Vue',
+        'vue-router': 'VueRouter',
+        'vuex': 'Vuex',
+        'echarts': 'echarts',
+        'axios': 'axios'
     },
     optimization: {
         splitChunks: {
             cacheGroups: {
-                // lib1: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all'
+                }
+                // echarts: {
                 //     chunks: 'all',
-                //     name: 'jquery',
+                //     name: 'echarts',
+                //     test: /[\\/]node_modules[\\/]echarts[\\/]/,
                 //     enforce: true
                 // },
-                echarts: {
-                    chunks: 'all',
-                    name: 'echarts',
-                    test: /[\\/]node_modules[\\/]echarts[\\/]/,
-                    enforce: true
-                },
-                vue: {
-                    chunks: 'all',
-                    name: 'vue',
-                    test: /[\\/]node_modules[\\/]vue[\\/]/,
-                    enforce: true
-                },
-                axios: {
-                    chunks: 'all',
-                    name: 'axios',
-                    test: /[\\/]node_modules[\\/]axios[\\/]/,
-                    enforce: true
-                }
+                // vue: {
+                //     chunks: 'all',
+                //     name: 'vue',
+                //     test: /[\\/]node_modules[\\/]vue[\\/]/,
+                //     enforce: true
+                // },
+                // axios: {
+                //     chunks: 'all',
+                //     name: 'axios',
+                //     test: /[\\/]node_modules[\\/]axios[\\/]/,
+                //     enforce: true
+                // },
+                // vuex: {
+                //     chunks: 'all',
+                //     name: 'vuex,
+                //     test: /[\\/]node_modules[\\/]vuex[\\/]/,
+                //     enforce: true
+                // }
             }
+        },
+        runtimeChunk: {
+            name: entrypoint => `runtime-${entrypoint.name}`
         }
     },
     plugins: [
@@ -99,102 +111,104 @@ module.exports = {
         }),
     ],
     module: {
-        rules: [{
-            test: /\.html$/,
-            loader: 'html-loader'
-        },
-        {
-            test: /\.vue$/,
-            // use: {
-            loader: 'vue-loader',
-            options: {
-                // cssModules: {
-                //     // localIdentName: '[path][name]---[local]---[hash:base64:5]',
-                //     localIdentName: '[name]--33[hash:base64:5]',
-                //     camelCase: true
-                // },
-                // extractCSS: true,
-                // loaders: isDev ? {
-                //     css: ['vue-style-loader', 'css-loader', 'postcss-loader'],
-                //     scss: ['vue-style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-                // } : {
-                //     css: ExtractTextPlugin.extract({use: ['css-loader'],
-                //         fallback: 'vue-style-loader'}),
-                //     scss: ExtractTextPlugin.extract({use: ['css-loader', 'sass-loader'],
-                //         fallback: 'vue-style-loader'})
-                // },
-                // postcss: [
-                //     require('autoprefixer')({
-                //         // browsers: ['last 2 versions']
-                //         browsers: ['last 10 Chrome versions', 'last 5 Firefox versions', 'Safari >= 6', 'ie > 8']
-                //     })
-                // ]
-            }
-            // }
-        },
-        {
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: {
-                loader: 'babel-loader',
+        rules: [
+            {
+                test: /\.(vue|js|jsx)$/,
+                loader: 'eslint-loader',
+                exclude: /node_modules/,
+                enforce: 'pre',
                 options: {
-                    presets: ['env'],
-                    plugins: ['transform-runtime', 'transform-object-rest-spread']
+                    formatter: require('eslint-friendly-formatter')
                 }
+            },
+            {
+                test: /\.html$/,
+                loader: 'html-loader'
+            },
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader',
+                options: {
+                    preserveWhitepace: true,
+                    extractCSS: !isDev,
+                    cssModules: {
+                        localIdentName: isDev ? '[path]-[name]-[hash:base64:5]' : '[hash:base64:5]',
+                        camelCase: true
+                    },
+                }
+            // }
+            },
+            {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['env'],
+                        plugins: ['transform-runtime', 'transform-object-rest-spread']
+                    }
+                }
+            },
+
+            {
+                test: /\.scss$/,
+                use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            // localIdentName: '[path][name]-[local]-[hash:base64:5]'
+                            localIdentName: '[name]-[local]-[hash:base64:8]'
+                        }
+                    },
+                    'postcss-loader',
+                    'sass-loader',
+                    {
+                        loader: 'sass-resources-loader',
+                        options: {
+                            resources: [
+                                path.resolve(__dirname, '../src/css/energyanalysis.scss')
+                            ]
+                        }
+
+                    }
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                    },
+                    'postcss-loader',
+                ]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            limit: 1024,
+                            name: 'resources/[path][name].[hash:8].[ext]'
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            limit: 1024,
+                            name: 'resources/[path][name].[hash:8].[ext]'
+                        }
+                    }
+
+                ]
             }
-        },
-
-        {
-            test: /\.scss$/,
-            use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-                {
-                    loader: 'css-loader',
-                    options: {
-                        modules: true,
-                        // localIdentName: '[path][name]-[local]-[hash:base64:5]'
-                        localIdentName: '[name]-[local]-[hash:base64:8]'
-                    }
-                },
-                'postcss-loader',
-                'sass-loader',
-                {
-                    loader: 'sass-resources-loader',
-                    options: {
-                        resources: [
-                            path.resolve(__dirname, '../src/css/energyanalysis.scss')
-                        ]
-                    }
-
-                }
-            ]
-        },
-        {
-            test: /\.css$/,
-            use: [
-                isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-                {
-                    loader: 'css-loader',
-                    options: {
-                        // modules: true,
-                        // // localIdentName: '[local]_[hash:base64:5]'
-                        // localIdentName: '[local]--test'
-                    }
-                },
-                'postcss-loader',
-            ]
-        },
-        {
-            test: /\.(png|svg|jpg|gif)$/,
-            use: [
-                'file-loader'
-            ]
-        },
-        {
-            test: /\.(woff|woff2|eot|ttf|otf)$/,
-            use: [
-                'file-loader'
-            ]
-        }
         ]
     }
 };

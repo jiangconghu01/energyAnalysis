@@ -1,11 +1,10 @@
-import { cityMap } from './staticData.js';
-let data = (() => {
-    let a = [];
-    for (let index = 0; index < 11; index++) {
-        a.push(parseInt(Math.random() * 10) + 5);
-    }
-    return a;
-})();
+// let data = (() => {
+//     let a = [];
+//     for (let index = 0; index < 11; index++) {
+//         a.push(parseInt(Math.random() * 10) + 5);
+//     }
+//     return a;
+// })();
 const option = {
     tooltip: {
         trigger: 'axis'

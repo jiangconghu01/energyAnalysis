@@ -379,4 +379,4 @@ var cityDataArr = [{
         cityCode: 'A331105'
     }]
 }];
-export default {provinceData, cityDataArr};
+export default { provinceData, cityDataArr };

@@ -148,10 +148,10 @@ export default {
             // configco.xAxis[0].splitNumber = this.subListLog.length;
             // configco.xAxis[0].splitNumber = parseInt(this.sumNor).toString().length;
 
-            // let len = parseInt(this.sumNor).toString().length;
-            // configco.xAxis[0].interval = this.sumLog / len;
-            // configco.xAxis[0].max = this.sumLog;
-            // l = this.subListLog;
+                // let len = parseInt(this.sumNor).toString().length;
+                // configco.xAxis[0].interval = this.sumLog / len;
+                // configco.xAxis[0].max = this.sumLog;
+                // l = this.subListLog;
 
                 configco.xAxis[0].interval = 1;
                 configco.xAxis[0].max = this.maxLog;
@@ -168,7 +168,7 @@ export default {
                     barWidth: '9',
                     stack: '量',
                     barCategoryGap: 0,
-                    data: [{value: ele.val, value2: ele.val2}]
+                    data: [{ value: ele.val, value2: ele.val2 }]
                 };
                 configco.series.push(item);
             }

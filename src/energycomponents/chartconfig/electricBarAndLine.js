@@ -114,24 +114,24 @@ const option = {
         },
     }],
     dataZoom: [{
-            type: 'slider',
-            xAxisIndex: 0,
-            filterMode: 'empty',
-            bottom: '5%',
-            textStyle: {
-                color: 'rgba(255, 255, 255, 0.8)'
-            }
-        },
-        // {
-        //     type: 'slider',
-        //     yAxisIndex: 0,
-        //     filterMode: 'empty'
-        // },
-        {
-            type: 'inside',
-            xAxisIndex: 0,
-            filterMode: 'empty'
-        },
+        type: 'slider',
+        xAxisIndex: 0,
+        filterMode: 'empty',
+        bottom: '5%',
+        textStyle: {
+            color: 'rgba(255, 255, 255, 0.8)'
+        }
+    },
+    // {
+    //     type: 'slider',
+    //     yAxisIndex: 0,
+    //     filterMode: 'empty'
+    // },
+    {
+        type: 'inside',
+        xAxisIndex: 0,
+        filterMode: 'empty'
+    },
         // {
         //     type: 'inside',
         //     yAxisIndex: 0,

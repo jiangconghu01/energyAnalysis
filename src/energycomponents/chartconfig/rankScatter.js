@@ -94,47 +94,47 @@ const option = {
         }
     },
     xAxis: [{
-            type: 'value',
-            scale: true,
-            max: 205,
-            axisLabel: { // ---坐标轴 标签
-                show: true, // ---是否显示
-                inside: false, // ---是否朝内
-                rotate: 0, // ---旋转角度
-                margin: 8, // ---刻度标签与轴线之间的距离
-                color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
-                fontSize: 12,
-                fontWeight: 200,
-                formatter: (val) => {
-                    return parseInt(val * 100) + '%';
-                }
-            },
-            axisTick: { // ---坐标轴 刻度
-                show: true, // ---是否显示
-                inside: false, // ---是否朝内
-                lengt: 3, // ---长度
-                lineStyle: {
-                    // color:'red',          //---默认取轴线的颜色
-                    width: 1,
-                    type: 'solid',
-                },
-            },
-            axisLine: { // ---坐标轴 轴线
-                show: true, // ---是否显示
-                // ------------------- 箭头 -------------------------
-                symbol: ['none'], // ---是否显示轴线箭头
-                // ------------------- 线 -------------------------
-                lineStyle: {
-                    color: '#80a4ce',
-                    width: 1,
-                    type: 'solid',
-                    opacity: 0.5
-                },
-            },
-            splitLine: {
-                show: false
+        type: 'value',
+        scale: true,
+        max: 205,
+        axisLabel: { // ---坐标轴 标签
+            show: true, // ---是否显示
+            inside: false, // ---是否朝内
+            rotate: 0, // ---旋转角度
+            margin: 8, // ---刻度标签与轴线之间的距离
+            color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
+            fontSize: 12,
+            fontWeight: 200,
+            formatter: (val) => {
+                return parseInt(val * 100) + '%';
             }
+        },
+        axisTick: { // ---坐标轴 刻度
+            show: true, // ---是否显示
+            inside: false, // ---是否朝内
+            lengt: 3, // ---长度
+            lineStyle: {
+                // color:'red',          //---默认取轴线的颜色
+                width: 1,
+                type: 'solid',
+            },
+        },
+        axisLine: { // ---坐标轴 轴线
+            show: true, // ---是否显示
+            // ------------------- 箭头 -------------------------
+            symbol: ['none'], // ---是否显示轴线箭头
+            // ------------------- 线 -------------------------
+            lineStyle: {
+                color: '#80a4ce',
+                width: 1,
+                type: 'solid',
+                opacity: 0.5
+            },
+        },
+        splitLine: {
+            show: false
         }
+    }
 
     ],
     yAxis: [{

@@ -6,7 +6,7 @@
         <div :class="$style.head">
             <div :class="$style.logo">
                 <div :class="$style['logo-img']">
-                    浙江电信财智系统
+                    XXXXXXXXXX平台
                     <!-- <img src="./static/electric/logo.png" alt=""> -->
                     </div>
                 <div :class="$style['logo-text']">-能耗划小分析</div>
@@ -88,12 +88,12 @@ export default {
         goGenery() {
             this.currentPage = 'genery';
             this.setTime();
-            this.$router.push({name: 'All'});
+            this.$router.push({ name: 'All' });
         },
         goElectric() {
             this.currentPage = 'electric';
             this.setTime();
-            this.$router.push({name: 'Electric'});
+            this.$router.push({ name: 'Electric' });
         },
         setTime() {
             this.$store.commit('setMonth', this.needMonth);

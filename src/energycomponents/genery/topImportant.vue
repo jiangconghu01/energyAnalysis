@@ -42,8 +42,8 @@
 <script>
 import ratioComp2 from './ratiocomp2.vue';
 import ratioComp3 from './ratiocomp3.vue';
-import {provinceMap, cityMap} from '../chartconfig/generyMap.js';
-import {topImpData} from '../chartconfig/staticData.js';
+import { provinceMap, cityMap } from '../chartconfig/generyMap.js';
+import { topImpData } from '../chartconfig/staticData.js';
 import zjMap from '../chartconfig/zjMap.js';
 import 'echarts/map/js/province/zhejiang.js';
 export default {

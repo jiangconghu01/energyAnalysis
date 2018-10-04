@@ -199,15 +199,13 @@ const throttle = (function() {
         }
     };
 })();
-//散点图显示label修正函数
-function controlScatterLabel(scatter) {
-    const boxWidth = scatter.getWidth();
-    const boxHeight = scatter.getHeight();
-    const baseRect = Math.min(boxHeight, boxWidth);
-
-
-}
-//地图缩放label显示修正函数
+// 散点图显示label修正函数
+// function controlScatterLabel(scatter) {
+//     const boxWidth = scatter.getWidth();
+//     const boxHeight = scatter.getHeight();
+//     const baseRect = Math.min(boxHeight, boxWidth);
+// }
+// 地图缩放label显示修正函数
 function controlMapLabel(map) {
     const boxWidth = map ? map.getWidth() : 0;
     const boxHeight = map ? map.getHeight() : 0;
@@ -327,76 +325,6 @@ function formatNumberRgx(num) {
     return parts.join('.');
 }
 
-function generyRBData(arr, code) {
-    let rb = {
-        station: [],
-        vehicle: [],
-        energy: [],
-        electric: []
-    };
-    for (let index = 0; index < arr.length; index++) {
-        switch (arr[index].indexCode) {
-            case 'NHDP0017':
-                rb.station.push({ name: '局站数', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0018':
-                rb.station.push({ name: 'A类', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0019':
-                rb.station.push({ name: 'B类', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0020':
-                rb.station.push({ name: 'C类', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0021':
-                rb.station.push({ name: 'D类有机房', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0022':
-                rb.station.push({ name: 'D类无机房', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0023':
-                rb.vehicle.push({ name: '车辆数', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0024':
-                rb.vehicle.push({ name: '管理', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0025':
-                rb.vehicle.push({ name: '生产', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0026':
-                rb.vehicle.push({ name: '应急', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0027':
-                rb.energy.push({ name: '能耗对象数', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0028':
-                rb.energy.push({ name: '通信机房', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0029':
-                rb.energy.push({ name: 'IDC机房', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0030':
-                rb.energy.push({ name: '无线基站', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0031':
-                rb.energy.push({ name: '接入点', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0032':
-                rb.energy.push({ name: '办公营销及其他', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0033':
-                rb.electric.push({ name: '电表回路数', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0034':
-                rb.electric.push({ name: '接口接入数量', val: parseInt(arr[index].indexVlue) });
-                break;
-            case 'NHDP0035':
-                rb.electric.push({ name: '报账纳管数量', val: parseInt(arr[index].indexVlue) });
-                break;
-        }
-    }
-    return rb;
-}
 // function searchValArr(codes, encodes, dataArr){
 
 // }
@@ -409,7 +337,6 @@ export {
     searchValsArr,
     searchMonthValsArr,
     searchEncodeMonthsVals,
-    generyRBData,
     getMonthsArr,
     getMonthsParam,
     searchMapData,

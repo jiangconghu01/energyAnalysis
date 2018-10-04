@@ -1,4 +1,3 @@
-import { cityMap } from './staticData.js';
 let data = (() => {
     const data = [];
     const x = [];
@@ -105,23 +104,23 @@ const option = {
         }
     }],
     series: [{
-            name: '能源费',
-            type: 'bar',
-            color: '#ffcc00',
-            barWidth: '4', // ---柱形宽度
-            // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
-            data: data.d
-        },
-        {
-            name: '收入',
-            type: 'bar',
-            color: '#2bfcff',
-            barWidth: '4', // ---柱形宽度
-            barGap: '100%',
-            barCategoryGap: '5%', // ---柱形间距
-            // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
-            data: data.d
-        }
+        name: '能源费',
+        type: 'bar',
+        color: '#ffcc00',
+        barWidth: '4', // ---柱形宽度
+        // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
+        data: data.d
+    },
+    {
+        name: '收入',
+        type: 'bar',
+        color: '#2bfcff',
+        barWidth: '4', // ---柱形宽度
+        barGap: '100%',
+        barCategoryGap: '5%', // ---柱形间距
+        // data: [0.2, 0.4, 0.1, 0.6, 0.6, 0.8]
+        data: data.d
+    }
     ]
 };
 

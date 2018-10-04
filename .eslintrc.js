@@ -1,4 +1,5 @@
 module.exports = {
+    root:true,
     "extends": "standard",
     "plugins": ["html"],
     // 启用额外的规则或者覆盖基础配置中的规则的默认选项
@@ -21,7 +22,9 @@ module.exports = {
         'no-dupe-keys': 'error',
         'quotes': ['warn', 'single'],
         'no-multi-spaces': ['warn', { ignoreEOLComments: false }],
-        "no-extend-native": 0 //允许对内置对象的原型进行扩展
+        "no-extend-native": 0, //允许对内置对象的原型进行扩展,
+        'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+        'no-undef':0
     },
     globals: { // 声明在代码中自定义的全局变量
         'CONFIG': true

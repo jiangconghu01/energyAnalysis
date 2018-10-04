@@ -40,15 +40,11 @@
 <script>
 
 import tableTotal from './tabletotal2.vue';
-import {tableTh, tableThCurrent, tableTd} from '../chartconfig/staticData.js';
+import { tableTh, tableThCurrent, tableTd } from '../chartconfig/staticData.js';
 import zjMap from '../chartconfig/zjMap.js';
 import 'echarts/map/js/province/zhejiang.js';
 import {
     getCityParam,
-    searchVal,
-    searchValArr,
-    searchEncsArr,
-    searchValsArr,
     searchMonthValsArr,
     searchEncodeMonthsVals,
     addDoubleArr
@@ -97,7 +93,7 @@ export default {
             });
             data = data.slice(1);
 
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
@@ -110,9 +106,9 @@ export default {
         setTable(source, codes) {
             // 设置异常当前表格数据
             const monthData = searchMonthValsArr(exceEncodeArr, codes, this.currentMonth, source);
-            
+
             const datas = monthData.map((ele, index) => {
-                const sum =eval(ele.dataArr.join('+'));
+                const sum = eval(ele.dataArr.join('+'));
                 const a33 = ele.dataArr[0];
                 ele.dataArr[0] = ~~sum - ~~a33;
                 return tableTd[index].concat(ele.dataArr);
@@ -133,7 +129,7 @@ export default {
                 for (let index = 0; index < ele.length; index++) {
                     const element = ele[index];
                     type = element.type;
-                    const sum =eval(element.dataArr.join('+'));
+                    const sum = eval(element.dataArr.join('+'));
                     const a33 = element.dataArr[0];
                     element.dataArr[0] = ~~sum - ~~a33;
                     all.push(element.dataArr);
@@ -142,7 +138,7 @@ export default {
                 // result = addDoubleArr(all);
                 result = tableTd[i].concat(['', '各月异常总数量之和']).concat(addDoubleArr(all));
                 // console.log(result);
-                ele.unshift({type: `${type}-${i}`, month: `all${i}`, dataArr: result});
+                ele.unshift({ type: `${type}-${i}`, month: `all${i}`, dataArr: result });
             });
             const aa = [].concat(...totalArr);
             // console.log(aa);
@@ -151,7 +147,7 @@ export default {
             // this.currentYearData = totalArr;
         },
         goback() {
-            this.$router.replace({name: 'Electric'});
+            this.$router.replace({ name: 'Electric' });
         },
         viewNumber() {
             this.current = 1;
