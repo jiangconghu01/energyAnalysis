@@ -50,8 +50,8 @@ const option = {
     xAxis: [{
         type: 'value',
         boundaryGap: [0, 0.01],
-        //max: 1.2,
-        //min: -2,
+        // max: 1.2,
+        // min: -2,
         axisLabel: {
             margin: 8, // ---刻度标签与轴线之间的距离
             color: 'rgba(255, 255, 255, 0.8)', // ---默认取轴线的颜色
@@ -103,26 +103,26 @@ const option = {
         }
     }],
     dataZoom: [{
-            type: 'slider',
-            yAxisIndex: 0,
-            filterMode: 'empty',
-            bottom: '10%',
-            start: 80,
-            end: 100,
-            textStyle: {
-                color: 'rgba(255, 255, 255, 0.8)'
-            }
-        },
-        // {
-        //     type: 'slider',
-        //     yAxisIndex: 0,
-        //     filterMode: 'empty'
-        // },
-        {
-            type: 'inside',
-            yAxisIndex: 0,
-            filterMode: 'empty'
-        },
+        type: 'slider',
+        yAxisIndex: 0,
+        filterMode: 'empty',
+        bottom: '10%',
+        start: 0,
+        end: 100,
+        textStyle: {
+            color: 'rgba(255, 255, 255, 0.8)'
+        }
+    },
+    // {
+    //     type: 'slider',
+    //     yAxisIndex: 0,
+    //     filterMode: 'empty'
+    // },
+    {
+        type: 'inside',
+        yAxisIndex: 0,
+        filterMode: 'empty'
+    },
         // {
         //     type: 'inside',
         //     yAxisIndex: 0,
@@ -133,9 +133,9 @@ const option = {
         name: '同比',
         type: 'bar',
         stack: 'yy',
-        //color: '#ffcc00','#94ef30'
+        // color: '#ffcc00','#94ef30'
         color: function(params) {
-            //console.log(params);
+            // console.log(params);
             if (parseFloat(params.data.value2) < 0) {
                 return '#94ef30';
             }

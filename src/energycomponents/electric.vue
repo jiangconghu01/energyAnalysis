@@ -90,8 +90,8 @@ import jzMap from './chartconfig/zjMap.js';
 import { categoryCount, categoryCost, cityMap as zjCitysArr } from './chartconfig/staticData.js';
 import ConfigLine from './chartconfig/electricLine.js';
 import ConfigLineSmall from './chartconfig/electricLineSmall.js';
-import {provinceMap, cityMap} from './chartconfig/generyMap.js';
-import {ConfigElePie1, ConfigElePie2} from './chartconfig/electricPie.js';
+import { provinceMap, cityMap } from './chartconfig/generyMap.js';
+import { ConfigElePie1, ConfigElePie2 } from './chartconfig/electricPie.js';
 import ConfigPieLine from './chartconfig/electricPieAndLine.js';
 import { cityDataArr } from './cityMapCode.js';
 import {
@@ -249,13 +249,13 @@ export default {
             this.rightCurrent = 4;
         },
         goElectricQuantity() {
-            this.$router.push({name: 'ElectricDetail', params: {page: 'quantity'}});
+            this.$router.push({ name: 'ElectricDetail', params: { page: 'quantity' } });
         },
         goElectricPrice() {
-            this.$router.push({name: 'ElectricDetail', params: {page: 'price'}});
+            this.$router.push({ name: 'ElectricDetail', params: { page: 'price' } });
         },
         goExceptionPage() {
-            this.$router.push({name: 'ElectricExc', params: {text: '666'}});
+            this.$router.push({ name: 'ElectricExc', params: { text: '666' } });
         },
         getAxiosData(date) {
             let param1 = getProvinceParam(date, this.currentCity, electricBasicPage);
@@ -273,7 +273,7 @@ export default {
                 param2 = getCityParam(date, countryCodeArr, ['NHDP0062', 'NHDP0063', 'NHDP0043', 'NHDP0048']);
             }
             let data = param1 + ',' + param2;
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
@@ -301,7 +301,7 @@ export default {
             let param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
 
             let data = param1 + ',' + param2;
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
@@ -321,14 +321,13 @@ export default {
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then(res => {
                 this.ecxeptionData = res.data;
-                console.log(res.data);
             }).catch(err => {
                 console.warn(err);
             });
         },
         setPUEData(arr) {
             let line = this.$echarts.init(document.getElementById('electric-all-lt'));
-            this.$store.commit('setCharts', {name: 'chart1', val: line});
+            this.$store.commit('setCharts', { name: 'chart1', val: line });
             const lineOption = JSON.parse(JSON.stringify(ConfigLine));
             const encodes = ['NHDP0062', 'NHDP0063', 'NHDP0043', 'NHDP0048'];
             let data = [];
@@ -348,8 +347,9 @@ export default {
                 cityArr = [jzMap.mapName[this.currentCity]];
             }
             if (this.mapMoudle === 'province') {
-                codeArr = jzMap.arrCode.slice(0,-2);
-                cityArr = jzMap.arrName.slice(0,-2);
+                const index = jzMap.arrCode.indexOf('A3300');
+                codeArr = jzMap.arrCode.slice(0, -3); codeArr.push(jzMap.arrCode[index]);
+                cityArr = jzMap.arrName.slice(0, -3); cityArr.push(jzMap.arrName[index]);
             }
             data = searchValsArr(encodes, codeArr, arr);
             pueType = {
@@ -432,7 +432,6 @@ export default {
                 lineOption.xAxis[0].axisLabel.rotate = 35;
             }
             lineOption.yAxis[0].axisLabel.formatter = function(value, index) {
-                console.log(value);
                 return parseFloat(value).toFixed(1);
             };
             lineOption.xAxis[0].data = pueType.xAxisData && pueType.xAxisData;
@@ -445,7 +444,7 @@ export default {
         setLeftBottom(arr) {
             const configOption = JSON.parse(JSON.stringify(ConfigPieLine));
             let pieLine = this.$echarts.init(document.getElementById('electric-all-lb'));
-            this.$store.commit('setCharts', {name: 'chart2', val: pieLine});
+            this.$store.commit('setCharts', { name: 'chart2', val: pieLine });
 
             const encodes1 = ['NHDP0052', 'NHDP0053', 'NHDP0054', 'NHDP0055', 'NHDP0056'];
             const encodes2 = ['NHDP0057', 'NHDP0058', 'NHDP0059', 'NHDP0060', 'NHDP0061'];
@@ -513,7 +512,7 @@ export default {
             if (this.mapMoudle === 'province') {
                 map = this.$echarts.init(document.getElementById('electric-right-top'));
                 map.clear();
-                this.$store.commit('setCharts', {name: 'chart3', val: map});
+                this.$store.commit('setCharts', { name: 'chart3', val: map });
                 let codes = jzMap.arrCode;
                 const encodes = ['NHDP0036', 'NHDP0037'];
                 let data = searchMapData(codes, encodes, arr, 'city');
@@ -687,14 +686,14 @@ export default {
             // this.$store.commit('setCharts', {name: 'chart6', val: pie1});
             // this.$store.commit('setCharts', {name: 'chart7', val: pie2});
             ConfigElePie1.series[0].data = [
-                {value: offPoint2[0] ? Number(offPoint2[0]) : 0, name: '转供电'},
-                {value: offPoint1[0] ? Number(offPoint1[0]) : 0, name: '直供电'},
+                { value: offPoint2[0] ? Number(offPoint2[0]) : 0, name: '转供电' },
+                { value: offPoint1[0] ? Number(offPoint1[0]) : 0, name: '直供电' },
             ];
             const width = parseInt(document.getElementById('electric-right-bottom').clientWidth);
             ConfigElePie2.series[0].data = [
-                {value: 8, name: '转供电', label: getLabel('B', offPoint2.slice(1), width * 0.58)},
-                {value: 20, name: '转供电', label: {show: false}, labelLine: {show: false}},
-                {value: 8, name: '直供电', label: getLabel('A', offPoint1.slice(1), width * 0.58)},
+                { value: 8, name: '转供电', label: getLabel('B', offPoint2.slice(1), width * 0.58) },
+                { value: 20, name: '转供电', label: { show: false }, labelLine: { show: false } },
+                { value: 8, name: '直供电', label: getLabel('A', offPoint1.slice(1), width * 0.58) },
             ];
             let all = parseFloat(offPoint1[0]) + parseFloat(offPoint2[0]);
             let point2 = parseFloat(offPoint2[0]);

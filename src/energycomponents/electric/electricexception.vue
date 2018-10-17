@@ -118,7 +118,7 @@ export default {
                 return tableTd[index].concat(ele.dataArr);
             });
             this.currentMonthData = datas;
-            console.log(datas);
+            // console.log(datas);
             // 设置异常累计表格数据
             const totalArr = [];
             const months = getCurentMonthArr(this.currentMonth);

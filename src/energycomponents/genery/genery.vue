@@ -322,10 +322,10 @@ export default {
                 searchValArr('NHDP0016', arr),
                 searchValArr('NHDP0009', arr),
                 searchValArr('NHDP0010', arr));
-                //去掉开头的市字
-               sortArr[1] = sortArr[1].map(ele => {
-                    return ele.replace(/市/,'');
-                });
+            // 去掉开头的市字
+            // sortArr[1] = sortArr[1].map(ele => {
+            //     return ele.replace(/市/, '');
+            // });
             this.leftBottom = {
                 listNetCost: sortArr[3],
                 listIDCCost: sortArr[4],

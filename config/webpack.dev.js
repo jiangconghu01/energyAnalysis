@@ -14,9 +14,10 @@ module.exports = merge(common, {
         proxy: {
 
             '/czxt/*': {
+                target: 'http://39.105.122.153',
                 // target: 'http://rap2api.taobao.org/app/mock/18550',
                 // target: 'http://134.96.245.118:7001/',
-                target: 'http://localhost:3000/',
+                // target: 'http://localhost:3000/',
                 changeOrigin: true,
                 secure: false
             }

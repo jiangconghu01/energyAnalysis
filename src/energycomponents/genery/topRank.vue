@@ -34,10 +34,10 @@
 <script>
 import ConfigScatter from '../chartconfig/rankScatter.js';
 import ConfigBar from '../chartconfig/rankBar.js';
-import {getTopParams} from './origindata.js';
+import { getTopParams } from './origindata.js';
 import { mapGetters } from 'vuex';
 import jzMap from '../chartconfig/zjMap.js';
-import {searchValsArr} from '../dataUtil.js';
+import { searchValsArr } from '../dataUtil.js';
 // import {
 //     topOffice,
 //     officeBasicNum,
@@ -85,8 +85,8 @@ export default {
         setCharts(namesdata, ydata, xdata, legendata, seriescount, bardata, home) {
             let scatter = this.$echarts.init(document.getElementById('rank-left-all'));
             let bar = this.$echarts.init(document.getElementById('rank-right-all'));
-            this.$store.commit('setCharts', {name: 'chart1', val: scatter});
-            this.$store.commit('setCharts', {name: 'chart2', val: bar});
+            this.$store.commit('setCharts', { name: 'chart1', val: scatter });
+            this.$store.commit('setCharts', { name: 'chart2', val: bar });
             let scatterTitle = '';
             let scatterMarkline = [];
             let names = namesdata;
@@ -121,12 +121,12 @@ export default {
             // 设置title和markline
             ConfigScatter.title.text = scatterTitle;
             ConfigScatter.tooltip.formatter = params => {
-                const x = tooltips[0].replace(/{#}/,params.value[0]);
-                const y = tooltips[1].replace(/{#}/,params.value[1]);
+                const x = tooltips[0].replace(/{#}/, params.value[0]);
+                const y = tooltips[1].replace(/{#}/, params.value[1]);
                 return `${params.data.name}:</br>
                 ${params.marker}${x}</br>
                 ${params.marker}${y}`;
-            }
+            };
             const x = xs.map(e => Number(e));
             const y = ys.map(e => Number(e));
 
@@ -176,7 +176,7 @@ export default {
                 const nameMap = await this.$http.get('/czxt/pages/wjhx/getTopNAmmeterName.do', params);
                 this.nameMap = nameMap.data;
                 const codes = nameMap.data.map(ele => ele.code);
-                const postParam = {paramArrs: getTopParams(param, codes, this.currentMonth)};
+                const postParam = { paramArrs: getTopParams(param, codes, this.currentMonth) };
                 const data = await this.$http.post('/czxt/pages/wjhx/getIdWjhxParm.do', postParam, this.module);
                 this.surceData = data.data;
                 return {

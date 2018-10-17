@@ -21,7 +21,8 @@ module.exports = {
         'no-dupe-keys': 'error',
         'quotes': ['warn', 'single'],
         'no-multi-spaces': ['warn', { ignoreEOLComments: false }],
-        "no-extend-native": 0 //允许对内置对象的原型进行扩展
+        "no-extend-native": 0, //允许对内置对象的原型进行扩展,
+        "eol-last": 0
     },
     globals: { // 声明在代码中自定义的全局变量
         'CONFIG': true

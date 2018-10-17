@@ -21,14 +21,14 @@ export default {
             home: true,
             czxtData: null,
             currentTab: 1,
-           // dev: this.$store.getters.module !== 'dev',
+            // dev: this.$store.getters.module !== 'dev',
             dev: true,
             test: 'test'
         };
     },
     methods: {
         toGeneryPage() {
-            this.$router.push({name: 'All'});
+            this.$router.push({ name: 'All' });
             this.currentTab = 1;
         },
         toGeneryImpotent() {
@@ -37,20 +37,20 @@ export default {
                 duration: 3,
                 closable: true
             });
-            //this.$router.push({name: 'TopImp'});
-            //this.currentTab = 2;
+            // this.$router.push({name: 'TopImp'});
+            // this.currentTab = 2;
         },
         toGeneryOffice() {
             this.currentTab = 3;
-            this.$router.push({name: 'TopRank', params: {pageType: 'office'}});
+            this.$router.push({ name: 'TopRank', params: { pageType: 'office' } });
         },
         toGeneryTyi() {
             this.currentTab = 4;
-            this.$router.push({name: 'TopRank', params: {pageType: 'tianyi'}});
+            this.$router.push({ name: 'TopRank', params: { pageType: 'tianyi' } });
         },
         toGeneryCommunication() {
             this.currentTab = 5;
-            this.$router.push({name: 'TopRank', params: {pageType: 'communication'}});
+            this.$router.push({ name: 'TopRank', params: { pageType: 'communication' } });
         },
         getData() {
             // this.axios({

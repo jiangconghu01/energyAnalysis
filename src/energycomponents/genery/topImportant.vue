@@ -124,7 +124,7 @@ export default {
              border-radius: 0.6rem;
         }
         .databar{
-            position: absolute;
+            position: absolute; 
             width:49%;
             height: 98%;
             top:2%;

@@ -33,7 +33,7 @@ const option = {
         name: '能源费情况',
         type: 'pie',
         radius: ['62%', '75%'],
-        center: ['45%', '55%'],
+        center: ['45%', '53%'],
         itemStyle: {
             normal: {
                 label: {
@@ -79,14 +79,14 @@ const option = {
             { value: 0, name: '油', label: { show: true }, labelLine: { show: true } },
         ],
         color: ['#ffa354', '#ffefb4', '#248bff'],
-        startAngle: 120,
+        startAngle: 10,
         hoverAnimation: false,
     },
     {
         name: '能耗情况',
         type: 'pie',
         radius: ['45%', '60%'],
-        center: ['45%', '55%'],
+        center: ['45%', '53%'],
         itemStyle: {
             normal: {
                 labelLine: {
@@ -140,7 +140,7 @@ const option = {
         ],
         // color: ['#ffefb4', '#ff66ec', '#24c6ff', '#ffa354'],
         color: ['#ffa354', '#ffefb4', '#24c6ff'],
-        startAngle: 190,
+        startAngle: -60,
         hoverAnimation: false,
     }
     ]

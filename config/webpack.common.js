@@ -9,9 +9,6 @@ const isDev = process.env.NODE_ENV === 'development';
 module.exports = {
     // context: path.resolve(__dirname, '../src'), // webpack查找相对路径文件时候会以该路径为基础路径
     entry: {
-        echarts: 'echarts',
-        axios: 'axios',
-        vue: 'vue',
         // index: './src/index.js',
         // filetree: './src/filetree.js',
         energyAnalysis: ['babel-polyfill', './src/eneryAnalysis.js'],
@@ -151,7 +148,6 @@ module.exports = {
                     loader: 'css-loader',
                     options: {
                         modules: true,
-                        // localIdentName: '[path][name]-[local]-[hash:base64:5]'
                         localIdentName: '[name]-[local]-[hash:base64:8]'
                     }
                 },
@@ -186,13 +182,25 @@ module.exports = {
         {
             test: /\.(png|svg|jpg|gif)$/,
             use: [
-                'file-loader'
+                {
+                    loader: 'file-loader',
+                    options: {
+                        limit: 1024,
+                        name: 'resources/[path][name].[hash:8].[ext]'
+                    }
+                }
             ]
         },
         {
             test: /\.(woff|woff2|eot|ttf|otf)$/,
             use: [
-                'file-loader'
+                {
+                    loader: 'file-loader',
+                    options: {
+                        limit: 1024,
+                        name: 'resources/[path][name].[hash:8].[ext]'
+                    }
+                }
             ]
         }
         ]

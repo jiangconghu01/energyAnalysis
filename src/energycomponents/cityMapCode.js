@@ -55,6 +55,10 @@ const provinceData = {
         cityName: '信产公司',
         mapCode: '',
         cityCode: 'A3314',
+    }, {
+        cityName: '省本部',
+        mapCode: '',
+        cityCode: 'A3300',
     }]
 };
 
@@ -90,10 +94,10 @@ const cityDataArr = [{
         cityName: '桐庐县',
         cityCode: 'A330109'
     }, {
-        cityName: '富阳市',
+        cityName: '富阳区',
         cityCode: 'A330110'
     }, {
-        cityName: '临安市',
+        cityName: '临安区',
         cityCode: 'A330111'
     }, {
         cityName: '余杭区',
@@ -104,6 +108,9 @@ const cityDataArr = [{
     }, {
         cityName: '淳安县',
         cityCode: 'A330114'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A330100'
     }]
 }, {
     cityName: '宁波市',
@@ -134,7 +141,7 @@ const cityDataArr = [{
         cityName: '余姚市',
         cityCode: 'A330208'
     }, {
-        cityName: '奉化市',
+        cityName: '奉化区',
         cityCode: 'A330209'
     }, {
         cityName: '象山县',
@@ -145,6 +152,9 @@ const cityDataArr = [{
     }, {
         cityName: '鄞州区',
         cityCode: 'A330212'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A330200'
     }]
 }, {
     cityName: '温州市',
@@ -160,7 +170,7 @@ const cityDataArr = [{
         cityName: '瓯海区',
         cityCode: 'A330303'
     }, {
-        cityName: '洞头县',
+        cityName: '洞头区',
         cityCode: 'A330304'
     }, {
         cityName: '乐清市',
@@ -183,6 +193,9 @@ const cityDataArr = [{
     }, {
         cityName: '泰顺县',
         cityCode: 'A330311'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A330300'
     }]
 }, {
     cityName: '嘉兴市',
@@ -209,6 +222,9 @@ const cityDataArr = [{
     }, {
         cityName: '桐乡市',
         cityCode: 'A330407'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A330400'
     }]
 }, {
     cityName: '湖州市',
@@ -229,6 +245,9 @@ const cityDataArr = [{
     }, {
         cityName: '安吉县',
         cityCode: 'A330505'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A330500'
     }]
 }, {
     cityName: '绍兴市',
@@ -238,7 +257,7 @@ const cityDataArr = [{
         cityName: '柯桥区',
         cityCode: 'A330601'
     }, {
-        cityName: '上虞市',
+        cityName: '上虞区',
         cityCode: 'A330602'
     }, {
         cityName: '嵊州市',
@@ -252,6 +271,9 @@ const cityDataArr = [{
     }, {
         cityName: '越城区',
         cityCode: 'A330606'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A330600'
     }]
 }, {
     cityName: '金华市',
@@ -284,6 +306,9 @@ const cityDataArr = [{
     }, {
         cityName: '浦江县',
         cityCode: 'A330709'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A330700'
     }]
 }, {
     cityName: '衢州市',
@@ -307,6 +332,9 @@ const cityDataArr = [{
     }, {
         cityName: '衢江区',
         cityCode: 'A330806'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A330800'
     }]
 }, {
     cityName: '丽水市',
@@ -340,8 +368,11 @@ const cityDataArr = [{
         cityName: '松阳县',
         cityCode: 'A330909'
     }, {
-        cityName: '景宁县',
+        cityName: '景宁畲族自治县',
         cityCode: 'A330910'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A330900'
     }]
 }, {
     cityName: '台州市',
@@ -372,8 +403,11 @@ const cityDataArr = [{
         cityName: '三门县',
         cityCode: 'A331008'
     }, {
-        cityName: '玉环县',
+        cityName: '玉环市',
         cityCode: 'A331009'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A331000'
     }]
 }, {
     cityName: '舟山市',
@@ -394,6 +428,9 @@ const cityDataArr = [{
     }, {
         cityName: '嵊泗县',
         cityCode: 'A331105'
+    }, {
+        cityName: '市本级',
+        cityCode: 'A331000'
     }]
 }];
 export { provinceData, cityDataArr };
