@@ -75,11 +75,11 @@ const option = {
             }
         },
         data: [
-            { value: 0, name: '电', label: { show: false }, labelLine: { show: false } },
+            { value: 0, name: '电', label: { show: false, color: '#ffefb4' }, labelLine: { show: false } },
             { value: 0, name: '油', label: { show: true }, labelLine: { show: true } },
         ],
         color: ['#ffa354', '#ffefb4', '#248bff'],
-        startAngle: 10,
+        startAngle: -10,
         hoverAnimation: false,
     },
     {
@@ -135,7 +135,7 @@ const option = {
             }
         },
         data: [
-            { value: 135, name: '电', label: { show: true }, labelLine: { show: true } },
+            { value: 135, name: '电', label: { show: true, color: '#ffefb4' }, labelLine: { show: true } },
             { value: 1348, name: '油', label: { show: true }, labelLine: { show: true } }
         ],
         // color: ['#ffefb4', '#ff66ec', '#24c6ff', '#ffa354'],

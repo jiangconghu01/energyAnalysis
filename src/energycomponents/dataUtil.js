@@ -224,7 +224,7 @@ function controlMapLabel(map) {
         const config = map.getOption();
         const sw = config.series[0].zoom * baseRect;
         let data2 = config.series[0].data;
-        if (sw > 150 && sw < 800) {
+        if (sw > 150 && sw < 700) {
             data2 = data2.map((ele) => {
                 ele.label = {
                     show: !labelZoom.controlArr.includes(ele.name)
@@ -232,7 +232,7 @@ function controlMapLabel(map) {
                 return ele;
             });
         }
-        if (sw > 800) {
+        if (sw > 700) {
             data2 = data2.map((ele) => {
                 if (labelZoom.controlArr.includes(ele.name)) {
                     ele.label = {
@@ -324,7 +324,10 @@ function formatNumberRgx(num) {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return parts.join('.');
 }
-
+// 根据区县编码查找名字查找编码
+// function getCountryMapVal(param) {
+//     cityDataArr.forEach(e)
+// }
 function generyRBData(arr, code) {
     let rb = {
         station: [],

@@ -1,4 +1,5 @@
-import hzjson from './mapjson/330100';
+// import hzjson from './mapjson/330100';
+import hzjson from './mapjson/map';
 import nbjson from './mapjson/330200';
 import wzjson from './mapjson/330300';
 import jxjson from './mapjson/330400';

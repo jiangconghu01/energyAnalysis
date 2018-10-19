@@ -41,16 +41,40 @@
             <div id="genery-right-all" :class="$style['right-all']">
                 <div id="genery-right-top" :class="$style['right-top']"></div>
                 <!-- <div id="genery-right-top2" :class="$style['right-top']" style="z-index:1000;width:50%;"></div> -->
-                <div v-show="mapMoudle==='city' || mapMoudle==='country'" id="genery-right-topcity" :class="[$style['right-top-back']]">
-                        <i-button type="primary" @click="goBack()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
+                <div  id="genery-right-topcity" :class="[$style['right-top-back']]">
+                        <i-button 
+                        type="primary"
+                        v-show="mapMoudle==='city' || mapMoudle==='country'" 
+                        @click="goBack()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
                             <Icon type="chevron-left"></Icon>
                             返回
                         </i-button>
+                        <i-button 
+                        type="primary"
+                        v-show="mapMoudle==='company'" 
+                        @click="goBack()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
+                            <Icon type="chevron-left"></Icon>
+                            返回省级数据
+                        </i-button>
                 </div>
-                <div v-show="mapMoudle==='province' || mapMoudle==='company'" :class="[$style['right-top-company']]">
+                <div  :class="[$style['right-top-company']]">
                     <ul>
-                        <li :class="$style['company-name']"  @click="goCompany('省传输局')">省传输局</li>
-                        <li :class="$style['company-name']" @click="goCompany('信产公司')">信产公司</li>
+                        <li 
+                        v-show="mapMoudle==='province' || mapMoudle==='company'" 
+                        :class="$style['company-name']" 
+                         @click="goCompany('省本部')">省本部</li>
+                        <li 
+                        v-show="mapMoudle==='province' || mapMoudle==='company'" 
+                        :class="$style['company-name']" 
+                         @click="goCompany('省传输局')">省传输局</li>
+                        <li 
+                        v-show="mapMoudle==='province' || mapMoudle==='company'" 
+                        :class="$style['company-name']" 
+                        @click="goCompany('信产公司')">信产公司</li>
+                        <li 
+                        v-show="mapMoudle==='city' || mapMoudle==='country'" 
+                        :class="$style['company-name']" 
+                        @click="gocityCenter()">市本级</li>
                     </ul>
                 </div>
                 <div id="genery-right-bottom" :class="$style['right-bottom']">
@@ -77,12 +101,13 @@
 <script>
 import ConfigPie from '../chartconfig/generyPie.js';
 import ConfigLine from '../chartconfig/generyLine.js';
-import {provinceMap, cityMap} from '../chartconfig/generyMap.js';
+import { provinceMap, cityMap } from '../chartconfig/generyMap.js';
 import jzMap from '../chartconfig/zjMap.js';
 import tableBar from './tablebarcomp.vue';
 import tableBar2 from './tablebarcomp2.vue';
 import { cityDataArr } from '../cityMapCode.js';
 import 'echarts/map/js/province/zhejiang.js';
+import { centerCityPart } from '../chartconfig/staticData.js';
 import {
     getProvinceParam,
     getCityParam,
@@ -122,6 +147,7 @@ export default {
             },
             table1: [],
             negativeList: [],
+            currentCityName: '',
             currentCity: 'A33',
             currentCityArr: cityNameArr,
             mapMoudle: 'province',
@@ -145,12 +171,10 @@ export default {
                 };
             } else if (280 > ht > 240) {
                 tran = {
-                    //    transform: translateY(-57%) translateX(-50%) scale(.9);
                     transform: 'translateY(-57%) translateX(-50%) scale(.9)'
                 };
             } else {
                 tran = {
-                    //    transform: translateY(-57%) translateX(-50%) scale(.9);
                     transform: 'translateY(-57%) translateX(-50%) scale(.8)'
                 };
             }
@@ -173,6 +197,13 @@ export default {
             this.currentCity = 'A33';
             this.currentCityArr = cityNameArr;
             // this.$router.push({name: 'All'});
+        },
+        gocityCenter() {
+            this.mapMoudle = 'country';
+            const name = this.currentCityName;
+            if (!name) return;
+            this.currentCity = jzMap.mapCode[name] + '00';
+            this.countryNameOne = '市本级';
         },
         goCompany(name) {
             this.mapMoudle = 'company';
@@ -204,7 +235,7 @@ export default {
             // let postData = this.$qs.stringify({
             //     paramArrs: data
             // });
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
@@ -234,7 +265,7 @@ export default {
             // let postData = this.$qs.stringify({
             //     paramArrs: data
             // });
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
@@ -253,10 +284,6 @@ export default {
                 eleCount: searchVal(code, 'NHDP0002', arr),
                 oilCost: searchVal(code, 'NHDP0004', arr),
                 oilCount: searchVal(code, 'NHDP0003', arr),
-                // waterCount: searchVal(code, 'NHDP0124', arr),
-                // waterCost: searchVal(code, 'NHDP0125', arr),
-                // gasCost: searchVal(code, 'NHDP0007', arr),
-                // gasCount: searchVal(code, 'NHDP0008', arr),
                 otherCost: searchVal(code, 'NHDP0007', arr),
                 otherCount: searchVal(code, 'NHDP0008', arr),
             };
@@ -264,24 +291,16 @@ export default {
             let eleCo = this.leftTop.eleCost;
             let oilCu = this.leftTop.oilCount;
             let oilCo = this.leftTop.oilCost;
-            // let waterCu = this.leftTop.waterCount;
-            // let waterCo = this.leftTop.waterCost;
-            // let gasCu = this.leftTop.gasCount;
-            // let gasCo = this.leftTop.gasCost;
             let otherCo = this.leftTop.otherCost;
             let otherCu = this.leftTop.otherCount;
             const listVal = [eleCo, oilCo, otherCo, eleCu, oilCu, otherCu];
             ConfigPie.series[0].data[0].value = eleCo > 0 ? eleCo : 0;
             ConfigPie.series[0].data[1].value = oilCo > 0 ? oilCo : 0;
-            ConfigPie.series[0].data[2] = {value: (otherCo > 0 ? otherCo : 0), name: '其他', label: {show: true}, labelLine: {show: true}};
-            // ConfigPie.series[0].data[2] = {value: (waterCo > 0 ? waterCo : 0), name: '水费'};
-            // ConfigPie.series[0].data[3] = {value: (gasCo > 0 ? gasCo : 0), name: '燃气费'};
+            ConfigPie.series[0].data[2] = { value: (otherCo > 0 ? otherCo : 0), name: '其他', label: { show: true, color: '#ffefb4' }, labelLine: { show: true } };
 
             ConfigPie.series[1].data[0].value = eleCu > 0 ? eleCu : 0;
             ConfigPie.series[1].data[1].value = oilCu > 0 ? oilCu : 0;
-            ConfigPie.series[1].data[2] = {value: (otherCu > 0 ? otherCu : 0), name: '其他', label: {show: true}, labelLine: {show: true}};
-            // ConfigPie.series[1].data[2] = {value: (waterCu > 0 ? waterCu : 0), name: '水量'};
-            // ConfigPie.series[1].data[3] = {value: (gasCu > 0 ? gasCo : 0), name: '燃气耗量'};
+            ConfigPie.series[1].data[2] = { value: (otherCu > 0 ? otherCu : 0), name: '其他', label: { show: true, color: '#ffefb4' }, labelLine: { show: true } };
             // const legendList = ['电费', '油费', '水费', '燃气费', '电量', '油耗', '水量', '燃气耗量'];
             ConfigPie.series[0].data.forEach((ele, index) => {
                 if (ele.value <= 0) {
@@ -312,11 +331,12 @@ export default {
             this.negativeList = getNagetiveList(legendList, listVal);
             ConfigPie.legend.data = legendList;
             let pie = this.$echarts.init(document.getElementById('genery-left-top'));
-            this.$store.commit('setCharts', {name: 'chart1', val: pie});
+            this.$store.commit('setCharts', { name: 'chart1', val: pie });
             pie.setOption(ConfigPie);
         },
         setLeftBottom(arr, code) {
-            const sortArr = getSortMapArr('drop',
+            // 先对柱状图表和下边表格做数据关系对应映射centerCityPart
+            let sortArr = getSortMapArr('drop',
                 searchValArr('NHDP0015', arr),
                 this.currentCityArr,
                 searchValArr('NHDP0016', arr),
@@ -326,6 +346,25 @@ export default {
             // sortArr[1] = sortArr[1].map(ele => {
             //     return ele.replace(/市/, '');
             // });
+            console.log(sortArr);
+            // 查找属于市本级的区县数据不再city级显示
+            if (this.mapMoudle === 'city') {
+                const deleteIndexList = [];
+                const targetAerr = (this.currentCityName ? centerCityPart[this.currentCityName] : []);
+                if (targetAerr.length) {
+                    sortArr[1].forEach((ele, index) => {
+                        if (targetAerr.includes(ele)) deleteIndexList.push(index);
+                    });
+
+                    const result = [];
+                    sortArr.forEach(ele => {
+                        const a = ele.filter((item, index) => !deleteIndexList.includes(index));
+                        result.push(a);
+                    });
+                    sortArr = result;
+                }
+            }
+
             this.leftBottom = {
                 listNetCost: sortArr[3],
                 listIDCCost: sortArr[4],
@@ -336,7 +375,7 @@ export default {
                 warnVal: searchVal(code, 'NHDP0012', arr)
             };
             let line = this.$echarts.init(document.getElementById('genery-left-bottom'));
-            this.$store.commit('setCharts', {name: 'chart2', val: line});
+            this.$store.commit('setCharts', { name: 'chart2', val: line });
             this.hoverLine = line;
             const option = JSON.parse(JSON.stringify(ConfigLine));
             // option.yAxis[0].min = 0;
@@ -360,15 +399,12 @@ export default {
             if (this.mapMoudle === 'province' || this.mapMoudle === 'city') {
                 option.xAxis[0].axisLabel.rotate = 35;
             }
-
+            // 查找属于市本级的区县数据替换为市本级显示
             if (this.mapMoudle === 'country') {
                 option.xAxis[0].data = [this.countryNameOne];
             } else {
-                // option.xAxis[0].data = this.currentCityArr;
                 option.xAxis[0].data = sortArr[1];
             }
-            // option.series[0].data = this.leftBottom.listPersentNet;
-            // option.series[1].data = this.leftBottom.listPersentIDC;
             option.series[0].data = sortArr[2];
             option.series[1].data = sortArr[0];
             const max = Math.max(Math.max.apply(null, this.leftBottom.listPersentNet), Math.max.apply(null, this.leftBottom.listPersentIDC));
@@ -433,7 +469,7 @@ export default {
             const baseRect = Math.min(boxWidth, boxHeight);
             if (this.mapMoudle === 'province') {
                 map.clear();
-                this.$store.commit('setCharts', {name: 'chart3', val: map});
+                this.$store.commit('setCharts', { name: 'chart3', val: map });
                 let codes = jzMap.arrCode;
                 const encodes = ['NHDP0006', 'NHDP0005'];
                 let data = searchMapData(codes, encodes, arr, 'city');
@@ -454,7 +490,7 @@ export default {
                 map.setOption(mapconfig);
             } else if (this.mapMoudle === 'city') {
                 map.clear();
-                this.$store.commit('setCharts', {name: 'chart3', val: map});
+                this.$store.commit('setCharts', { name: 'chart3', val: map });
                 let name = jzMap.mapName[code];
                 this.$echarts.registerMap(name, jzMap.mapJson[name]);
                 // const features = jzMap.mapJson[name].features;
@@ -487,7 +523,7 @@ export default {
                 const searchMapData2 = searchMapData;
                 if (this.countryParentName && countryToUpdateCityMap) {
                     map.clear();
-                    this.$store.commit('setCharts', {name: 'chart3', val: map});
+                    this.$store.commit('setCharts', { name: 'chart3', val: map });
                     const cityName = this.countryParentName;
                     this.$echarts.registerMap(cityName, datajzMap.mapJson[cityName]);
                     // console.log(datajzMap.mapJson[cityName]);
@@ -518,19 +554,38 @@ export default {
             map && map.off('click');
             map && map.on('click', (param) => {
                 if (this.mapMoudle === 'country') {
-                    this.currentCity = getCountyCodeOne(cityDataArr, param.name);
-                    this.currentCityArr = [param.name];
-                    this.countryNameOne = param.name;
+                    let name = param.name;
+                    // const targetAerr = (this.currentCityName ? centerCityPart[this.currentCityName] : []);
+                    // if (targetAerr.length && targetAerr.includes(name)) {
+                    //     const city = this.currentCityName;
+                    //     name = '市本级';
+                    //     this.currentCity = jzMap.mapCode[city] + '00';
+                    // } else {
+                    //     this.currentCity = getCountyCodeOne(cityDataArr, name);
+                    // }
+                    this.currentCity = getCountyCodeOne(cityDataArr, name);
+                    this.currentCityArr = [name];
+                    this.countryNameOne = name;
                     return;
                 }
                 if (this.mapMoudle === 'city') {
+                    let name = param.name;
                     this.mapMoudle = 'country';
-                    this.countryNameOne = param.name;
+                    this.countryNameOne = name;
                     // console.log(param.name);
-                    this.currentCity = getCountyCodeOne(cityDataArr, param.name);
+                    // const targetAerr = (this.currentCityName ? centerCityPart[this.currentCityName] : []);
+                    // if (targetAerr.length && targetAerr.includes(name)) {
+                    //     const city = this.currentCityName;
+                    //     name = '市本级';
+                    //     this.currentCity = jzMap.mapCode[city] + '00';
+                    // } else {
+                    //     this.currentCity = getCountyCodeOne(cityDataArr, name);
+                    // }
+                    this.currentCity = getCountyCodeOne(cityDataArr, name);
                     return;
                 }
                 this.mapMoudle = 'city';
+                this.currentCityName = param.name;
                 this.currentCityArr = getCountyName(cityDataArr, jzMap.mapCode[param.name]);
 
                 let clickCode = jzMap.mapCode[param.name];
@@ -573,7 +628,7 @@ function getNagetiveList(names, vals) {
     for (let index = 0, len = vals.length; index < len; index++) {
         const element = vals[index];
         if (element < 0) {
-            let item = index < len / 2 ? {name: names[index], val: element + '万元'} : {name: names[index], val: element + '吨标煤'};
+            let item = index < len / 2 ? { name: names[index], val: element + '万元' } : { name: names[index], val: element + '吨标煤' };
             list.push(item);
         }
     }
@@ -748,7 +803,7 @@ function addCodes(code, count) {
             }
             .right-top-back{
                 top:20px;
-                right: 10px;
+                right: 25px;
             }
             .right-top-company{
                 position: absolute;

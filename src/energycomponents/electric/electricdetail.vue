@@ -33,16 +33,33 @@
             </div>
             <div id="electric-detail-right-all" :class="$style['right-all']">
                 <div id="electric-detail-right" :class="$style['right-map']"></div>
-                <div v-show="mapMoudle==='city' || mapMoudle==='country' "  :class="[$style['right-top-back']]">
-                        <i-button type="primary" @click="backProvince()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
+                <div :class="[$style['right-top-back']]">
+                        <i-button 
+                        type="primary"
+                         v-show="mapMoudle==='city' || mapMoudle==='country' "   
+                        @click="backProvince()" 
+                        :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
                             <Icon type="chevron-left"></Icon>
                             返回
                         </i-button>
+                        <i-button 
+                        type="primary"
+                        v-show="mapMoudle==='company'" 
+                        @click="backProvince()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
+                            <Icon type="chevron-left"></Icon>
+                            返回省级数据
+                        </i-button>                        
                 </div>
-                <div v-show="mapMoudle==='province' || mapMoudle==='company'" :class="[$style['right-top-company']]">
+                <div :class="[$style['right-top-company']]">
                     <ul>
-                        <li :class="$style['company-name']"  @click="goCompany('省传输局')">省传输局</li>
-                        <li :class="$style['company-name']" @click="goCompany('信产公司')">信产公司</li>
+                        <li  v-show="mapMoudle==='province' || mapMoudle==='company'" 
+                        :class="$style['company-name']"  @click="goCompany('省本部')">省本部</li>
+                        <li  v-show="mapMoudle==='province' || mapMoudle==='company'" 
+                        :class="$style['company-name']"  @click="goCompany('省传输局')">省传输局</li>
+                        <li  v-show="mapMoudle==='province' || mapMoudle==='company'" 
+                        :class="$style['company-name']" @click="goCompany('信产公司')">信产公司</li>
+                        <li  v-show="mapMoudle==='city' || mapMoudle==='country'" 
+                        @click="gocityCenter()" :class="$style['company-name']" >市本级</li>
                     </ul>
                 </div>                    
             </div>
@@ -54,9 +71,9 @@
 // import tableBar from './tablebarcomp.vue';
 import 'echarts/map/js/province/zhejiang.js';
 import jzMap from '../chartconfig/zjMap.js';
-import {detailXarr, labelZoom} from '../chartconfig/staticData.js';
+import { detailXarr, labelZoom } from '../chartconfig/staticData.js';
 import ConfigBarLine from '../chartconfig/electricBarAndLine.js';
-import {provinceMap, cityMap} from '../chartconfig/generyMap.js';
+import { provinceMap, cityMap } from '../chartconfig/generyMap.js';
 import { cityDataArr } from '../cityMapCode.js';
 import {
     getProvinceParam,
@@ -92,10 +109,11 @@ export default {
             sourceData: {},
             sourceData2: {},
             sourceMonthData: {},
+            currentCityName: '',
             currentCity: 'A33',
             currentCityArr: cityNameArr,
             currentCityCodeArr: cityCodeArr,
-            countryNameOne:'',
+            countryNameOne: '',
             mapMoudle: 'province'
         };
     },
@@ -122,12 +140,19 @@ export default {
     },
     methods: {
         goback() {
-            this.$router.replace({name: 'Electric'});
+            this.$router.replace({ name: 'Electric' });
         },
-        goCompany(name){
+        gocityCenter() {
+            this.mapMoudle = 'country';
+            const name = this.currentCityName;
+            if (!name) return;
+            this.currentCity = jzMap.mapCode[name] + '00';
+            this.countryNameOne = '市本级';
+        },
+        goCompany(name) {
             this.mapMoudle = 'company';
             this.currentCity = jzMap.mapCode[name];
-            this.currentCityArr = [name]; 
+            this.currentCityArr = [name];
         },
         backProvince() {
             this.mapMoudle = 'province';
@@ -145,7 +170,7 @@ export default {
             const arr = getMonthsArr(this.currentMonth);
             const encodes = detailEncodeArr2;
             const data = getMonthsParam(arr.sMonths, encodes, this.currentCity);
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
@@ -157,9 +182,8 @@ export default {
             });
         },
         getAxiosData(date) {
-            
             let data = getCityParam(date, this.currentCityCodeArr, detailEncodeArr);
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
@@ -170,52 +194,52 @@ export default {
                 console.warn(error);
             });
         },
-        getAxiosDataToCountryMap(date,cityName){
-            const code=jzMap.mapCode[cityName];
+        getAxiosDataToCountryMap(date, cityName) {
+            const code = jzMap.mapCode[cityName];
             let countryCodeArr = getCountyCode(cityDataArr, code);
             let data = getCityParam(date, this.currentCityCodeArr, detailEncodeArr);
-            let postData = this.$store.getters.module === 'dev' ? {paramArrs: data} : this.$qs.stringify({
+            let postData = this.$store.getters.module === 'dev' ? { paramArrs: data } : this.$qs.stringify({
                 paramArrs: data
             });
             this.axios.post('/czxt/pages/wjhx/getIdWjhxParm.do', postData).then((response) => {
                 this.sourceData2 = response.data;
-                let countryToUpdateCityMap=true;
-                this.setMap(this.sourceData2, this.currentCity,countryToUpdateCityMap);
+                let countryToUpdateCityMap = true;
+                this.setMap(this.sourceData2, this.currentCity, countryToUpdateCityMap);
             }).catch((error) => {
                 console.warn(error);
             });
         },
         setMap(arr, code, countryToUpdateCityMap) {
-            if(this.mapMoudle === 'company'){
+            if (this.mapMoudle === 'company') {
                 return;
             }
-            let map ='';
+            let map = '';
             // const encodes = ['NHDP0036', 'NHDP0037'];
             let encodes = this.current === 1 ? ['NHDP0036'] : ['NHDP0037'];
             let title = this.current === 1 ? '电量当年累计值' : '电费当年累计值';
             let unit = this.current === 1 ? '万度' : '万元';
-            if (this.mapMoudle=== 'province') {
+            if (this.mapMoudle === 'province') {
                 map = this.$echarts.init(document.getElementById('electric-detail-right'));
                 map.clear();
-                this.$store.commit('setCharts', {name: 'chart1', val: map});
+                this.$store.commit('setCharts', { name: 'chart1', val: map });
                 const mapconfig = JSON.parse(JSON.stringify(provinceMap));
                 let codes = jzMap.arrCode;
                 let data = searchMapData(codes, encodes, arr, 'city');
-                let max=0;
-                data.forEach(ele=>{
-                    if(parseFloat(ele.value)>max){
-                        max=Math.ceil(parseFloat(ele.value));
+                let max = 0;
+                data.forEach(ele => {
+                    if (parseFloat(ele.value) > max) {
+                        max = Math.ceil(parseFloat(ele.value));
                     }
                 });
-                mapconfig.dataRange.max=max;
+                mapconfig.dataRange.max = max;
                 mapconfig.title.text = title;
                 mapconfig.series[0].data = data;
                 mapconfig.tooltip.formatter = `{b}<br/>{c}${unit}`;
                 map.setOption(mapconfig);
-            } else if(this.mapMoudle === 'city'){
+            } else if (this.mapMoudle === 'city') {
                 map = this.$echarts.init(document.getElementById('electric-detail-right'));
                 map.clear();
-                this.$store.commit('setCharts', {name: 'chart1', val: map});               
+                this.$store.commit('setCharts', { name: 'chart1', val: map });
                 let name = jzMap.mapName[code];
                 this.$echarts.registerMap(name, jzMap.mapJson[name]);
                 const mapconfig = JSON.parse(JSON.stringify(cityMap));
@@ -224,68 +248,69 @@ export default {
                 let subCodes = addCodes(clickCode, subCodeCount);
 
                 let data2 = searchMapData(subCodes, encodes, arr, 'country');
-                let max=0;
-                data2.forEach(ele=>{
-                    if(parseFloat(ele.value)>max){
-                        max=Math.ceil(parseFloat(ele.value));
+                let max = 0;
+                data2.forEach(ele => {
+                    if (parseFloat(ele.value) > max) {
+                        max = Math.ceil(parseFloat(ele.value));
                     }
                 });
-                mapconfig.dataRange.max=max;
+                mapconfig.dataRange.max = max;
                 mapconfig.title.text = title;
                 mapconfig.series[0].map = name;
                 mapconfig.series[0].data = data2;
                 mapconfig.tooltip.formatter = `{b}<br/>{c}${unit}`;
                 map.setOption(mapconfig);
-            }else{
-                if(this.countryParentName && countryToUpdateCityMap){
-                map = this.$echarts.init(document.getElementById('electric-detail-right'));
-                map.clear();
-                this.$store.commit('setCharts', {name: 'chart1', val: map});               
-                let name = this.countryParentName;
-                this.$echarts.registerMap(name, jzMap.mapJson[name]);
-                const mapconfig = JSON.parse(JSON.stringify(cityMap));
-                let clickCode = jzMap.mapCode[name];
-                let subCodeCount = jzMap.countryCodeCount[clickCode];
-                let subCodes = addCodes(clickCode, subCodeCount);
+            } else {
+                if (this.countryParentName && countryToUpdateCityMap) {
+                    map = this.$echarts.init(document.getElementById('electric-detail-right'));
+                    map.clear();
+                    this.$store.commit('setCharts', { name: 'chart1', val: map });
+                    let name = this.countryParentName;
+                    this.$echarts.registerMap(name, jzMap.mapJson[name]);
+                    const mapconfig = JSON.parse(JSON.stringify(cityMap));
+                    let clickCode = jzMap.mapCode[name];
+                    let subCodeCount = jzMap.countryCodeCount[clickCode];
+                    let subCodes = addCodes(clickCode, subCodeCount);
 
-                let data2 = searchMapData(subCodes, encodes, this.sourceData2, 'country');
-                let max=0;
-                data2.forEach(ele=>{
-                    if(parseFloat(ele.value)>max){
-                        max=Math.ceil(parseFloat(ele.value));
-                    }
-                });
-                mapconfig.dataRange.max=max;
-                mapconfig.title.text = title;
-                mapconfig.series[0].map = name;
-                mapconfig.series[0].data = data2;
-                mapconfig.tooltip.formatter = `{b}<br/>{c}${unit}`;
-                map.setOption(mapconfig);
+                    let data2 = searchMapData(subCodes, encodes, this.sourceData2, 'country');
+                    let max = 0;
+                    data2.forEach(ele => {
+                        if (parseFloat(ele.value) > max) {
+                            max = Math.ceil(parseFloat(ele.value));
+                        }
+                    });
+                    mapconfig.dataRange.max = max;
+                    mapconfig.title.text = title;
+                    mapconfig.series[0].map = name;
+                    mapconfig.series[0].data = data2;
+                    mapconfig.tooltip.formatter = `{b}<br/>{c}${unit}`;
+                    map.setOption(mapconfig);
                 }
             }
-           const boxWidth = map ? map.getWidth() : 0;
-           const boxHeight = map ? map.getHeight() : 0;
-           const baseRect = Math.min(boxWidth,boxHeight);
+            const boxWidth = map ? map.getWidth() : 0;
+            const boxHeight = map ? map.getHeight() : 0;
+            const baseRect = Math.min(boxWidth, boxHeight);
 
-           controlMapLabel(map);
-           map && map.off('click');
-           map && map.on('click', (param) => {
-                if(this.mapMoudle === 'country'){
-                    this.currentCity = getCountyCodeOne(cityDataArr,param.name);
-                    this.currentCityArr=[param.name];
-                    this.currentCityCodeArr=[this.currentCity];
-                    this.countryNameOne=param.name;
+            controlMapLabel(map);
+            map && map.off('click');
+            map && map.on('click', (param) => {
+                if (this.mapMoudle === 'country') {
+                    this.currentCity = getCountyCodeOne(cityDataArr, param.name);
+                    this.currentCityArr = [param.name];
+                    this.currentCityCodeArr = [this.currentCity];
+                    this.countryNameOne = param.name;
                     return;
                 }
                 if (this.mapMoudle === 'city') {
                     this.mapMoudle = 'country';
-                    this.countryNameOne=param.name;
-                   this.currentCity = getCountyCodeOne(cityDataArr,param.name);
+                    this.countryNameOne = param.name;
+                    this.currentCity = getCountyCodeOne(cityDataArr, param.name);
                     return;
                 }
                 this.mapMoudle = 'city';
+                this.currentCityName = param.name;
                 let clickCode = jzMap.mapCode[param.name];
-                this.countryParentName=param.name;
+                this.countryParentName = param.name;
                 this.currentCityArr = getCountyName(cityDataArr, clickCode);
                 this.currentCityCodeArr = getCountyCode(cityDataArr, clickCode);
                 this.currentCity = clickCode;
@@ -295,7 +320,7 @@ export default {
             const configOption = JSON.parse(JSON.stringify(ConfigBarLine));
             configOption.dataZoom = [];
             let barLine = this.$echarts.init(document.getElementById('electric-detail-left-bottom'));
-            this.$store.commit('setCharts', {name: 'chart2', val: barLine});
+            this.$store.commit('setCharts', { name: 'chart2', val: barLine });
             const encodes1 = ['NHDP0040', 'NHDP0042', 'NHDP0041', 'NHDP0044'];
             const encodes2 = ['NHDP0045', 'NHDP0047', 'NHDP0046', 'NHDP0049'];
             let dataEcount = [];
@@ -311,7 +336,7 @@ export default {
             //     dataLineCost = searchValsArr(['NHDP0051'], codeArr, arr);
             //     configOption.xAxis[0].data = cityArr;
             // }
-            if (this.mapMoudle==='country') {
+            if (this.mapMoudle === 'country') {
                 let codeArr = [this.currentCity];
                 let cityArr = [this.countryNameOne];
                 dataEcount = searchValsArr(encodes1, codeArr, arr);
@@ -331,7 +356,7 @@ export default {
             }
             if (this.mapMoudle === 'company') {
                 let codeArr = [this.currentCity];
-                let cityArr =  [jzMap.mapName[this.currentCity]];
+                let cityArr = [jzMap.mapName[this.currentCity]];
                 dataEcount = searchValsArr(encodes1, codeArr, arr);
                 dataEcost = searchValsArr(encodes2, codeArr, arr);
                 dataLineCount = searchValsArr(['NHDP0050'], codeArr, arr);
@@ -340,7 +365,7 @@ export default {
             }
             if (this.mapMoudle === 'province') {
                 dataEcount = searchValsArr(encodes1, jzMap.arrCode, arr);
-                dataEcost = searchValsArr(encodes2, jzMap.arrCode,arr);
+                dataEcost = searchValsArr(encodes2, jzMap.arrCode, arr);
                 dataLineCount = searchValsArr(['NHDP0050'], jzMap.arrCode, arr);
                 dataLineCost = searchValsArr(['NHDP0051'], jzMap.arrCode, arr);// 返回数组里边多个数组
             }
@@ -356,9 +381,9 @@ export default {
                 configOption.series[0].data = [];
                 configOption.series.push.apply(configOption.series, getDataLineBar(detailXarr, dataEcost));
             }
-            //configOption.grid.y2 = '15%';
+            // configOption.grid.y2 = '15%';
             configOption.grid.y2 = 40;
-            if(this.mapMoudle === 'province' || this.mapMoudle === 'city'){
+            if (this.mapMoudle === 'province' || this.mapMoudle === 'city') {
                 configOption.xAxis[0].axisLabel.rotate = 35;
             }
             barLine.setOption(configOption);
@@ -366,7 +391,7 @@ export default {
         setLeftTop(monthsArr, encodes, code, monthsxArr) {
             const configOption = JSON.parse(JSON.stringify(ConfigBarLine));
             let barLine = this.$echarts.init(document.getElementById('electric-detail-left-top'));
-            this.$store.commit('setCharts', {name: 'chart3', val: barLine});
+            this.$store.commit('setCharts', { name: 'chart3', val: barLine });
             configOption.title.text = '月度分析';
             configOption.xAxis[0].data = monthsxArr;
             const encodes1 = ['NHDP0126', 'NHDP0128', 'NHDP0127', 'NHDP0130'];
@@ -406,7 +431,7 @@ export default {
             // const arr = getMonthsArr(this.currentMonth);
             this.getAxiosData(val);
             this.getMonthAxiosData(this.currentMonth);
-            this.mapMoudle === 'country' && this.getAxiosDataToCountryMap(val,this.countryParentName);
+            this.mapMoudle === 'country' && this.getAxiosDataToCountryMap(val, this.countryParentName);
             // this.setLeftTop(arr.sMonths, this.sourceMonthData, this.currentCity, arr.xMonths);
         },
         currentCity: function(val, oldVal) {
@@ -416,7 +441,7 @@ export default {
         current() {
             this.getAxiosData(this.currentMonth);
             this.getMonthAxiosData(this.currentMonth);
-            this.mapMoudle === 'country' && this.getAxiosDataToCountryMap(this.currentMonth,this.countryParentName);
+            this.mapMoudle === 'country' && this.getAxiosDataToCountryMap(this.currentMonth, this.countryParentName);
             // const arr = getMonthsArr(this.currentMonth);
             // this.mapMoudle === 'country'?this.setMap(this.sourceData, this.currentCity,true) : this.setMap(this.sourceData, this.currentCity);
             // this.setLeftBottom(this.sourceData);
@@ -558,7 +583,7 @@ function addCodes(code, count) {
             }
             .right-top-back{
                 top:20px;
-                right: 10px;
+                right: 25px;
                 position: absolute;
             }
             .right-top-company{

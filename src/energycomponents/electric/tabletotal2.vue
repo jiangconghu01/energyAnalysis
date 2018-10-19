@@ -50,7 +50,7 @@
         </div>
 </template>
 <script>
-import {tableTh} from '../chartconfig/staticData.js';
+import { tableTh } from '../chartconfig/staticData.js';
 export default {
     props: {
         type: {
@@ -118,15 +118,17 @@ export default {
             //     width: 59 / len + '%'
             // };
             if (['异常指标', '异常说明', '累计规则'].includes(ele)) {
-                return {width: '130px'};
+                return { width: '130px' };
             }
             if (ele === '异常统计规则') {
-                return this.type === 'total' ? {width: '150px'} : {width: '230px'};
+                return this.type === 'total' ? { width: '150px' } : { width: '230px' };
             }
             return '';
         },
         setHeight() {
-            let height = document.getElementById('exc-table').clientHeight;
+            const ele = document.getElementById('exc-table');
+            if (!ele) return;
+            const height = ele.clientHeight;
             this.contentHeight = `${height - 80}px`;
         },
         totalArr() {

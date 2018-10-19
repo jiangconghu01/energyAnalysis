@@ -31,16 +31,39 @@
             </div>
             <div id="electric-right-all" :class="$style['right-all']">
                 <div id="electric-right-top" :class="$style['right-top']"></div>
-                <div v-show="mapMoudle==='city' || mapMoudle==='country'" id="electric-right-topcity" :class="[$style['right-top-back']]">
-                        <i-button type="primary" @click="goBack()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
+                <div id="electric-right-topcity" :class="[$style['right-top-back']]">
+                        <i-button 
+                        type="primary" 
+                        v-show="mapMoudle==='city' || mapMoudle==='country'"
+                        @click="goBack()" 
+                        :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
                             <Icon type="chevron-left"></Icon>
                             返回
                         </i-button>
+                        <i-button 
+                        type="primary"
+                        v-show="mapMoudle==='company'" 
+                        @click="goBack()" :style="{borderColor: 'rgba(255, 255, 255, 0.8)'}">
+                            <Icon type="chevron-left"></Icon>
+                            返回省级数据
+                        </i-button>
                 </div>
-                <div v-show="mapMoudle==='province' || mapMoudle==='company'" :class="[$style['right-top-company']]">
+                <div :class="[$style['right-top-company']]">
                     <ul>
-                        <li :class="$style['company-name']"  @click="goCompany('省传输局')">省传输局</li>
-                        <li :class="$style['company-name']" @click="goCompany('信产公司')">信产公司</li>
+                        <li  v-show="mapMoudle==='province' || mapMoudle==='company'" 
+                        :class="$style['company-name']"  
+                        @click="goCompany('省本部')">省本部</li>
+                        <li  v-show="mapMoudle==='province' || mapMoudle==='company'" 
+                        :class="$style['company-name']"  
+                        @click="goCompany('省传输局')">省传输局</li>
+                        <li 
+                         v-show="mapMoudle==='province' || mapMoudle==='company'" 
+                        :class="$style['company-name']" 
+                        @click="goCompany('信产公司')">信产公司</li>
+                        <li 
+                         v-show="mapMoudle==='city' || mapMoudle==='country'" 
+                        :class="$style['company-name']" 
+                        @click="gocityCenter()">市本级</li>
                     </ul>
                 </div>                
                 <div  :class="$style['right-mid']">
@@ -139,6 +162,7 @@ export default {
             buttonStyle: {
                 backgroundColor: 'rgba(16, 162, 249, 1)'
             },
+            currentCityName: '',
             currentCity: 'A33',
             currentCityArr: cityNameArr,
             currentCityCodeArr: cityCodeArr,
@@ -217,6 +241,13 @@ export default {
             this.mapMoudle = 'province';
             this.currentCity = 'A33';
             this.currentCityArr = cityNameArr;
+        },
+        gocityCenter() {
+            this.mapMoudle = 'country';
+            const name = this.currentCityName;
+            if (!name) return;
+            this.currentCity = jzMap.mapCode[name] + '00';
+            this.countryNameOne = '市本级';
         },
         goCompany(name) {
             this.mapMoudle = 'company';
@@ -601,6 +632,7 @@ export default {
                     return;
                 }
                 this.mapMoudle = 'city';
+                this.currentCityName = param.name;
                 let clickCode = jzMap.mapCode[param.name];
                 this.countryParentName = param.name;
                 this.currentCityArr = getCountyName(cityDataArr, clickCode);
@@ -971,7 +1003,7 @@ function getLabel(type, data, width) {
             }
             .right-top-back{
                 top:20px;
-                right: 10px;
+                right: 25px;
                 position: absolute;
             }
             .right-top-company{
