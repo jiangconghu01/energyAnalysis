@@ -516,23 +516,56 @@ export default {
                 configOption.series[0].data = dataPieCount;
                 configOption.series[0].name = '电量占比';
                 const sum = addDoubleArr2(dataEcount);
+                // 对数据排序
                 const results = getSortMapArr('drop', sum, cityArr, ...dataEcount);
                 // console.log(cityArr,dataEcount,sum,results,results[1],results.slice(2));
                 configOption.xAxis[0].data = results[1];
-                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCount, results.slice(2)));
+                // 设置如果最大值max大于第二(max2)1.5倍以上则设置图标最大值为1.5倍max2，并将max列的值缩小到1.5max2
+                const max = results[0][0];
+                const max2 = results[0][1];
+                const module = this.mapMoudle;
+                let scale = 1;
+                if (max > max2 * 1.5 && module !== 'country' && module !== 'company') {
+                    const a = max / max2;
+                    scale = a / 1.5;
+                }
+                console.log(max, max2);
+                console.log(parseFloat(max * 1.5).toFixed(2), parseFloat(max2 * 1.5).toFixed(2));
+                configOption.yAxis[0].max = (module === 'country' || module === 'company') ? parseFloat(max * 1.5).toFixed(2) : parseFloat(max2 * 1.5).toFixed(2);
+                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCount, results.slice(2), scale, module));
             }
             if (this.leftCurrent === 2) {
                 configOption.legend.data = categoryCost;
                 configOption.series[0].name = '电费占比';
                 configOption.series[0].data = dataPieCost;
                 const sum = addDoubleArr2(dataEcost);
+                // 对数据排序
                 const results = getSortMapArr('drop', sum, cityArr, ...dataEcost);
+
                 configOption.xAxis[0].data = results[1];
-                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCost, results.slice(2)));
+                // 设置如果最大值max大于第二(max2)1.5倍以上则设置图标最大值为1.5倍max2，并将max列的值缩小到1.5max2
+                const max = results[0][0];
+                const max2 = results[0][1] ? results[0][1] : 0;
+                let scale = 1;
+                if (max > max2 * 1.4 && module !== 'country' && module !== 'company') {
+                    const a = max / max2;
+                    scale = a / 1.5;
+                }
+                configOption.yAxis[0].max = (module === 'country' || module === 'company') ? parseFloat(max * 1.5).toFixed(2) : parseFloat(max2 * 1.5).toFixed(2);
+                configOption.series.push.apply(configOption.series, getDataLineBar(categoryCost, results.slice(2), scale, module));
             }
             if (this.mapMoudle === 'province' || this.mapMoudle === 'city') {
                 configOption.xAxis[0].axisLabel.rotate = 35;
             }
+            // 设置label显示值为data中的value1真实值
+            configOption.tooltip.formatter = function(param) {
+                let str = `<div>${param[0].axisValue}</div>`;
+                param.forEach((ele, index) => {
+                    str += `<div>${ele.marker}${ele.name}:${ele.data.value1}</div>`;
+                });
+                return str;
+            };
+            console.log(configOption);
             pieLine.setOption(configOption);
         },
         setMap(arr, code, countryToUpdateCityMap) {
@@ -781,16 +814,25 @@ export default {
     }
 
 };
-function getDataLineBar(category, dataArr) {
+function getDataLineBar(category, dataArr, scale, module) {
     const array = [];
+
     category.forEach((ele, index) => {
+        const data = dataArr[index];
+        const dataFormatter = data.map((element, i) => {
+            return {
+                name: ele,
+                value: i === 0 && module !== 'country' ? (element / scale) : element,
+                value1: element
+            };
+        });
         let obj = {
             name: ele,
             type: 'bar',
             stack: '用量',
             barWidth: '13',
             barCategoryGap: '10%',
-            data: dataArr[index]
+            data: dataFormatter
         };
         array.push(obj);
     });

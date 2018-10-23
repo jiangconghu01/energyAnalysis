@@ -140,7 +140,7 @@ const option = {
         ],
         // color: ['#ffefb4', '#ff66ec', '#24c6ff', '#ffa354'],
         color: ['#ffa354', '#ffefb4', '#24c6ff'],
-        startAngle: -60,
+        startAngle: -50,
         hoverAnimation: false,
     }
     ]

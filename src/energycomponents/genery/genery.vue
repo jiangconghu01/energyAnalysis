@@ -14,8 +14,8 @@
                     </ul>
                 </div>
             </div>
-            <!-- <div :class="$style['left-bottom']" @mouseenter="houverBox()" @mouseleave="houverBox()">  -->
-            <div :class="$style['left-bottom']" @mouseleave="houverBox()"> 
+            <div :class="$style['left-bottom']" @mouseenter="houverBox()" @mouseleave="houverBox()"> 
+            <!-- <div :class="$style['left-bottom']" @mouseleave="houverBox()">  -->
                 <div id="genery-left-bottom" :class="$style['left-bottom-content']" ref="echarts"></div>
                 <div :class="$style['left-bottom-tip']">
                     <div :class="$style['table-title']">
@@ -117,7 +117,8 @@ import {
     searchMapData,
     controlMapLabel,
     getSortMapArr,
-    formatNumberRgx
+    formatNumberRgx,
+    searchValsArr
 }
     from '../dataUtil.js';
 import {
@@ -227,7 +228,9 @@ export default {
                 let countryCodeArr = [this.currentCity];
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
             } else {
-                let countryCodeArr = [this.currentCity];
+                const name = this.currentCityName;
+                const cityCenterCode = jzMap.mapCode[name] + '00';
+                let countryCodeArr = [this.currentCity, cityCenterCode];
                 param2 = getCityParam(date, countryCodeArr, countyEncodeArr);
             }
 
@@ -336,26 +339,40 @@ export default {
         },
         setLeftBottom(arr, code) {
             // 先对柱状图表和下边表格做数据关系对应映射centerCityPart
+            let list = this.currentCityArr;
+            let cityCode = '';
+
+            if (this.mapMoudle === 'country') {
+                debugger;
+                const targetAerr = (this.currentCityName ? centerCityPart[this.currentCityName] : []);
+                if (targetAerr.length && targetAerr.includes(list[0])) {
+                    const name = this.currentCityName;
+                    cityCode = jzMap.mapCode[name] + '00';
+                    list = ['市本级'];
+                } else {
+                    cityCode = code;
+                }
+            }
             let sortArr = getSortMapArr('drop',
-                searchValArr('NHDP0015', arr),
-                this.currentCityArr,
-                searchValArr('NHDP0016', arr),
-                searchValArr('NHDP0009', arr),
-                searchValArr('NHDP0010', arr));
+                searchValArr('NHDP0015', arr, cityCode),
+                list,
+                searchValArr('NHDP0016', arr, cityCode),
+                searchValArr('NHDP0009', arr, cityCode),
+                searchValArr('NHDP0010', arr, cityCode));
+
             // 去掉开头的市字
             // sortArr[1] = sortArr[1].map(ele => {
             //     return ele.replace(/市/, '');
             // });
-            console.log(sortArr);
             // 查找属于市本级的区县数据不再city级显示
             if (this.mapMoudle === 'city') {
                 const deleteIndexList = [];
                 const targetAerr = (this.currentCityName ? centerCityPart[this.currentCityName] : []);
+                // 过滤掉市本级重合得区县，不再显示
                 if (targetAerr.length) {
                     sortArr[1].forEach((ele, index) => {
                         if (targetAerr.includes(ele)) deleteIndexList.push(index);
                     });
-
                     const result = [];
                     sortArr.forEach(ele => {
                         const a = ele.filter((item, index) => !deleteIndexList.includes(index));
@@ -363,6 +380,34 @@ export default {
                     });
                     sortArr = result;
                 }
+            }
+            if (this.mapMoudle === 'country') {
+                // const switchIndexList = [];
+                // const targetAerr = (this.currentCityName ? centerCityPart[this.currentCityName] : []);
+
+                // if (targetAerr.length) {
+                //     let cityCenterIndex = '';
+                //     sortArr[1].forEach((ele, index) => {
+                //         if (targetAerr.includes(ele)) switchIndexList.push(index);
+                //         if (ele === '市本级') cityCenterIndex = index;
+                //     });
+                //     const cityCenterData = [];
+                //     sortArr.forEach(ele => {
+                //         cityCenterData.push(ele[cityCenterIndex]);
+                //     });
+                //     console.log(cityCenterIndex, cityCenterData);
+                //     const result = [];
+                //     sortArr.forEach((ele, index) => {
+                //         const a = ele.map((item, i) => {
+                //             if (switchIndexList.includes(i)) {
+                //                 return cityCenterData[index];
+                //             } else {
+                //                 return ele;
+                //             }
+                //         });
+                //         result.push(a);
+                //     });
+                // }
             }
 
             this.leftBottom = {
@@ -401,7 +446,12 @@ export default {
             }
             // 查找属于市本级的区县数据替换为市本级显示
             if (this.mapMoudle === 'country') {
-                option.xAxis[0].data = [this.countryNameOne];
+                let name = this.countryNameOne;
+                const targetAerr = (this.currentCityName ? centerCityPart[this.currentCityName] : []);
+                if (targetAerr.length && targetAerr.includes(name)) {
+                    name = '市本级';
+                }
+                option.xAxis[0].data = [name];
             } else {
                 option.xAxis[0].data = sortArr[1];
             }

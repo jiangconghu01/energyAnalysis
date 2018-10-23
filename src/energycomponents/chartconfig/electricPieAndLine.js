@@ -24,7 +24,10 @@ import { cityMap, categoryCount } from './staticData.js';
 // }
 const option = {
     tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        formatter: function(param) {
+            console.log(param);
+        }
     },
     // grid: {
     //     x: 100,

@@ -38,14 +38,24 @@ function searchVal(code, encode, dataArr, fix) {
     return fix ? parseFloat(target.indexVlue).toFixed(fix) : parseFloat(target.indexVlue).toFixed(2);
 }
 // 根据编码查出所有改编码的值
-function searchValArr(encode, dataArr) {
+function searchValArr(encode, dataArr, cityCode) {
     const target = [];
-    for (let index = 0, len = dataArr.length; index < len; index++) {
-        const element = dataArr[index];
-        if (element.indexCode === encode) {
-            target.push(parseFloat(element.indexVlue).toFixed(2));
+    if (cityCode) {
+        for (let index = 0, len = dataArr.length; index < len; index++) {
+            const element = dataArr[index];
+            if (element.indexCode === encode && element.accountCode === cityCode) {
+                target.push(parseFloat(element.indexVlue).toFixed(2));
+            }
+        }
+    } else {
+        for (let index = 0, len = dataArr.length; index < len; index++) {
+            const element = dataArr[index];
+            if (element.indexCode === encode) {
+                target.push(parseFloat(element.indexVlue).toFixed(2));
+            }
         }
     }
+
     return target;
 }
 // 根据-指标数组-和-编码数组-查出所有指标对应的所有编码值
@@ -242,7 +252,7 @@ function controlMapLabel(map) {
                 return ele;
             });
         }
-        if (sw < 150) {
+        if (sw < 180) {
             data2 = data2.map((ele) => {
                 ele.label = {
                     show: false
