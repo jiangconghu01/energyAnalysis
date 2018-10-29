@@ -545,7 +545,8 @@ export default {
                 configOption.xAxis[0].data = results[1];
                 // 设置如果最大值max大于第二(max2)1.5倍以上则设置图标最大值为1.5倍max2，并将max列的值缩小到1.5max2
                 const max = results[0][0];
-                const max2 = results[0][1] ? results[0][1] : 0;
+                const max2 = results[0][1];
+                const module = this.mapMoudle;
                 let scale = 1;
                 if (max > max2 * 1.4 && module !== 'country' && module !== 'company') {
                     const a = max / max2;
@@ -951,7 +952,7 @@ function getLabel(type, data, width) {
                     height: 20,
                 },
                 valueHead: {
-                    width: 70,
+                    width: parseInt((width - 32) / 4),
                     height: 20,
                     color: 'rgba(255, 255, 255, 0.8)',
                     // padding: [0, 10, 0, 5],

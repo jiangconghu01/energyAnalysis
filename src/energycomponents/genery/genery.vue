@@ -343,7 +343,6 @@ export default {
             let cityCode = '';
 
             if (this.mapMoudle === 'country') {
-                debugger;
                 const targetAerr = (this.currentCityName ? centerCityPart[this.currentCityName] : []);
                 if (targetAerr.length && targetAerr.includes(list[0])) {
                     const name = this.currentCityName;

@@ -132,6 +132,8 @@ export default {
         setBar() {
             let t = this.$echarts.init(document.getElementById(this.itemid));
             const configco = JSON.parse(JSON.stringify(config));
+            console.log(parseInt(this.itemid.slice(-1)) + 3);
+            this.$store.commit('setCharts', { name: 'chart' + (parseInt(this.itemid.slice(-1)) + 3), val: t });
             const isNor = this.type === 'normal';
             // console.log(this.subList, this.subListLog);
             const colors = ['#ffed8b', '#ffa848', '#70fed2', '#6668ff', '#3dd55a'];
@@ -147,7 +149,6 @@ export default {
             } else {
             // configco.xAxis[0].splitNumber = this.subListLog.length;
             // configco.xAxis[0].splitNumber = parseInt(this.sumNor).toString().length;
-
             // let len = parseInt(this.sumNor).toString().length;
             // configco.xAxis[0].interval = this.sumLog / len;
             // configco.xAxis[0].max = this.sumLog;
@@ -168,7 +169,7 @@ export default {
                     barWidth: '9',
                     stack: '量',
                     barCategoryGap: 0,
-                    data: [{value: ele.val, value2: ele.val2}]
+                    data: [{ value: ele.val, value2: ele.val2 }]
                 };
                 configco.series.push(item);
             }
@@ -221,7 +222,7 @@ export default {
         }
         .title{
             height: 100%;
-            width:15%;
+            width:18%;
             font-size: 14px;
             &>div{
                 //height: 50%;

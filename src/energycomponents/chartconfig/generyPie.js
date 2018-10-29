@@ -60,7 +60,7 @@ const option = {
                     show: true,
                     position: 'center',
                     textStyle: {
-                        fontSize: '16',
+                        fontSize: '14',
                         fontWeight: 'bold'
                     }
                 },
@@ -78,8 +78,8 @@ const option = {
             { value: 0, name: '电', label: { show: false, color: '#ffefb4' }, labelLine: { show: false } },
             { value: 0, name: '油', label: { show: true }, labelLine: { show: true } },
         ],
-        color: ['#ffa354', '#ffefb4', '#248bff'],
-        startAngle: -10,
+        color: ['#ffa354', '#ffefb4', '#24c6ff'], // '#FFEC00'
+        startAngle: -5,
         hoverAnimation: false,
     },
     {
@@ -120,7 +120,7 @@ const option = {
                     show: true,
                     position: 'center',
                     textStyle: {
-                        fontSize: '16',
+                        fontSize: '14',
                         fontWeight: 'bold'
                     }
                 },
@@ -140,7 +140,7 @@ const option = {
         ],
         // color: ['#ffefb4', '#ff66ec', '#24c6ff', '#ffa354'],
         color: ['#ffa354', '#ffefb4', '#24c6ff'],
-        startAngle: -50,
+        startAngle: -55,
         hoverAnimation: false,
     }
     ]
