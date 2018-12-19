@@ -88,12 +88,12 @@ export default {
         goGenery() {
             this.currentPage = 'genery';
             this.setTime();
-            this.$router.push({name: 'All'});
+            this.$router.push({ name: 'All' });
         },
         goElectric() {
             this.currentPage = 'electric';
             this.setTime();
-            this.$router.push({name: 'Electric'});
+            this.$router.push({ name: 'Electric' });
         },
         setTime() {
             this.$store.commit('setMonth', this.needMonth);

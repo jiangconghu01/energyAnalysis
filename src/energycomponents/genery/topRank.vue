@@ -162,11 +162,8 @@ export default {
             const d = getSortArr(names, barsd);
             ConfigBar.yAxis[0].data = d.name;
             ConfigBar.series[0].data = d.val;
-            scatter.setOption(ConfigScatter);
-            // scatter.on('datazoom', (data) => {
-            //     console.log(data);
-            // });
-            bar.setOption(ConfigBar);
+            scatter && scatter.setOption(ConfigScatter);
+            bar && bar.setOption(ConfigBar);
         },
         async getData(param) {
             const params = {

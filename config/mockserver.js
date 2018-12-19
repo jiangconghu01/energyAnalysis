@@ -8,14 +8,6 @@ app.use(async(ctx) => {
         let html = `
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
       <h1>koa2 request post method</h1>
-      <form method="POST" action="/">
-        <p>userName</p>
-        <input name="userName" /><br/>
-        <p>nickName</p>
-        <input name="nickName" /><br/>
-        <p>email</p>
-        <input name="email" /><br/>
-        <button type="submit">submit</button>
       </form>
     `;
         ctx.body = html;

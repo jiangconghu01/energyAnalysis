@@ -976,9 +976,9 @@ function getLabel(type, data, width) {
     .content{
         height: 90%;
         width: 100%;
-        margin-top: 20px;
+        //margin-top: 20px;
         position: absolute;
-        top: 7%;
+        top: 9.9%;
         overflow-y: hidden;
         &>div{
 

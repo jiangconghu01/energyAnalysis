@@ -23,6 +23,15 @@ import { cityMap, categoryCount } from './staticData.js';
 //     return a;
 // }
 const option = {
+    title: {
+        text: '总电耗结构分析',
+        left: '10px',
+        textStyle: {
+            color: 'rgba(255, 255, 255, 0.8)',
+            fontSize: 16,
+            fontWeight: 300
+        }
+    },
     tooltip: {
         trigger: 'axis',
         formatter: function(param) {

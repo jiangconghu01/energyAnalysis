@@ -368,7 +368,7 @@ export default {
                 const deleteIndexList = [];
                 const targetAerr = (this.currentCityName ? centerCityPart[this.currentCityName] : []);
                 // 过滤掉市本级重合得区县，不再显示
-                if (targetAerr.length) {
+                if (targetAerr && targetAerr.length) {
                     sortArr[1].forEach((ele, index) => {
                         if (targetAerr.includes(ele)) deleteIndexList.push(index);
                     });
@@ -456,6 +456,10 @@ export default {
             }
             option.series[0].data = sortArr[2];
             option.series[1].data = sortArr[0];
+            // 临时调整代码，省本部数据300000%度太大，屏蔽掉保证其他正常显示
+            if (sortArr[0][0] >= 3) {
+                sortArr[0][0] = 0;
+            }
             const max = Math.max(Math.max.apply(null, this.leftBottom.listPersentNet), Math.max.apply(null, this.leftBottom.listPersentIDC));
             const min = Math.min(Math.min.apply(null, this.leftBottom.listPersentNet), Math.min.apply(null, this.leftBottom.listPersentIDC));
             let guid = this.leftBottom.guideVal;
